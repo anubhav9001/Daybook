@@ -1,0 +1,12 @@
+node_modules/
+dist/
+release/
+.tmp-build/
+config.local.json
+.npm-cache/
+.electron-cache/
+.builder-cache/
+.localappdata/
+
+# Publisher OAuth configuration (included in local release builds, never commit)
+config.json
