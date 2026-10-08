@@ -40,6 +40,7 @@ See the [security and accessibility audit](SECURITY_AUDIT.md) for scope, verific
 - Cloud AI providers receive the selected conversation and limited recent mail/calendar context when analysis is requested. Each provider’s retention, training, and regional handling policies apply. Ollama is the local-processing option, but its own service/model setup remains part of the trust boundary.
 - Inbox classification uses local subject/preview rules and can miss or misclassify messages, including automated SharePoint notices.
 - This source review did not include a Windows installer runtime assessment, third-party penetration test, screen-reader session, or complete contrast/WCAG measurement. Those checks remain before claiming full accessibility or security assurance.
+- A moderate npm advisory currently affects the transitive build-tool dependency chain through sprintf-js. No patched sprintf-js release is available as of this audit; the affected package is used through Electron build tooling, not directly by Daybook's renderer features. The GitHub workflow reports high-severity-and-above findings as blocking.
 - Provider/API outages and model mistakes can produce an error, missed classification, or inaccurate draft. Users should review all generated content.
 
 ## Current limitations
