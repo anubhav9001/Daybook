@@ -25,9 +25,22 @@ Please contact the repository owner and receive approval before submitting a con
 
 **Public repository limitation:** because this repository is public, GitHub allows visitors to view and fork it under GitHub's Terms of Service. A notice here cannot technically require approval before someone forks or makes a local copy. To restrict access to the source and control who can copy it, the repository would need to be private; that would also restrict public access to the release downloads.
 
-## Accessibility
+## Accessibility and security features
 
-Daybook is designed for keyboard-only and screen reader use, with labeled controls, visible focus, modal focus management, and announced status updates.
+The latest source includes OS-aware System/Light/Dark themes; labeled, keyboard-operable navigation and account controls; visible focus indicators; dialogs that contain keyboard focus, close with Escape, and return focus to the opener; keyboard-operable inbox tabs with an announced panel; live status/error announcements; scrollable dialogs; and reduced-motion support. Settings exposes theme selection under Accessibility. These are implementation features, not a formal WCAG conformance claim.
+
+Security controls include Electron context isolation, renderer sandboxing, disabled Node integration, restrictive Content Security Policy, main-frame IPC sender checks, denied navigation/popups/permission prompts, HTTPS provider endpoints and redirect rejection, OAuth state plus PKCE and loopback callbacks, OS-backed encrypted local credentials/settings, redaction and bounded retention for the local error log, and explicit review before saving drafts or creating meetings. Daybook does not send email automatically. Cloud AI is opt-in per provider and receives only the context described in the consent notice.
+
+See the [security and accessibility audit](SECURITY_AUDIT.md) for scope, verification limits, and known issues.
+
+## Known issues
+
+- Windows installers are unsigned. SmartScreen may warn, and users cannot verify the installer’s publisher signature. Signing remains deferred.
+- OAuth mail/calendar permissions are broad enough to read or modify account data within the granted scopes. Use only on trusted devices and revoke the app’s access from Google/Microsoft account security settings when needed.
+- Cloud AI providers receive the selected conversation and limited recent mail/calendar context when analysis is requested. Each provider’s retention, training, and regional handling policies apply. Ollama is the local-processing option, but its own service/model setup remains part of the trust boundary.
+- Inbox classification uses local subject/preview rules and can miss or misclassify messages, including automated SharePoint notices.
+- This source review did not include a Windows installer runtime assessment, third-party penetration test, screen-reader session, or complete contrast/WCAG measurement. Those checks remain before claiming full accessibility or security assurance.
+- Provider/API outages and model mistakes can produce an error, missed classification, or inaccurate draft. Users should review all generated content.
 
 ## Current limitations
 
