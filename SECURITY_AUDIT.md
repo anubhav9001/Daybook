@@ -63,6 +63,7 @@
 | Draft options | Tone, length, and language are chosen from fixed lists; only fixed text reaches the prompt. Follow-up drafts go to the original recipients minus the user and are saved as drafts, never sent. |
 | Search | Queries are limited to 200 characters without control characters and rate limited; Microsoft search text has quotes removed before it is placed in a KQL phrase. |
 | Faster on-device replies | Streaming uses the same per-session key and loopback address. Cancelling a request closes the connection so generation stops. Quoted history is removed before analysis, which also reduces what cloud providers receive. |
+| Prepared replies (0.5.1) | Background drafting uses only the built-in engine, the same mail requests as an on-demand suggestion, and keeps results in memory (never on disk) for at most two hours. Calendar entries are no longer sent to the built-in AI. |
 | Microsoft time zones | Graph times requested in UTC are now read as UTC (they were previously read as local time). Meeting tracking compares times by value, so the change does not create false reschedule notices. |
 
 ## Hosted open-model providers (0.4.1)
