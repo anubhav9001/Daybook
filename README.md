@@ -4,9 +4,11 @@ Daybook is an accessible desktop assistant for managing Google Gmail/Calendar an
 
 When a conversation may need a meeting, Daybook can suggest a title, participants, duration, and open times on your connected calendars. You review the invitees and time and confirm before the event is created. Daybook tracks responses and time changes for meetings created in the app and notifies you when it refreshes.
 
+**[Download the latest Windows release](https://github.com/anubhav9001/Daybook/releases/latest)** · [Browse the source code](https://github.com/anubhav9001/Daybook/tree/main)
+
 ## Get started
 
-1. Install the Windows app from the matching `Daybook-Setup-<version>.exe` asset on the GitHub Releases page.
+1. [Download the latest Windows installer](https://github.com/anubhav9001/Daybook/releases/latest) and run the `Daybook-Setup-<version>.exe` asset.
 2. Connect one or more Google and Microsoft 365 accounts.
 3. Set up the analysis engine under **Settings**: use local Ollama, free-tier Groq, OpenRouter's free model router, Google Gemini, OpenAI, Anthropic Claude, or a Microsoft Azure AI Foundry deployment. Each cloud provider requires its own API key and consent; cloud providers receive the context described in the consent notice.
 4. Review a suggested reply, edit it, and save it as a draft. Daybook never sends the email for you.
@@ -15,7 +17,13 @@ Use the Account selector to switch between connected mail/calendar accounts. Hel
 
 ## Download and updates
 
-Windows installers and automatic updates are published through GitHub Releases. The release workflow runs when the publisher pushes a version tag such as `v0.3.0`; it builds and publishes the installer and update metadata. See [SETUP.md](SETUP.md#github-release-setup) for one-time publisher setup. Install the NSIS installer for automatic update support; updates are downloaded in the background and require confirmation before installation.
+[Open the latest release](https://github.com/anubhav9001/Daybook/releases/latest) to download the Windows installer. Windows installers and automatic updates are published through GitHub Releases. The release workflow runs when the publisher pushes a version tag such as `v0.3.0`; it builds and publishes the installer and update metadata. See [SETUP.md](SETUP.md#github-release-setup) for one-time publisher setup. Install the NSIS installer for automatic update support; updates are downloaded in the background and require confirmation before installation.
+
+## Contributions and reuse
+
+Please contact the repository owner and receive approval before submitting a contribution for inclusion in Daybook or reusing, modifying, redistributing, or developing a derivative of this project. Contributions are reviewed, and only the owner can approve changes to the upstream repository. No separate software license is provided.
+
+**Public repository limitation:** because this repository is public, GitHub allows visitors to view and fork it under GitHub's Terms of Service. A notice here cannot technically require approval before someone forks or makes a local copy. To restrict access to the source and control who can copy it, the repository would need to be private; that would also restrict public access to the release downloads.
 
 ## Accessibility
 
@@ -26,6 +34,5 @@ Daybook is designed for keyboard-only and screen reader use, with labeled contro
 - Meeting availability checks use calendars connected to your own accounts. The app does not query guests' free/busy schedules.
 - Response and reschedule tracking applies to meetings created by Daybook and updates when the app refreshes.
 - Inbox categories are local heuristics based on the visible subject and message preview. They do not move mail in Gmail or Outlook and can miss replies that lack a clear question or request.
-- Automatic updates become available after the first GitHub Release is published. The current repository has not published an installer release yet.
 - Cloud AI providers require each user to supply their own API key unless the publisher builds and operates a secure shared AI service. Never embed a provider API key in a desktop installer.
 
