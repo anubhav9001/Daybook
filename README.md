@@ -36,3 +36,10 @@ Daybook is designed for keyboard-only and screen reader use, with labeled contro
 - Inbox categories are local heuristics based on the visible subject and message preview. They do not move mail in Gmail or Outlook and can miss replies that lack a clear question or request.
 - Cloud AI providers require each user to supply their own API key unless the publisher builds and operates a secure shared AI service. Never embed a provider API key in a desktop installer.
 
+
+
+## Security review (2026-10-07)
+
+A static review covered Electron isolation and navigation, CSP, IPC sender validation, encrypted account and AI credentials, local error-log redaction, dependency metadata, and release automation. The app enables context isolation, renderer sandboxing, web security, denies renderer navigation/new windows/permissions, and requires explicit user action to save a reply as a draft.
+
+Known release limitation: Windows installers remain unsigned until a valid publisher code-signing certificate is configured in GitHub Actions secrets `WINDOWS_CERTIFICATE_BASE64` and `WINDOWS_CERTIFICATE_PASSWORD`. Without it, Windows may show a SmartScreen warning. The workflow verifies Authenticode when signing is configured and runs `npm audit --audit-level=high` before packaging; only a successful workflow run can confirm the dependency audit passed. This static review is not a penetration test or a guarantee of security. Mail/calendar permissions are sensitive and should remain user-consented; never commit user tokens, AI keys, provider client secrets, or signing keys.
