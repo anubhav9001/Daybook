@@ -10,7 +10,7 @@ When a conversation may need a meeting, Daybook can suggest a title, participant
 
 1. [Download the latest Windows installer](https://github.com/anubhav9001/Daybook/releases/latest) and run the `Daybook-Setup-<version>.exe` asset.
 2. Connect one or more Google and Microsoft 365 accounts.
-3. Set up the analysis engine under **Settings**: use local Ollama, free-tier Groq, OpenRouter's free model router, Google Gemini, OpenAI, Anthropic Claude, or a Microsoft Azure AI Foundry deployment. Each cloud provider requires its own API key and consent; cloud providers receive the context described in the consent notice.
+3. Choose **Set up private AI** on the dashboard. Daybook downloads a free, open-source Qwen3 model sized for your computer (one time, 2.5–5 GB), verifies it, and switches reply suggestions to it automatically. It runs on your computer with the bundled llama.cpp engine: no account, API key, or usage cost, and email never leaves the PC. Alternatively, under **Settings** you can use local Ollama, free-tier Groq, OpenRouter's free model router, Google Gemini, OpenAI, Anthropic Claude, or a Microsoft Azure AI Foundry deployment. Each cloud provider requires its own API key and consent; cloud providers receive the context described in the consent notice.
 4. Review a suggested reply, edit it, and save it as a draft. Daybook never sends the email for you.
 
 Use the Account selector to switch between connected mail/calendar accounts. Help contains feature guides, About/version details, version history, and an update check. The publisher configures Google and Microsoft OAuth credentials once in the packaged app; end users do not enter OAuth client IDs. See [SETUP.md](SETUP.md) for publisher setup, AI choices, permissions, privacy behavior, build instructions, and current release limitations. Settings is available in the File menu and with Ctrl+,. See [SECURITY_AUDIT.md](SECURITY_AUDIT.md) for the current security audit and remaining risks.
@@ -32,6 +32,18 @@ The latest source includes OS-aware System/Light/Dark themes; labeled, keyboard-
 Security controls include Electron context isolation, renderer sandboxing, disabled Node integration, restrictive Content Security Policy, main-frame IPC sender checks, denied navigation/popups/permission prompts, HTTPS provider endpoints and redirect rejection, OAuth state plus PKCE and loopback callbacks, OS-backed encrypted local credentials/settings, redaction and bounded retention for the local error log, and explicit review before saving drafts or creating meetings. Daybook does not send email automatically. Cloud AI is opt-in per provider and receives only the context described in the consent notice.
 
 See the [security and accessibility audit](SECURITY_AUDIT.md) for scope, verification limits, and known issues.
+
+## Built-in private AI
+
+The Windows installer bundles the open-source [llama.cpp](https://github.com/ggml-org/llama.cpp) server (MIT license, build b11500, SHA-256 pinned). Models are not bundled, because they are 2.5–18.6 GB, larger than a GitHub release asset allows, and would make every update huge. Instead, Daybook offers a one-click download on first launch:
+
+| Model | Download | Suggested for |
+| --- | --- | --- |
+| Qwen3 4B (Q4_K_M) | 2.5 GB | 8–15 GB memory |
+| Qwen3 8B (Q4_K_M) | 5.0 GB | 16 GB memory or more (default when available) |
+| Qwen3 30B-A3B (Q4_K_M) | 18.6 GB | 32 GB memory or more |
+
+All are Apache-2.0 models from Qwen's official Hugging Face repositories. Each file is checked against a fixed SHA-256 fingerprint before use, interrupted downloads resume, and after download the AI works offline. The engine starts when a suggestion is requested, listens only on 127.0.0.1 with a random port and per-session key, uses a graphics card automatically when Vulkan is available, and stops after 10 idle minutes.
 
 ## Known issues
 

@@ -10,3 +10,6 @@ config.local.json
 
 # Publisher OAuth configuration (included in local release builds, never commit)
 config.json
+
+# Built-in AI engine (bundled per platform by scripts/fetch-llama.cjs)
+vendor/
