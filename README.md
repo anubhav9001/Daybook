@@ -2,7 +2,18 @@
 
 Daybook is an accessible desktop assistant for managing Google Gmail/Calendar and Microsoft 365 Outlook/Calendar together. It reads your inbox and schedule, highlights messages that may need a response, and can prepare an editable reply draft using the conversation and your recent sent messages as context.
 
-When a conversation may need a meeting, Daybook can suggest a title, participants, duration, and open times on your connected calendars. You review the invitees and time and confirm before the event is created. Daybook tracks responses and time changes for meetings created in the app and notifies you when it refreshes.
+When a conversation may need a meeting, Daybook can suggest a title, participants, duration, and open times on your connected calendars, and checks invitees' busy times when their calendars are shared with you. You review the invitees and time and confirm before the event is created. Daybook tracks responses and time changes for meetings created in the app and notifies you when it refreshes.
+
+Version 0.5.0 adds:
+
+- **Smarter inbox sorting** with the built-in private AI, on your computer only.
+- **Waiting on others**: sent mail nobody has answered, with one-click follow-up drafts.
+- **Done and Snooze**, which change only Daybook's view.
+- **Search** across all connected accounts.
+- **A system tray icon**, with notifications for priority senders.
+- **Draft controls**: tone, length, and language, plus saved replies.
+- **Faster on-device replies** that appear as they are written.
+- **A clearer, neutral dark theme.**
 
 **[Download the latest Windows release](https://github.com/anubhav9001/Daybook/releases/latest)** · [Browse the source code](https://github.com/anubhav9001/Daybook/tree/main)
 
@@ -50,16 +61,16 @@ All are Apache-2.0 models from Qwen's official Hugging Face repositories. Each f
 - Windows installers are unsigned. SmartScreen may warn, and users cannot verify the installer’s publisher signature. Signing remains deferred.
 - OAuth mail/calendar permissions are broad enough to read or modify account data within the granted scopes. Use only on trusted devices and revoke the app’s access from Google/Microsoft account security settings when needed.
 - Cloud AI providers receive the selected conversation and limited recent mail/calendar context when analysis is requested. Each provider’s retention, training, and regional handling policies apply. Ollama is the local-processing option, but its own service/model setup remains part of the trust boundary.
-- Inbox classification uses local subject/preview rules and can miss or misclassify messages, including automated SharePoint notices.
+- Inbox sorting uses the built-in private AI when it is installed, and local subject/preview rules otherwise. Both can miss or misclassify messages.
 - This source review did not include a Windows installer runtime assessment, third-party penetration test, screen-reader session, or complete contrast/WCAG measurement. Those checks remain before claiming full accessibility or security assurance.
 - A moderate npm advisory currently affects the transitive build-tool dependency chain through sprintf-js. No patched sprintf-js release is available as of this audit; the affected package is used through Electron build tooling, not directly by Daybook's renderer features. The GitHub workflow reports high-severity-and-above findings as blocking.
 - Provider/API outages and model mistakes can produce an error, missed classification, or inaccurate draft. Users should review all generated content.
 
 ## Current limitations
 
-- Meeting availability checks use calendars connected to your own accounts. The app does not query guests' free/busy schedules.
+- Invitee availability can be checked only when the invitee's calendar is shared with you (usually the same organization). Daybook says which invitees it could not check. Google accounts connected before 0.5.0 need to reconnect once to allow it.
 - Response and reschedule tracking applies to meetings created by Daybook and updates when the app refreshes.
-- Inbox categories are local heuristics based on the visible subject and message preview. They do not move mail in Gmail or Outlook and can miss replies that lack a clear question or request.
+- Inbox categories, Done, and Snooze never move or change mail in Gmail or Outlook. Waiting on others checks the last 30 days, and in Outlook only replies that arrive in the Inbox.
 - Cloud AI providers require each user to supply their own API key unless the publisher builds and operates a secure shared AI service. Never embed a provider API key in a desktop installer.
 
 
