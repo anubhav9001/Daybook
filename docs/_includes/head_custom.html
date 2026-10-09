@@ -408,6 +408,58 @@
   }
 
   /* ========================================================================
+     LIGHT THEME — syntax highlighting (WCAG AA on JTD's light code bg ≈ #f5f6fa)
+     Dark overrides below replace these when dark is active.
+     ======================================================================== */
+  .highlight .c,
+  .highlight .c1,
+  .highlight .cm,
+  .highlight .cp,
+  .highlight .cs { color: #5d6a79 !important; font-style: italic; }           /* comments 5.7:1 */
+  .highlight .k,
+  .highlight .kc,
+  .highlight .kd,
+  .highlight .kn,
+  .highlight .kp,
+  .highlight .kr,
+  .highlight .kt { color: #c7122a !important; }                                /* keywords 5.5:1 */
+  .highlight .s,
+  .highlight .s1,
+  .highlight .s2,
+  .highlight .sb,
+  .highlight .sc,
+  .highlight .sd,
+  .highlight .se,
+  .highlight .sh,
+  .highlight .si,
+  .highlight .sx,
+  .highlight .sr,
+  .highlight .ss { color: #032f62 !important; }                                /* strings 15:1 */
+  .highlight .nb,
+  .highlight .bp { color: #0953a3 !important; }                                /* built-ins / cmdlets 7:1 */
+  .highlight .nf,
+  .highlight .nc { color: #5a2e9b !important; }                                /* functions / classes 8:1 */
+  .highlight .nv,
+  .highlight .vc,
+  .highlight .vg,
+  .highlight .vi { color: #a04000 !important; }                                /* variables 6:1 */
+  .highlight .nn,
+  .highlight .nt,
+  .highlight .na { color: #1a6f33 !important; }                                /* namespaces / tags / attrs 5.8:1 */
+  .highlight .n,
+  .highlight .nx,
+  .highlight .no { color: #24292e !important; }                                /* generic names 15:1 */
+  .highlight .o,
+  .highlight .ow,
+  .highlight .p { color: #c7122a !important; }                                 /* operators / punct 5.5:1 */
+  .highlight .mi,
+  .highlight .mf,
+  .highlight .mh,
+  .highlight .mo,
+  .highlight .il { color: #0953a3 !important; }                                /* numbers 7:1 */
+  .highlight .err { color: #9c1b1e !important; background: transparent !important; } /* errors 8:1 */
+
+  /* ========================================================================
      DARK THEME
      ======================================================================== */
   @media (prefers-color-scheme: dark) {
