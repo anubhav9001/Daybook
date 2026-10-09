@@ -1,5 +1,4 @@
 <script>
-  // Pre-paint: apply saved theme if any. Otherwise CSS @media handles OS pref.
   (function () {
     try {
       var saved = localStorage.getItem('daybook-theme');
@@ -26,19 +25,53 @@
     --jtd-link:      #92b4ff;
     --jtd-link-hvr:  #b7ccff;
     --jtd-primary:   #4b7bec;
+    --jtd-focus:     #ffbf47;
   }
 
   /* ========================================================================
-     Layout fixes: aux-nav becomes vertical "Important" list in sidebar,
-     site-nav becomes horizontal top bar beside search.
-     The JS in footer_custom.html relocates these elements; the CSS below
-     styles them in their NEW homes.
+     Accessibility: visually-hidden utility (used for aria-only text)
      ======================================================================== */
+  .sr-only, .visually-hidden {
+    position: absolute !important;
+    width: 1px !important; height: 1px !important;
+    padding: 0 !important; margin: -1px !important;
+    overflow: hidden !important; clip: rect(0,0,0,0) !important;
+    white-space: nowrap !important; border: 0 !important;
+  }
 
-  /* Horizontal top bar: main nav + search + theme toggle */
-  .main-header { flex-wrap: wrap; gap: 8px 16px; align-items: center; }
-  .main-header .site-nav {
+  /* ========================================================================
+     Focus — tight ring on the element itself, never covering extra area
+     ======================================================================== */
+  *:focus { outline: none; }
+  *:focus-visible {
+    outline: 2px solid var(--jtd-focus);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  .btn:focus-visible,
+  .btn-primary:focus-visible {
+    outline: 2px solid var(--jtd-focus);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.9);
+  }
+  .nav-list-link:focus-visible,
+  .aux-nav .site-button:focus-visible {
+    outline: 2px solid var(--jtd-focus);
+    outline-offset: -2px; /* inside the element so it only outlines the item itself */
+  }
+
+  /* ========================================================================
+     Layout — main nav horizontal in header; "Important" vertical in sidebar
+     ======================================================================== */
+  .main-header {
     display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    align-items: center;
+    padding: 10px 20px;
+  }
+  .main-header .search { flex: 0 1 320px; min-width: 220px; }
+  .main-header .site-nav {
     flex: 1 1 auto;
     min-width: 0;
     overflow-x: auto;
@@ -49,36 +82,42 @@
     margin: 0;
     padding: 0;
     list-style: none;
-    gap: 4px;
+    gap: 2px;
   }
   .main-header .site-nav .nav-list-item { margin: 0; }
   .main-header .site-nav .nav-list-link {
     display: inline-block;
-    padding: 6px 12px;
-    border-radius: 4px;
+    padding: 8px 14px;
+    border-radius: 6px;
     white-space: nowrap;
+    font-weight: 500;
+    text-decoration: none;
+    background-image: none !important;
+  }
+  .main-header .site-nav .nav-list-link:hover {
+    background: rgba(127,127,127,0.12);
   }
   .main-header .site-nav .nav-list-link.active {
+    background: rgba(75,123,236,0.15);
+    color: var(--jtd-primary);
     font-weight: 600;
   }
-  /* Hide nested sub-lists if present inside the horizontal nav */
   .main-header .site-nav .nav-list .nav-list { display: none; }
 
-  /* Vertical "Important" list in sidebar */
+  /* Sidebar: give header room, then push Just-the-Docs credit to bottom */
+  .side-bar {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  .side-bar > .site-header { flex: 0 0 auto; }
+  .side-bar > #site-nav { display: none !important; } /* moved out by JS */
+
+  /* "Important" vertical list in sidebar */
   .side-bar .aux-nav {
     display: block;
-    padding: 12px 16px;
-    border-top: 1px solid var(--jtd-border);
-    margin-top: 16px;
-  }
-  .side-bar .aux-nav::before {
-    content: "Important";
-    display: block;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    opacity: 0.65;
-    margin-bottom: 8px;
+    padding: 16px 20px 8px;
+    margin: 8px 0;
   }
   .side-bar .aux-nav .aux-nav-list {
     display: flex;
@@ -90,58 +129,81 @@
   }
   .side-bar .aux-nav .aux-nav-list-item { margin: 0; }
   .side-bar .aux-nav .site-button {
-    display: block;
-    padding: 6px 8px;
-    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 6px;
     text-align: left;
     width: 100%;
+    text-decoration: none;
+    font-weight: 500;
   }
-  .side-bar .aux-nav .site-button:hover { background: rgba(127,127,127,0.12); }
+  .side-bar .aux-nav .site-button:hover {
+    background: rgba(127,127,127,0.12);
+  }
+  /* External link indicator */
+  .side-bar .aux-nav .site-button .ext-icon {
+    flex: 0 0 auto;
+    font-size: 11px;
+    opacity: 0.65;
+    transform: translateY(-1px);
+  }
 
-  /* Theme toggle in the main-header */
+  /* Push the "Just the Docs" credit to the sidebar bottom */
+  .side-bar .site-footer {
+    display: block !important;        /* show on all breakpoints */
+    margin-top: auto;                 /* pushes to bottom */
+    padding: 16px 20px;
+    font-size: 12px;
+    opacity: 0.65;
+    border-top: 1px solid rgba(127,127,127,0.2);
+  }
+  /* Hide the duplicate footer credit that JTD adds in main-content area */
+  footer .d-md-none { display: none !important; }
+
+  /* ========================================================================
+     Theme toggle button
+     ======================================================================== */
   #theme-toggle {
     flex: 0 0 auto;
     background: transparent;
     color: inherit;
     border: 1px solid currentColor;
     border-radius: 20px;
-    padding: 4px 12px;
+    padding: 6px 14px;
     font-size: 13px;
     font-family: inherit;
     cursor: pointer;
     opacity: 0.85;
+    white-space: nowrap;
   }
   #theme-toggle:hover { opacity: 1; }
-  #theme-toggle:focus-visible { outline: 2px solid var(--jtd-primary); outline-offset: 2px; }
 
-  /* Permalink icons beside headings — understated, not before text */
+  /* ========================================================================
+     Permalink icons on headings — understated, meaningful
+     ======================================================================== */
   .anchor-heading {
     opacity: 0;
     transition: opacity 0.15s ease;
     margin-left: 8px;
     text-decoration: none;
+    vertical-align: middle;
   }
-  h1:hover .anchor-heading,
-  h2:hover .anchor-heading,
-  h3:hover .anchor-heading,
-  h4:hover .anchor-heading,
-  h5:hover .anchor-heading,
-  h6:hover .anchor-heading,
-  .anchor-heading:focus { opacity: 0.6; }
+  h1:hover .anchor-heading, h2:hover .anchor-heading, h3:hover .anchor-heading,
+  h4:hover .anchor-heading, h5:hover .anchor-heading, h6:hover .anchor-heading,
+  .anchor-heading:focus, .anchor-heading:focus-visible { opacity: 0.7; }
 
   /* ========================================================================
-     Dark theme — applies under @media (prefers-color-scheme: dark) unless the
-     user picked "light", or always when the user picked "dark".
+     DARK THEME
      ======================================================================== */
-
   @media (prefers-color-scheme: dark) {
     html:not([data-jtd-theme="light"]) { color-scheme: dark; }
   }
   html[data-jtd-theme="dark"] { color-scheme: dark; }
 
-  /* A single mixin applied to both selector groups via a helper class... but
-     keeping it simple with two parallel blocks for maximum compatibility. */
-
+  /* Shared helpers to avoid duplication: one @media + one explicit block */
   @media (prefers-color-scheme: dark) {
     html:not([data-jtd-theme="light"]),
     html:not([data-jtd-theme="light"]) body,
@@ -161,33 +223,24 @@
     }
     html:not([data-jtd-theme="light"]) .site-title,
     html:not([data-jtd-theme="light"]) #menu-button { color: var(--jtd-heading) !important; }
-    html:not([data-jtd-theme="light"]) .site-footer { color: var(--jtd-text-dim) !important; }
+    html:not([data-jtd-theme="light"]) .site-footer { color: var(--jtd-text-dim) !important; border-color: var(--jtd-border) !important; }
     html:not([data-jtd-theme="light"]) .site-footer a { color: var(--jtd-link) !important; }
 
-    /* MAIN nav (now horizontal in top bar) */
-    html:not([data-jtd-theme="light"]) .main-header .site-nav .nav-list-link {
-      color: var(--jtd-text) !important;
-      background: transparent !important;
-    }
+    html:not([data-jtd-theme="light"]) .main-header .site-nav .nav-list-link { color: var(--jtd-text) !important; }
     html:not([data-jtd-theme="light"]) .main-header .site-nav .nav-list-link:hover {
       background: var(--jtd-surface-2) !important;
       color: var(--jtd-heading) !important;
     }
     html:not([data-jtd-theme="light"]) .main-header .site-nav .nav-list-link.active {
-      background: var(--jtd-surface) !important;
-      color: var(--jtd-heading) !important;
+      background: rgba(75,123,236,0.18) !important;
+      color: var(--jtd-link) !important;
     }
-
-    /* IMPORTANT list (now vertical in sidebar) */
-    html:not([data-jtd-theme="light"]) .side-bar .aux-nav .site-button {
-      color: var(--jtd-text) !important;
-    }
+    html:not([data-jtd-theme="light"]) .side-bar .aux-nav .site-button { color: var(--jtd-text) !important; }
     html:not([data-jtd-theme="light"]) .side-bar .aux-nav .site-button:hover {
       background: var(--jtd-surface-2) !important;
       color: var(--jtd-heading) !important;
     }
 
-    /* Content area */
     html:not([data-jtd-theme="light"]) .main-content p,
     html:not([data-jtd-theme="light"]) .main-content li { color: var(--jtd-text) !important; }
     html:not([data-jtd-theme="light"]) .main-content a,
@@ -230,6 +283,11 @@
       color: #ffffff !important;
       border-color: var(--jtd-primary) !important;
     }
+    html:not([data-jtd-theme="light"]) .btn:focus-visible {
+      outline: 2px solid var(--jtd-focus) !important;
+      outline-offset: 3px !important;
+      box-shadow: 0 0 0 1px #000 !important;
+    }
 
     html:not([data-jtd-theme="light"]) table th,
     html:not([data-jtd-theme="light"]) table td { border-color: var(--jtd-border) !important; color: var(--jtd-text) !important; }
@@ -240,11 +298,9 @@
     html:not([data-jtd-theme="light"]) ::-webkit-scrollbar { background: var(--jtd-bg); width: 10px; height: 10px; }
     html:not([data-jtd-theme="light"]) ::-webkit-scrollbar-thumb { background: var(--jtd-surface); border-radius: 4px; }
     html:not([data-jtd-theme="light"]) ::-webkit-scrollbar-thumb:hover { background: var(--jtd-border); }
-
     html:not([data-jtd-theme="light"]) .anchor-heading { color: var(--jtd-link) !important; }
   }
 
-  /* Repeat for explicit user choice = dark */
   html[data-jtd-theme="dark"],
   html[data-jtd-theme="dark"] body,
   html[data-jtd-theme="dark"] .main,
@@ -263,11 +319,11 @@
   }
   html[data-jtd-theme="dark"] .site-title,
   html[data-jtd-theme="dark"] #menu-button { color: var(--jtd-heading) !important; }
-  html[data-jtd-theme="dark"] .site-footer { color: var(--jtd-text-dim) !important; }
+  html[data-jtd-theme="dark"] .site-footer { color: var(--jtd-text-dim) !important; border-color: var(--jtd-border) !important; }
   html[data-jtd-theme="dark"] .site-footer a { color: var(--jtd-link) !important; }
-  html[data-jtd-theme="dark"] .main-header .site-nav .nav-list-link { color: var(--jtd-text) !important; background: transparent !important; }
+  html[data-jtd-theme="dark"] .main-header .site-nav .nav-list-link { color: var(--jtd-text) !important; }
   html[data-jtd-theme="dark"] .main-header .site-nav .nav-list-link:hover { background: var(--jtd-surface-2) !important; color: var(--jtd-heading) !important; }
-  html[data-jtd-theme="dark"] .main-header .site-nav .nav-list-link.active { background: var(--jtd-surface) !important; color: var(--jtd-heading) !important; }
+  html[data-jtd-theme="dark"] .main-header .site-nav .nav-list-link.active { background: rgba(75,123,236,0.18) !important; color: var(--jtd-link) !important; }
   html[data-jtd-theme="dark"] .side-bar .aux-nav .site-button { color: var(--jtd-text) !important; }
   html[data-jtd-theme="dark"] .side-bar .aux-nav .site-button:hover { background: var(--jtd-surface-2) !important; color: var(--jtd-heading) !important; }
   html[data-jtd-theme="dark"] .main-content p,
@@ -282,11 +338,7 @@
   html[data-jtd-theme="dark"] .main-content h5,
   html[data-jtd-theme="dark"] .main-content h6 { color: var(--jtd-heading) !important; }
   html[data-jtd-theme="dark"] hr { border-color: var(--jtd-border) !important; }
-  html[data-jtd-theme="dark"] .search-input {
-    background-color: var(--jtd-bg) !important;
-    color: var(--jtd-text) !important;
-    border: 1px solid var(--jtd-border) !important;
-  }
+  html[data-jtd-theme="dark"] .search-input { background-color: var(--jtd-bg) !important; color: var(--jtd-text) !important; border: 1px solid var(--jtd-border) !important; }
   html[data-jtd-theme="dark"] .search-input::placeholder { color: var(--jtd-text-dim) !important; }
   html[data-jtd-theme="dark"] .search,
   html[data-jtd-theme="dark"] .search-input-wrap,
@@ -296,19 +348,10 @@
   html[data-jtd-theme="dark"] .highlight,
   html[data-jtd-theme="dark"] pre.highlight,
   html[data-jtd-theme="dark"] pre { background-color: var(--jtd-surface) !important; color: var(--jtd-text) !important; }
-  html[data-jtd-theme="dark"] .btn {
-    color: var(--jtd-text) !important;
-    background-color: var(--jtd-surface) !important;
-    background-image: none !important;
-    box-shadow: none !important;
-    border: 1px solid var(--jtd-border) !important;
-  }
+  html[data-jtd-theme="dark"] .btn { color: var(--jtd-text) !important; background-color: var(--jtd-surface) !important; background-image: none !important; box-shadow: none !important; border: 1px solid var(--jtd-border) !important; }
   html[data-jtd-theme="dark"] .btn:hover { background-color: var(--jtd-border) !important; }
-  html[data-jtd-theme="dark"] .btn-primary {
-    background-color: var(--jtd-primary) !important;
-    color: #ffffff !important;
-    border-color: var(--jtd-primary) !important;
-  }
+  html[data-jtd-theme="dark"] .btn-primary { background-color: var(--jtd-primary) !important; color: #ffffff !important; border-color: var(--jtd-primary) !important; }
+  html[data-jtd-theme="dark"] .btn:focus-visible { outline: 2px solid var(--jtd-focus) !important; outline-offset: 3px !important; box-shadow: 0 0 0 1px #000 !important; }
   html[data-jtd-theme="dark"] table th,
   html[data-jtd-theme="dark"] table td { border-color: var(--jtd-border) !important; color: var(--jtd-text) !important; }
   html[data-jtd-theme="dark"] table th { background-color: var(--jtd-surface) !important; }
