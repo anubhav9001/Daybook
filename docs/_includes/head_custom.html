@@ -1,10 +1,8 @@
 <script>
-  // Pre-paint: if the user has an explicit choice, apply it as data-jtd-theme.
-  // If no choice is saved, the @media rule below handles system preference
-  // automatically — no JS needed.
+  // Pre-paint: apply saved theme if any. Otherwise CSS @media handles OS pref.
   (function () {
     try {
-      var saved = localStorage.getItem('daybook-theme'); // 'light' | 'dark' | null
+      var saved = localStorage.getItem('daybook-theme');
       if (saved === 'light' || saved === 'dark') {
         document.documentElement.setAttribute('data-jtd-theme', saved);
       }
@@ -13,18 +11,14 @@
 </script>
 <style>
   /* ========================================================================
-     DARK THEME for Just the Docs
-     Applies when EITHER:
-       - the OS prefers dark AND the user hasn't picked light, OR
-       - the user explicitly picked dark via the toggle button
+     Palette
      ======================================================================== */
-
-  /* --- Shared palette as CSS vars (easy to tweak) ---------------------- */
   :root {
     --jtd-bg:        #1b1b22;
     --jtd-bg-side:   #141418;
     --jtd-bg-head:   #27262b;
     --jtd-surface:   #2f2f36;
+    --jtd-surface-2: #26262d;
     --jtd-border:    #3a3942;
     --jtd-text:      #e6e1e8;
     --jtd-text-dim:  #a79fb0;
@@ -34,9 +28,121 @@
     --jtd-primary:   #4b7bec;
   }
 
-  /* --- Apply dark on system preference, unless user chose light -------- */
+  /* ========================================================================
+     Layout fixes: aux-nav becomes vertical "Important" list in sidebar,
+     site-nav becomes horizontal top bar beside search.
+     The JS in footer_custom.html relocates these elements; the CSS below
+     styles them in their NEW homes.
+     ======================================================================== */
+
+  /* Horizontal top bar: main nav + search + theme toggle */
+  .main-header { flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+  .main-header .site-nav {
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-x: auto;
+  }
+  .main-header .site-nav .nav-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    gap: 4px;
+  }
+  .main-header .site-nav .nav-list-item { margin: 0; }
+  .main-header .site-nav .nav-list-link {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .main-header .site-nav .nav-list-link.active {
+    font-weight: 600;
+  }
+  /* Hide nested sub-lists if present inside the horizontal nav */
+  .main-header .site-nav .nav-list .nav-list { display: none; }
+
+  /* Vertical "Important" list in sidebar */
+  .side-bar .aux-nav {
+    display: block;
+    padding: 12px 16px;
+    border-top: 1px solid var(--jtd-border);
+    margin-top: 16px;
+  }
+  .side-bar .aux-nav::before {
+    content: "Important";
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.65;
+    margin-bottom: 8px;
+  }
+  .side-bar .aux-nav .aux-nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .side-bar .aux-nav .aux-nav-list-item { margin: 0; }
+  .side-bar .aux-nav .site-button {
+    display: block;
+    padding: 6px 8px;
+    border-radius: 4px;
+    text-align: left;
+    width: 100%;
+  }
+  .side-bar .aux-nav .site-button:hover { background: rgba(127,127,127,0.12); }
+
+  /* Theme toggle in the main-header */
+  #theme-toggle {
+    flex: 0 0 auto;
+    background: transparent;
+    color: inherit;
+    border: 1px solid currentColor;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    opacity: 0.85;
+  }
+  #theme-toggle:hover { opacity: 1; }
+  #theme-toggle:focus-visible { outline: 2px solid var(--jtd-primary); outline-offset: 2px; }
+
+  /* Permalink icons beside headings — understated, not before text */
+  .anchor-heading {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    margin-left: 8px;
+    text-decoration: none;
+  }
+  h1:hover .anchor-heading,
+  h2:hover .anchor-heading,
+  h3:hover .anchor-heading,
+  h4:hover .anchor-heading,
+  h5:hover .anchor-heading,
+  h6:hover .anchor-heading,
+  .anchor-heading:focus { opacity: 0.6; }
+
+  /* ========================================================================
+     Dark theme — applies under @media (prefers-color-scheme: dark) unless the
+     user picked "light", or always when the user picked "dark".
+     ======================================================================== */
+
   @media (prefers-color-scheme: dark) {
     html:not([data-jtd-theme="light"]) { color-scheme: dark; }
+  }
+  html[data-jtd-theme="dark"] { color-scheme: dark; }
+
+  /* A single mixin applied to both selector groups via a helper class... but
+     keeping it simple with two parallel blocks for maximum compatibility. */
+
+  @media (prefers-color-scheme: dark) {
     html:not([data-jtd-theme="light"]),
     html:not([data-jtd-theme="light"]) body,
     html:not([data-jtd-theme="light"]) .main,
@@ -54,19 +160,34 @@
       border-bottom: 1px solid var(--jtd-border) !important;
     }
     html:not([data-jtd-theme="light"]) .site-title,
-    html:not([data-jtd-theme="light"]) .site-title:hover,
     html:not([data-jtd-theme="light"]) #menu-button { color: var(--jtd-heading) !important; }
     html:not([data-jtd-theme="light"]) .site-footer { color: var(--jtd-text-dim) !important; }
     html:not([data-jtd-theme="light"]) .site-footer a { color: var(--jtd-link) !important; }
-    html:not([data-jtd-theme="light"]) .nav-list .nav-list-link { color: var(--jtd-text) !important; }
-    html:not([data-jtd-theme="light"]) .nav-list .nav-list-link:hover,
-    html:not([data-jtd-theme="light"]) .nav-list .nav-list-link.active {
-      background-color: var(--jtd-surface) !important;
+
+    /* MAIN nav (now horizontal in top bar) */
+    html:not([data-jtd-theme="light"]) .main-header .site-nav .nav-list-link {
+      color: var(--jtd-text) !important;
+      background: transparent !important;
+    }
+    html:not([data-jtd-theme="light"]) .main-header .site-nav .nav-list-link:hover {
+      background: var(--jtd-surface-2) !important;
       color: var(--jtd-heading) !important;
     }
-    html:not([data-jtd-theme="light"]) .aux-nav .site-button,
-    html:not([data-jtd-theme="light"]) .aux-nav a { color: var(--jtd-text) !important; }
-    html:not([data-jtd-theme="light"]) .aux-nav .site-button:hover { color: var(--jtd-heading) !important; }
+    html:not([data-jtd-theme="light"]) .main-header .site-nav .nav-list-link.active {
+      background: var(--jtd-surface) !important;
+      color: var(--jtd-heading) !important;
+    }
+
+    /* IMPORTANT list (now vertical in sidebar) */
+    html:not([data-jtd-theme="light"]) .side-bar .aux-nav .site-button {
+      color: var(--jtd-text) !important;
+    }
+    html:not([data-jtd-theme="light"]) .side-bar .aux-nav .site-button:hover {
+      background: var(--jtd-surface-2) !important;
+      color: var(--jtd-heading) !important;
+    }
+
+    /* Content area */
     html:not([data-jtd-theme="light"]) .main-content p,
     html:not([data-jtd-theme="light"]) .main-content li { color: var(--jtd-text) !important; }
     html:not([data-jtd-theme="light"]) .main-content a,
@@ -79,23 +200,23 @@
     html:not([data-jtd-theme="light"]) .main-content h5,
     html:not([data-jtd-theme="light"]) .main-content h6 { color: var(--jtd-heading) !important; }
     html:not([data-jtd-theme="light"]) hr { border-color: var(--jtd-border) !important; }
+
     html:not([data-jtd-theme="light"]) .search-input {
       background-color: var(--jtd-bg) !important;
       color: var(--jtd-text) !important;
       border: 1px solid var(--jtd-border) !important;
     }
     html:not([data-jtd-theme="light"]) .search-input::placeholder { color: var(--jtd-text-dim) !important; }
-    html:not([data-jtd-theme="light"]) .search-results {
-      background-color: var(--jtd-bg-head) !important;
-      color: var(--jtd-text) !important;
-    }
+    html:not([data-jtd-theme="light"]) .search,
+    html:not([data-jtd-theme="light"]) .search-input-wrap,
+    html:not([data-jtd-theme="light"]) .search-label { background-color: transparent !important; }
+    html:not([data-jtd-theme="light"]) .search-results { background-color: var(--jtd-bg-head) !important; color: var(--jtd-text) !important; }
+
     html:not([data-jtd-theme="light"]) code,
     html:not([data-jtd-theme="light"]) .highlight,
     html:not([data-jtd-theme="light"]) pre.highlight,
-    html:not([data-jtd-theme="light"]) pre {
-      background-color: var(--jtd-surface) !important;
-      color: var(--jtd-text) !important;
-    }
+    html:not([data-jtd-theme="light"]) pre { background-color: var(--jtd-surface) !important; color: var(--jtd-text) !important; }
+
     html:not([data-jtd-theme="light"]) .btn {
       color: var(--jtd-text) !important;
       background-color: var(--jtd-surface) !important;
@@ -109,15 +230,21 @@
       color: #ffffff !important;
       border-color: var(--jtd-primary) !important;
     }
+
     html:not([data-jtd-theme="light"]) table th,
     html:not([data-jtd-theme="light"]) table td { border-color: var(--jtd-border) !important; color: var(--jtd-text) !important; }
     html:not([data-jtd-theme="light"]) table th { background-color: var(--jtd-surface) !important; }
-    html:not([data-jtd-theme="light"]) table tr:nth-child(2n) { background-color: #22222a !important; }
+    html:not([data-jtd-theme="light"]) table tr:nth-child(2n) { background-color: var(--jtd-surface-2) !important; }
     html:not([data-jtd-theme="light"]) blockquote { color: var(--jtd-text-dim) !important; border-left-color: var(--jtd-border) !important; }
+
+    html:not([data-jtd-theme="light"]) ::-webkit-scrollbar { background: var(--jtd-bg); width: 10px; height: 10px; }
+    html:not([data-jtd-theme="light"]) ::-webkit-scrollbar-thumb { background: var(--jtd-surface); border-radius: 4px; }
+    html:not([data-jtd-theme="light"]) ::-webkit-scrollbar-thumb:hover { background: var(--jtd-border); }
+
+    html:not([data-jtd-theme="light"]) .anchor-heading { color: var(--jtd-link) !important; }
   }
 
-  /* --- User explicitly chose dark (overrides even on light systems) ---- */
-  html[data-jtd-theme="dark"] { color-scheme: dark; }
+  /* Repeat for explicit user choice = dark */
   html[data-jtd-theme="dark"],
   html[data-jtd-theme="dark"] body,
   html[data-jtd-theme="dark"] .main,
@@ -135,19 +262,14 @@
     border-bottom: 1px solid var(--jtd-border) !important;
   }
   html[data-jtd-theme="dark"] .site-title,
-  html[data-jtd-theme="dark"] .site-title:hover,
   html[data-jtd-theme="dark"] #menu-button { color: var(--jtd-heading) !important; }
   html[data-jtd-theme="dark"] .site-footer { color: var(--jtd-text-dim) !important; }
   html[data-jtd-theme="dark"] .site-footer a { color: var(--jtd-link) !important; }
-  html[data-jtd-theme="dark"] .nav-list .nav-list-link { color: var(--jtd-text) !important; }
-  html[data-jtd-theme="dark"] .nav-list .nav-list-link:hover,
-  html[data-jtd-theme="dark"] .nav-list .nav-list-link.active {
-    background-color: var(--jtd-surface) !important;
-    color: var(--jtd-heading) !important;
-  }
-  html[data-jtd-theme="dark"] .aux-nav .site-button,
-  html[data-jtd-theme="dark"] .aux-nav a { color: var(--jtd-text) !important; }
-  html[data-jtd-theme="dark"] .aux-nav .site-button:hover { color: var(--jtd-heading) !important; }
+  html[data-jtd-theme="dark"] .main-header .site-nav .nav-list-link { color: var(--jtd-text) !important; background: transparent !important; }
+  html[data-jtd-theme="dark"] .main-header .site-nav .nav-list-link:hover { background: var(--jtd-surface-2) !important; color: var(--jtd-heading) !important; }
+  html[data-jtd-theme="dark"] .main-header .site-nav .nav-list-link.active { background: var(--jtd-surface) !important; color: var(--jtd-heading) !important; }
+  html[data-jtd-theme="dark"] .side-bar .aux-nav .site-button { color: var(--jtd-text) !important; }
+  html[data-jtd-theme="dark"] .side-bar .aux-nav .site-button:hover { background: var(--jtd-surface-2) !important; color: var(--jtd-heading) !important; }
   html[data-jtd-theme="dark"] .main-content p,
   html[data-jtd-theme="dark"] .main-content li { color: var(--jtd-text) !important; }
   html[data-jtd-theme="dark"] .main-content a,
@@ -166,17 +288,14 @@
     border: 1px solid var(--jtd-border) !important;
   }
   html[data-jtd-theme="dark"] .search-input::placeholder { color: var(--jtd-text-dim) !important; }
-  html[data-jtd-theme="dark"] .search-results {
-    background-color: var(--jtd-bg-head) !important;
-    color: var(--jtd-text) !important;
-  }
+  html[data-jtd-theme="dark"] .search,
+  html[data-jtd-theme="dark"] .search-input-wrap,
+  html[data-jtd-theme="dark"] .search-label { background-color: transparent !important; }
+  html[data-jtd-theme="dark"] .search-results { background-color: var(--jtd-bg-head) !important; color: var(--jtd-text) !important; }
   html[data-jtd-theme="dark"] code,
   html[data-jtd-theme="dark"] .highlight,
   html[data-jtd-theme="dark"] pre.highlight,
-  html[data-jtd-theme="dark"] pre {
-    background-color: var(--jtd-surface) !important;
-    color: var(--jtd-text) !important;
-  }
+  html[data-jtd-theme="dark"] pre { background-color: var(--jtd-surface) !important; color: var(--jtd-text) !important; }
   html[data-jtd-theme="dark"] .btn {
     color: var(--jtd-text) !important;
     background-color: var(--jtd-surface) !important;
@@ -193,54 +312,10 @@
   html[data-jtd-theme="dark"] table th,
   html[data-jtd-theme="dark"] table td { border-color: var(--jtd-border) !important; color: var(--jtd-text) !important; }
   html[data-jtd-theme="dark"] table th { background-color: var(--jtd-surface) !important; }
-  html[data-jtd-theme="dark"] table tr:nth-child(2n) { background-color: #22222a !important; }
+  html[data-jtd-theme="dark"] table tr:nth-child(2n) { background-color: var(--jtd-surface-2) !important; }
   html[data-jtd-theme="dark"] blockquote { color: var(--jtd-text-dim) !important; border-left-color: var(--jtd-border) !important; }
-
-  /* Extra dark coverage: search wrapper, scrollbar, html gap */
-  @media (prefers-color-scheme: dark) {
-    html:not([data-jtd-theme="light"]) .search,
-    html:not([data-jtd-theme="light"]) .search-input-wrap,
-    html:not([data-jtd-theme="light"]) .search-label { background-color: transparent !important; }
-    html:not([data-jtd-theme="light"]) ::-webkit-scrollbar { background: var(--jtd-bg); }
-    html:not([data-jtd-theme="light"]) ::-webkit-scrollbar-thumb { background: var(--jtd-surface); border-radius: 4px; }
-    html:not([data-jtd-theme="light"]) ::-webkit-scrollbar-thumb:hover { background: var(--jtd-border); }
-  }
-  html[data-jtd-theme="dark"] .search,
-  html[data-jtd-theme="dark"] .search-input-wrap,
-  html[data-jtd-theme="dark"] .search-label { background-color: transparent !important; }
-  html[data-jtd-theme="dark"] ::-webkit-scrollbar { background: var(--jtd-bg); }
+  html[data-jtd-theme="dark"] ::-webkit-scrollbar { background: var(--jtd-bg); width: 10px; height: 10px; }
   html[data-jtd-theme="dark"] ::-webkit-scrollbar-thumb { background: var(--jtd-surface); border-radius: 4px; }
   html[data-jtd-theme="dark"] ::-webkit-scrollbar-thumb:hover { background: var(--jtd-border); }
-
-  /* Theme toggle button — position-fixed fallback so it's always visible */
-  #theme-toggle {
-    position: fixed;
-    top: 12px;
-    right: 16px;
-    z-index: 9999;
-    background: rgba(0, 0, 0, 0.6);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 20px;
-    padding: 6px 14px;
-    font-size: 13px;
-    font-family: inherit;
-    cursor: pointer;
-    backdrop-filter: blur(6px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-  }
-  @media (prefers-color-scheme: light) {
-    html:not([data-jtd-theme="dark"]) #theme-toggle {
-      background: rgba(255, 255, 255, 0.9);
-      color: #1b1b22;
-      border-color: rgba(0, 0, 0, 0.2);
-    }
-  }
-  html[data-jtd-theme="light"] #theme-toggle {
-    background: rgba(255, 255, 255, 0.9);
-    color: #1b1b22;
-    border-color: rgba(0, 0, 0, 0.2);
-  }
-  #theme-toggle:hover { opacity: 0.85; }
-  #theme-toggle:focus-visible { outline: 2px solid var(--jtd-primary); outline-offset: 2px; }
+  html[data-jtd-theme="dark"] .anchor-heading { color: var(--jtd-link) !important; }
 </style>

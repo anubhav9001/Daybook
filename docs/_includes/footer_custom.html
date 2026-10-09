@@ -1,20 +1,18 @@
 <script>
   (function () {
+    /* ----- Theme toggle ----- */
     var STATES = ['system', 'light', 'dark'];
     var LABELS = {
       system: '⚙ System',
       light:  '☀ Light',
       dark:   '☽ Dark'
     };
-
-    function getSaved() {
-      try { return localStorage.getItem('daybook-theme'); } catch (e) { return null; }
-    }
-    function current() {
+    function getSaved() { try { return localStorage.getItem('daybook-theme'); } catch (e) { return null; } }
+    function currentState() {
       var s = getSaved();
       return (s === 'light' || s === 'dark') ? s : 'system';
     }
-    function apply(state) {
+    function applyState(state) {
       try {
         if (state === 'system') localStorage.removeItem('daybook-theme');
         else localStorage.setItem('daybook-theme', state);
@@ -27,28 +25,66 @@
       var btn = document.getElementById('theme-toggle');
       if (btn) {
         btn.textContent = LABELS[state];
-        btn.setAttribute('aria-label', 'Theme: ' + state + ' (click to change)');
+        btn.setAttribute('aria-label', 'Theme: ' + state + '. Click to change.');
       }
     }
 
-    function mount() {
-      if (document.getElementById('theme-toggle')) return;
-      var btn = document.createElement('button');
-      btn.id = 'theme-toggle';
-      btn.type = 'button';
-      btn.textContent = LABELS[current()];
-      btn.setAttribute('aria-label', 'Theme: ' + current() + ' (click to change)');
-      btn.addEventListener('click', function () {
-        var idx = STATES.indexOf(current());
-        apply(STATES[(idx + 1) % STATES.length]);
+    function restructure() {
+      /* 1. Move main nav from side-bar into main-header (visual + DOM order) */
+      var siteNav = document.querySelector('.side-bar #site-nav');
+      var mainHeader = document.getElementById('main-header');
+      var search = mainHeader ? mainHeader.querySelector('.search') : null;
+      if (siteNav && mainHeader && search) {
+        /* Insert the main nav right after the search so order is: search, nav, aux... */
+        if (search.nextSibling) {
+          mainHeader.insertBefore(siteNav, search.nextSibling);
+        } else {
+          mainHeader.appendChild(siteNav);
+        }
+        siteNav.setAttribute('aria-label', 'Main');
+      }
+
+      /* 2. Move aux-nav from main-header into side-bar and rename to "Important" */
+      var auxNav = document.querySelector('.main-header .aux-nav, .aux-nav');
+      var sideBar = document.querySelector('.side-bar');
+      if (auxNav && sideBar && !sideBar.contains(auxNav)) {
+        sideBar.appendChild(auxNav);
+      }
+      if (auxNav) {
+        auxNav.setAttribute('aria-label', 'Important');
+      }
+
+      /* 3. Insert theme toggle into the top bar in correct visual/DOM order */
+      if (mainHeader && !document.getElementById('theme-toggle')) {
+        var btn = document.createElement('button');
+        btn.id = 'theme-toggle';
+        btn.type = 'button';
+        btn.textContent = LABELS[currentState()];
+        btn.setAttribute('aria-label', 'Theme: ' + currentState() + '. Click to change.');
+        btn.addEventListener('click', function () {
+          var idx = STATES.indexOf(currentState());
+          applyState(STATES[(idx + 1) % STATES.length]);
+        });
+        /* Place at the END of the main-header — matches its visual position */
+        mainHeader.appendChild(btn);
+      }
+
+      /* 4. Give heading permalink icons meaningful names */
+      var anchors = document.querySelectorAll('.main-content .anchor-heading');
+      anchors.forEach(function (a) {
+        var h = a.closest('h1,h2,h3,h4,h5,h6');
+        var heading = h ? (h.textContent || '').trim() : '';
+        a.setAttribute('aria-label', 'Permanent link to ' + heading);
+        a.setAttribute('title', 'Permanent link to ' + heading);
+        /* Remove the aria-labelledby on anchor so our aria-label is used */
+        a.removeAttribute('aria-labelledby');
       });
-      (document.body || document.documentElement).appendChild(btn);
     }
 
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', mount);
+      document.addEventListener('DOMContentLoaded', restructure);
     } else {
-      mount();
+      restructure();
     }
   })();
 </script>
