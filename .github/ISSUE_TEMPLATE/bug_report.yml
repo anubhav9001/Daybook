@@ -1,0 +1,65 @@
+name: Bug Report
+description: Report a problem with Daybook
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report!
+        Please fill in the fields below so we can reproduce and fix it.
+  - type: input
+    id: version
+    attributes:
+      label: Daybook version
+      placeholder: e.g. 0.5.2
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: e.g. Windows 11 23H2
+    validations:
+      required: true
+  - type: dropdown
+    id: account
+    attributes:
+      label: Account type involved
+      options:
+        - Google
+        - Microsoft 365
+        - Both
+        - Not account-related
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you expect, and what did you see instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open Daybook
+        2. Click ...
+        3. See error ...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Logs from the installer or app, if any.
+      render: shell
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checks
+      options:
+        - label: I have searched existing issues and this is not a duplicate.
+          required: true

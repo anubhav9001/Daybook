@@ -1,0 +1,40 @@
+title: Daybook
+description: Accessible desktop assistant for Google and Microsoft 365 mail and calendars.
+remote_theme: just-the-docs/just-the-docs
+url: https://anubhav9001.github.io
+baseurl: /Daybook
+
+# Top-right header links (always visible)
+aux_links:
+  "Documentation (Wiki)":
+    - "https://github.com/anubhav9001/Daybook/wiki"
+  "Report a Bug":
+    - "https://github.com/anubhav9001/Daybook/issues/new/choose"
+  "Issue Tracker":
+    - "https://github.com/anubhav9001/Daybook/issues"
+  "Discussions":
+    - "https://github.com/anubhav9001/Daybook/discussions"
+  "GitHub":
+    - "https://github.com/anubhav9001/Daybook"
+aux_links_new_tab: true
+
+# Search box in the sidebar
+search_enabled: true
+search:
+  heading_level: 2
+  previews: 3
+
+heading_anchors: true
+color_scheme: light
+
+# Footer
+footer_content: >
+  <a href="https://github.com/anubhav9001/Daybook/wiki">Wiki</a> &middot;
+  <a href="https://github.com/anubhav9001/Daybook/issues">Issues</a> &middot;
+  <a href="https://github.com/anubhav9001/Daybook/issues/new/choose">Report a Bug</a> &middot;
+  <a href="https://github.com/anubhav9001/Daybook/discussions">Discussions</a> &middot;
+  <a href="https://github.com/anubhav9001/Daybook/releases">Releases</a>
+
+plugins:
+  - jekyll-remote-theme
+  - jekyll-seo-tag
