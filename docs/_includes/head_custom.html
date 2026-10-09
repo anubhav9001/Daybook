@@ -10,90 +10,102 @@
   })();
 </script>
 <style>
-  /* --- Dark theme overrides for Just the Docs ----------------------------- */
-  html[data-jtd-theme="dark"] { color-scheme: dark; }
+  /* --- Dark theme overrides for Just the Docs ---------------------------- */
+  html[data-jtd-theme="dark"] { color-scheme: dark; background-color: #1b1b22 !important; }
 
-  html[data-jtd-theme="dark"] body {
-    background-color: #1b1b22;
-    color: #e6e1e8;
+  html[data-jtd-theme="dark"] body,
+  html[data-jtd-theme="dark"] .main,
+  html[data-jtd-theme="dark"] .main-content-wrap,
+  html[data-jtd-theme="dark"] .main-content {
+    background-color: #1b1b22 !important;
+    color: #e6e1e8 !important;
   }
 
   html[data-jtd-theme="dark"] .side-bar {
-    background-color: #27262b;
-    border-right: 1px solid #3a3942;
+    background-color: #141418 !important;
+    border-right: 1px solid #3a3942 !important;
   }
   html[data-jtd-theme="dark"] .main-header {
-    background-color: #27262b;
-    border-bottom: 1px solid #3a3942;
+    background-color: #27262b !important;
+    border-bottom: 1px solid #3a3942 !important;
   }
+
   html[data-jtd-theme="dark"] .site-title,
-  html[data-jtd-theme="dark"] .site-title:hover { color: #ffffff; }
+  html[data-jtd-theme="dark"] .site-title:hover,
+  html[data-jtd-theme="dark"] #menu-button { color: #ffffff !important; }
 
-  html[data-jtd-theme="dark"] .site-footer,
-  html[data-jtd-theme="dark"] footer { color: #a79fb0; }
+  html[data-jtd-theme="dark"] .site-footer { color: #a79fb0 !important; }
+  html[data-jtd-theme="dark"] .site-footer a { color: #92b4ff !important; }
 
-  html[data-jtd-theme="dark"] .nav-list .nav-list-link { color: #e6e1e8; }
+  html[data-jtd-theme="dark"] .nav-list .nav-list-link { color: #e6e1e8 !important; }
   html[data-jtd-theme="dark"] .nav-list .nav-list-link:hover,
   html[data-jtd-theme="dark"] .nav-list .nav-list-link.active {
-    background-color: #2f2f36;
-    color: #ffffff;
+    background-color: #2f2f36 !important;
+    color: #ffffff !important;
   }
 
   html[data-jtd-theme="dark"] .aux-nav .site-button,
-  html[data-jtd-theme="dark"] .aux-nav a { color: #cfc9d6; }
-  html[data-jtd-theme="dark"] .aux-nav .site-button:hover { color: #ffffff; }
+  html[data-jtd-theme="dark"] .aux-nav a { color: #cfc9d6 !important; }
+  html[data-jtd-theme="dark"] .aux-nav .site-button:hover { color: #ffffff !important; }
+
+  html[data-jtd-theme="dark"] .main-content p,
+  html[data-jtd-theme="dark"] .main-content li,
+  html[data-jtd-theme="dark"] .main-content { color: #e6e1e8 !important; }
 
   html[data-jtd-theme="dark"] .main-content a,
-  html[data-jtd-theme="dark"] .main-content a:visited { color: #92b4ff; }
-  html[data-jtd-theme="dark"] .main-content a:hover { color: #b7ccff; }
+  html[data-jtd-theme="dark"] .main-content a:visited { color: #92b4ff !important; }
+  html[data-jtd-theme="dark"] .main-content a:hover { color: #b7ccff !important; }
 
   html[data-jtd-theme="dark"] .main-content h1,
   html[data-jtd-theme="dark"] .main-content h2,
   html[data-jtd-theme="dark"] .main-content h3,
   html[data-jtd-theme="dark"] .main-content h4,
   html[data-jtd-theme="dark"] .main-content h5,
-  html[data-jtd-theme="dark"] .main-content h6 { color: #ffffff; }
+  html[data-jtd-theme="dark"] .main-content h6 { color: #ffffff !important; }
 
-  html[data-jtd-theme="dark"] hr { border-color: #3a3942; }
+  html[data-jtd-theme="dark"] hr { border-color: #3a3942 !important; }
 
   html[data-jtd-theme="dark"] .search-input {
-    background-color: #1b1b22;
-    color: #e6e1e8;
-    border: 1px solid #3a3942;
+    background-color: #1b1b22 !important;
+    color: #e6e1e8 !important;
+    border: 1px solid #3a3942 !important;
   }
-  html[data-jtd-theme="dark"] .search-input::placeholder { color: #8a8294; }
-  html[data-jtd-theme="dark"] .search-results { background-color: #27262b; color: #e6e1e8; }
-  html[data-jtd-theme="dark"] .search-result:hover { background-color: #2f2f36; }
+  html[data-jtd-theme="dark"] .search-input::placeholder { color: #8a8294 !important; }
+  html[data-jtd-theme="dark"] .search-label .search-icon { color: #8a8294 !important; }
+  html[data-jtd-theme="dark"] .search-results { background-color: #27262b !important; color: #e6e1e8 !important; }
+  html[data-jtd-theme="dark"] .search-result:hover { background-color: #2f2f36 !important; }
 
   html[data-jtd-theme="dark"] code,
   html[data-jtd-theme="dark"] .highlight,
   html[data-jtd-theme="dark"] pre.highlight,
   html[data-jtd-theme="dark"] pre {
     background-color: #2f2f36 !important;
-    color: #e6e1e8;
+    color: #e6e1e8 !important;
   }
 
   html[data-jtd-theme="dark"] .btn {
-    color: #e6e1e8;
-    background-color: #2f2f36;
-    background-image: none;
-    box-shadow: none;
-    border: 1px solid #3a3942;
+    color: #e6e1e8 !important;
+    background-color: #2f2f36 !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border: 1px solid #3a3942 !important;
   }
-  html[data-jtd-theme="dark"] .btn:hover { background-color: #3a3942; }
+  html[data-jtd-theme="dark"] .btn:hover { background-color: #3a3942 !important; }
   html[data-jtd-theme="dark"] .btn-primary {
-    background-color: #4b7bec;
-    color: #ffffff;
-    border-color: #4b7bec;
+    background-color: #4b7bec !important;
+    color: #ffffff !important;
+    border-color: #4b7bec !important;
   }
-  html[data-jtd-theme="dark"] .btn-primary:hover { background-color: #5c88ee; }
+  html[data-jtd-theme="dark"] .btn-primary:hover { background-color: #5c88ee !important; }
 
   html[data-jtd-theme="dark"] table th,
-  html[data-jtd-theme="dark"] table td { border-color: #3a3942; color: #e6e1e8; }
-  html[data-jtd-theme="dark"] table th { background-color: #2f2f36; }
-  html[data-jtd-theme="dark"] table tr:nth-child(2n) { background-color: #22222a; }
+  html[data-jtd-theme="dark"] table td { border-color: #3a3942 !important; color: #e6e1e8 !important; }
+  html[data-jtd-theme="dark"] table th { background-color: #2f2f36 !important; }
+  html[data-jtd-theme="dark"] table tr:nth-child(2n) { background-color: #22222a !important; }
 
-  html[data-jtd-theme="dark"] blockquote { color: #a79fb0; border-left-color: #3a3942; }
+  html[data-jtd-theme="dark"] blockquote { color: #a79fb0 !important; border-left-color: #3a3942 !important; }
+
+  html[data-jtd-theme="dark"] .skip-to-main { background-color: #4b7bec !important; color: #ffffff !important; }
 
   /* Theme toggle button */
   #theme-toggle {
