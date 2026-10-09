@@ -15,19 +15,19 @@
      Palette
      ======================================================================== */
   :root {
-    --jtd-bg:        #1b1b22;
-    --jtd-bg-side:   #141418;
-    --jtd-bg-head:   #27262b;
-    --jtd-surface:   #2f2f36;
-    --jtd-surface-2: #26262d;
-    --jtd-border:    #3a3942;
-    --jtd-text:      #e6e1e8;
-    --jtd-text-dim:  #a79fb0;
+    --jtd-bg:        #15151c;        /* darker base for stronger contrast */
+    --jtd-bg-side:   #0f0f14;
+    --jtd-bg-head:   #1f1e26;
+    --jtd-surface:   #2a2932;
+    --jtd-surface-2: #22222a;
+    --jtd-border:    #44434e;        /* more visible borders */
+    --jtd-text:      #f1edf5;        /* near-white body text ≈15:1 on bg */
+    --jtd-text-dim:  #bdb6c6;        /* dim text still readable ≈8:1 */
     --jtd-heading:   #ffffff;
-    --jtd-link:      #92b4ff;
-    --jtd-link-hvr:  #b7ccff;
-    --jtd-primary:   #4b7bec;
-    --jtd-focus:     #ffbf47;
+    --jtd-link:      #a9c1ff;        /* brighter link ≈9:1 */
+    --jtd-link-hvr:  #ccdcff;
+    --jtd-primary:   #5a89ff;
+    --jtd-focus:     #ffcc33;
   }
 
   /* ========================================================================
@@ -265,19 +265,21 @@
   #theme-toggle:hover { opacity: 1; }
 
   /* ========================================================================
-     Search results dropdown — fully opaque panel with clean row layout
+     Search results dropdown — ID-selector wins JTD's own rules
      ======================================================================== */
-  .search-results {
+  #search-results.search-results,
+  #search-results {
     margin-top: 4px !important;
     border-radius: 8px !important;
-    border: 1px solid rgba(127,127,127,0.3) !important;
-    box-shadow: 0 8px 28px rgba(0,0,0,0.22) !important;
+    border: 1px solid rgba(127,127,127,0.35) !important;
+    box-shadow: 0 10px 32px rgba(0,0,0,0.35) !important;
     max-height: 70vh !important;
     overflow: auto !important;
     background: #ffffff !important;
     background-color: #ffffff !important;
     padding: 4px !important;
     z-index: 9999 !important;
+    isolation: isolate;              /* new stacking context */
   }
   .search-results-list {
     padding: 0 !important;
@@ -483,12 +485,13 @@
     html:not([data-jtd-theme="light"]) .search,
     html:not([data-jtd-theme="light"]) .search-input-wrap,
     html:not([data-jtd-theme="light"]) .search-label { background-color: transparent !important; }
-    html:not([data-jtd-theme="light"]) .search-results {
-      background: #27262b !important;
-      background-color: #27262b !important;
+    html:not([data-jtd-theme="light"]) #search-results.search-results,
+    html:not([data-jtd-theme="light"]) #search-results {
+      background: #1f1e26 !important;
+      background-color: #1f1e26 !important;
       color: var(--jtd-text) !important;
       border-color: var(--jtd-border) !important;
-      box-shadow: 0 8px 28px rgba(0,0,0,0.6) !important;
+      box-shadow: 0 10px 32px rgba(0,0,0,0.7) !important;
     }
     html:not([data-jtd-theme="light"]) .search-result:hover,
     html:not([data-jtd-theme="light"]) .search-result.active {
@@ -585,12 +588,13 @@
   html[data-jtd-theme="dark"] .search,
   html[data-jtd-theme="dark"] .search-input-wrap,
   html[data-jtd-theme="dark"] .search-label { background-color: transparent !important; }
-  html[data-jtd-theme="dark"] .search-results {
-    background: #27262b !important;
-    background-color: #27262b !important;
+  html[data-jtd-theme="dark"] #search-results.search-results,
+  html[data-jtd-theme="dark"] #search-results {
+    background: #1f1e26 !important;
+    background-color: #1f1e26 !important;
     color: var(--jtd-text) !important;
     border-color: var(--jtd-border) !important;
-    box-shadow: 0 8px 28px rgba(0,0,0,0.6) !important;
+    box-shadow: 0 10px 32px rgba(0,0,0,0.7) !important;
   }
   html[data-jtd-theme="dark"] .search-result:hover,
   html[data-jtd-theme="dark"] .search-result.active {

@@ -79,8 +79,29 @@
       title.insertBefore(svg, title.firstChild);
     }
 
+    /* Belt-and-braces: force opaque bg + high z-index on #search-results
+       every time its content changes, so JTD's innerHTML writes can't
+       strip our styling. */
+    function pinSearchResultsStyle() {
+      var sr = document.getElementById('search-results');
+      if (!sr) return;
+      function paint() {
+        var dark = document.documentElement.getAttribute('data-jtd-theme') === 'dark'
+                || (document.documentElement.getAttribute('data-jtd-theme') !== 'light'
+                    && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        sr.style.setProperty('background-color', dark ? '#1f1e26' : '#ffffff', 'important');
+        sr.style.setProperty('z-index', '9999', 'important');
+        sr.style.setProperty('isolation', 'isolate', 'important');
+      }
+      paint();
+      new MutationObserver(paint).observe(sr, { childList: true, subtree: true, attributes: true });
+      /* Re-paint when the theme switches too */
+      new MutationObserver(paint).observe(document.documentElement, { attributes: true, attributeFilter: ['data-jtd-theme'] });
+    }
+
     function restructure() {
       addLogo();
+      pinSearchResultsStyle();
       /* Move main nav from sidebar into main-header, right after search */
       var siteNav = document.querySelector('.side-bar #site-nav');
       var mainHeader = document.getElementById('main-header');
