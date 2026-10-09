@@ -12,9 +12,9 @@
     }
     function applyTheme(theme) {
       document.documentElement.setAttribute('data-jtd-theme', theme);
-      if (window.jtd && typeof jtd.setTheme === 'function') {
-        jtd.setTheme(theme);
-      }
+      // Note: jtd.setTheme is intentionally NOT called — the dark stylesheet
+      // isn't shipped with remote_theme. Our CSS overrides (in head_custom.html)
+      // handle the dark palette by targeting html[data-jtd-theme="dark"].
       var btn = document.getElementById('theme-toggle');
       if (btn) {
         btn.textContent = theme === 'dark' ? 'Light mode' : 'Dark mode';
