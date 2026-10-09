@@ -1,6 +1,5 @@
 <script>
   (function () {
-    // 3-way cycle: System -> Light -> Dark -> System ...
     var STATES = ['system', 'light', 'dark'];
     var LABELS = {
       system: '⚙ System',
@@ -32,39 +31,24 @@
       }
     }
 
-    function insert() {
-      if (document.getElementById('theme-toggle')) return true;
-      var list = document.querySelector('.aux-nav .aux-nav-list')
-              || document.querySelector('.aux-nav ul');
-      if (!list) return false;
-      var li = document.createElement('li');
-      li.className = 'aux-nav-list-item';
+    function mount() {
+      if (document.getElementById('theme-toggle')) return;
       var btn = document.createElement('button');
       btn.id = 'theme-toggle';
       btn.type = 'button';
-      btn.className = 'site-button';
       btn.textContent = LABELS[current()];
       btn.setAttribute('aria-label', 'Theme: ' + current() + ' (click to change)');
       btn.addEventListener('click', function () {
         var idx = STATES.indexOf(current());
         apply(STATES[(idx + 1) % STATES.length]);
       });
-      li.appendChild(btn);
-      list.appendChild(li);
-      return true;
+      (document.body || document.documentElement).appendChild(btn);
     }
 
-    function boot() {
-      if (!insert()) {
-        requestAnimationFrame(function () {
-          if (!insert()) setTimeout(insert, 100);
-        });
-      }
-    }
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', boot);
+      document.addEventListener('DOMContentLoaded', mount);
     } else {
-      boot();
+      mount();
     }
   })();
 </script>

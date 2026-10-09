@@ -196,17 +196,51 @@
   html[data-jtd-theme="dark"] table tr:nth-child(2n) { background-color: #22222a !important; }
   html[data-jtd-theme="dark"] blockquote { color: var(--jtd-text-dim) !important; border-left-color: var(--jtd-border) !important; }
 
-  /* Theme toggle button */
-  #theme-toggle {
-    background: transparent;
-    border: 1px solid currentColor;
-    border-radius: 4px;
-    padding: 4px 10px;
-    font-size: 14px;
-    cursor: pointer;
-    margin-left: 8px;
-    color: inherit;
-    font-family: inherit;
+  /* Extra dark coverage: search wrapper, scrollbar, html gap */
+  @media (prefers-color-scheme: dark) {
+    html:not([data-jtd-theme="light"]) .search,
+    html:not([data-jtd-theme="light"]) .search-input-wrap,
+    html:not([data-jtd-theme="light"]) .search-label { background-color: transparent !important; }
+    html:not([data-jtd-theme="light"]) ::-webkit-scrollbar { background: var(--jtd-bg); }
+    html:not([data-jtd-theme="light"]) ::-webkit-scrollbar-thumb { background: var(--jtd-surface); border-radius: 4px; }
+    html:not([data-jtd-theme="light"]) ::-webkit-scrollbar-thumb:hover { background: var(--jtd-border); }
   }
-  #theme-toggle:hover { opacity: 0.75; }
+  html[data-jtd-theme="dark"] .search,
+  html[data-jtd-theme="dark"] .search-input-wrap,
+  html[data-jtd-theme="dark"] .search-label { background-color: transparent !important; }
+  html[data-jtd-theme="dark"] ::-webkit-scrollbar { background: var(--jtd-bg); }
+  html[data-jtd-theme="dark"] ::-webkit-scrollbar-thumb { background: var(--jtd-surface); border-radius: 4px; }
+  html[data-jtd-theme="dark"] ::-webkit-scrollbar-thumb:hover { background: var(--jtd-border); }
+
+  /* Theme toggle button — position-fixed fallback so it's always visible */
+  #theme-toggle {
+    position: fixed;
+    top: 12px;
+    right: 16px;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  }
+  @media (prefers-color-scheme: light) {
+    html:not([data-jtd-theme="dark"]) #theme-toggle {
+      background: rgba(255, 255, 255, 0.9);
+      color: #1b1b22;
+      border-color: rgba(0, 0, 0, 0.2);
+    }
+  }
+  html[data-jtd-theme="light"] #theme-toggle {
+    background: rgba(255, 255, 255, 0.9);
+    color: #1b1b22;
+    border-color: rgba(0, 0, 0, 0.2);
+  }
+  #theme-toggle:hover { opacity: 0.85; }
+  #theme-toggle:focus-visible { outline: 2px solid var(--jtd-primary); outline-offset: 2px; }
 </style>
