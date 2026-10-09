@@ -70,6 +70,7 @@
     align-items: center;
     padding: 6px 14px;
     min-height: 48px;
+    overflow: hidden;              /* guarantee no scrollbar on this bar */
   }
   .main-header .search {
     flex: 0 1 200px;
@@ -282,18 +283,47 @@
   .search-no-result { padding: 12px; opacity: 0.7; font-style: italic; }
 
   /* ========================================================================
-     Permalink icons on headings — understated, meaningful
+     Permalink icons on headings — placed AFTER the heading text
+     (JTD renders them before by default; flex order moves them to the end
+     so the focus ring never overlaps the heading).
      ======================================================================== */
-  .anchor-heading {
+  .main-content h1,
+  .main-content h2,
+  .main-content h3,
+  .main-content h4,
+  .main-content h5,
+  .main-content h6 {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .main-content .anchor-heading {
+    order: 2;
+    margin: 0;
     opacity: 0;
     transition: opacity 0.15s ease;
-    margin-left: 8px;
     text-decoration: none;
-    vertical-align: middle;
+    display: inline-flex;
+    align-items: center;
+    padding: 2px;
+    border-radius: 4px;
+    line-height: 1;
   }
-  h1:hover .anchor-heading, h2:hover .anchor-heading, h3:hover .anchor-heading,
-  h4:hover .anchor-heading, h5:hover .anchor-heading, h6:hover .anchor-heading,
-  .anchor-heading:focus, .anchor-heading:focus-visible { opacity: 0.7; }
+  .main-content .anchor-heading svg { display: block; }
+  .main-content h1:hover .anchor-heading,
+  .main-content h2:hover .anchor-heading,
+  .main-content h3:hover .anchor-heading,
+  .main-content h4:hover .anchor-heading,
+  .main-content h5:hover .anchor-heading,
+  .main-content h6:hover .anchor-heading,
+  .main-content .anchor-heading:focus,
+  .main-content .anchor-heading:focus-visible { opacity: 0.7; }
+  /* Tight focus ring on the small icon, offset tiny so it never crosses text */
+  .main-content .anchor-heading:focus-visible {
+    outline: 2px solid var(--jtd-focus);
+    outline-offset: 1px;
+  }
 
   /* ========================================================================
      DARK THEME
