@@ -66,7 +66,21 @@
       a.dataset.iconAdded = '1';
     }
 
+    function addLogo() {
+      var title = document.querySelector('.site-header .site-title');
+      if (!title || title.querySelector('.site-logo')) return;
+      var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('class', 'site-logo');
+      svg.setAttribute('viewBox', '0 0 64 64');
+      svg.setAttribute('aria-hidden', 'true');
+      svg.innerHTML = '<rect width="64" height="64" rx="12" fill="#4b7bec"/>' +
+                      '<path d="M18 14h18a14 14 0 0 1 0 28H18V14zm8 8v12h10a6 6 0 0 0 0-12H26z" fill="#ffffff"/>' +
+                      '<circle cx="46" cy="48" r="4" fill="#ffffff"/>';
+      title.insertBefore(svg, title.firstChild);
+    }
+
     function restructure() {
+      addLogo();
       /* Move main nav from sidebar into main-header, right after search */
       var siteNav = document.querySelector('.side-bar #site-nav');
       var mainHeader = document.getElementById('main-header');
