@@ -35,18 +35,35 @@
       if (!isExt) return;
       a.setAttribute('target', '_blank');
       a.setAttribute('rel', 'noopener noreferrer');
-      /* Visible icon */
       var icon = document.createElement('span');
       icon.className = 'ext-icon';
       icon.setAttribute('aria-hidden', 'true');
-      icon.textContent = '↗'; /* ↗ */
+      icon.textContent = '↗';
       a.appendChild(icon);
-      /* Screen-reader-only hint */
       var sr = document.createElement('span');
       sr.className = 'sr-only';
       sr.textContent = ' (opens in new tab)';
       a.appendChild(sr);
       a.dataset.extMarked = '1';
+    }
+
+    /* Prefix each sidebar "Important" link with a category icon. */
+    function prefixSidebarIcon(a) {
+      if (!a || a.dataset.iconAdded === '1') return;
+      var txt = (a.textContent || '').trim().toLowerCase();
+      var icon = '→'; /* fallback */
+      if (txt.indexOf('wiki') > -1 || txt.indexOf('documentation') > -1) icon = '📘';
+      else if (txt.indexOf('bug') > -1 || txt.indexOf('report') > -1)    icon = '🐞';
+      else if (txt.indexOf('issue') > -1 || txt.indexOf('tracker') > -1) icon = '📋';
+      else if (txt.indexOf('discussion') > -1)                            icon = '💬';
+      else if (txt.indexOf('github') > -1)                                icon = '⌨';
+      else if (txt.indexOf('release') > -1 || txt.indexOf('download') > -1) icon = '⬇';
+      var span = document.createElement('span');
+      span.className = 'nav-icon';
+      span.setAttribute('aria-hidden', 'true');
+      span.textContent = icon;
+      a.insertBefore(span, a.firstChild);
+      a.dataset.iconAdded = '1';
     }
 
     function restructure() {
@@ -72,8 +89,10 @@
       }
       if (auxNav) {
         auxNav.setAttribute('aria-label', 'Important');
-        /* Mark external links for a11y */
-        auxNav.querySelectorAll('a').forEach(markExternalLink);
+        auxNav.querySelectorAll('a').forEach(function (a) {
+          prefixSidebarIcon(a);   /* icon FIRST so it's at the start of the link */
+          markExternalLink(a);
+        });
       }
 
       /* Add theme toggle to main-header at the end (visual = DOM order) */

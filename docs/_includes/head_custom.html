@@ -75,14 +75,17 @@
     flex: 1 1 auto;
     min-width: 0;
     overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
   }
   .main-header .site-nav .nav-list {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;      /* keep on one line */
     margin: 0;
     padding: 0;
     list-style: none;
     gap: 2px;
+    white-space: nowrap;
   }
   .main-header .site-nav .nav-list-item { margin: 0; }
   .main-header .site-nav .nav-list-link {
@@ -113,11 +116,11 @@
   .side-bar > .site-header { flex: 0 0 auto; }
   .side-bar > #site-nav { display: none !important; } /* moved out by JS */
 
-  /* "Important" vertical list in sidebar */
+  /* "Important" vertical list in sidebar — plain text LINK style with icons */
   .side-bar .aux-nav {
     display: block;
-    padding: 16px 20px 8px;
-    margin: 8px 0;
+    padding: 12px 20px;
+    margin: 8px 0 0;
   }
   .side-bar .aux-nav .aux-nav-list {
     display: flex;
@@ -128,27 +131,40 @@
     list-style: none;
   }
   .side-bar .aux-nav .aux-nav-list-item { margin: 0; }
-  .side-bar .aux-nav .site-button {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 6px;
-    padding: 8px 12px;
-    border-radius: 6px;
+  .side-bar .aux-nav a.site-button {
+    /* reset JTD's button-ish look so it reads as a link */
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 6px 0;
+    background: none !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border: 0;
+    border-radius: 0;
     text-align: left;
-    width: 100%;
+    width: auto;
+    font-weight: normal;
     text-decoration: none;
-    font-weight: 500;
+    color: inherit;
   }
-  .side-bar .aux-nav .site-button:hover {
-    background: rgba(127,127,127,0.12);
+  .side-bar .aux-nav a.site-button:hover,
+  .side-bar .aux-nav a.site-button:focus-visible {
+    text-decoration: underline;
+    background: none !important;
   }
-  /* External link indicator */
-  .side-bar .aux-nav .site-button .ext-icon {
+  .side-bar .aux-nav .nav-icon {
+    flex: 0 0 1.2em;
+    display: inline-block;
+    text-align: center;
+    font-size: 1em;
+    opacity: 0.9;
+  }
+  .side-bar .aux-nav .ext-icon {
     flex: 0 0 auto;
-    font-size: 11px;
-    opacity: 0.65;
-    transform: translateY(-1px);
+    font-size: 0.8em;
+    margin-left: 2px;
+    opacity: 0.6;
   }
 
   /* Push the "Just the Docs" credit to the sidebar bottom */
@@ -235,10 +251,11 @@
       background: rgba(75,123,236,0.18) !important;
       color: var(--jtd-link) !important;
     }
-    html:not([data-jtd-theme="light"]) .side-bar .aux-nav .site-button { color: var(--jtd-text) !important; }
-    html:not([data-jtd-theme="light"]) .side-bar .aux-nav .site-button:hover {
-      background: var(--jtd-surface-2) !important;
-      color: var(--jtd-heading) !important;
+    html:not([data-jtd-theme="light"]) .side-bar .aux-nav a.site-button { color: var(--jtd-text) !important; background: none !important; }
+    html:not([data-jtd-theme="light"]) .side-bar .aux-nav a.site-button:hover,
+    html:not([data-jtd-theme="light"]) .side-bar .aux-nav a.site-button:focus-visible {
+      color: var(--jtd-link-hvr) !important;
+      text-decoration: underline !important;
     }
 
     html:not([data-jtd-theme="light"]) .main-content p,
@@ -324,8 +341,9 @@
   html[data-jtd-theme="dark"] .main-header .site-nav .nav-list-link { color: var(--jtd-text) !important; }
   html[data-jtd-theme="dark"] .main-header .site-nav .nav-list-link:hover { background: var(--jtd-surface-2) !important; color: var(--jtd-heading) !important; }
   html[data-jtd-theme="dark"] .main-header .site-nav .nav-list-link.active { background: rgba(75,123,236,0.18) !important; color: var(--jtd-link) !important; }
-  html[data-jtd-theme="dark"] .side-bar .aux-nav .site-button { color: var(--jtd-text) !important; }
-  html[data-jtd-theme="dark"] .side-bar .aux-nav .site-button:hover { background: var(--jtd-surface-2) !important; color: var(--jtd-heading) !important; }
+  html[data-jtd-theme="dark"] .side-bar .aux-nav a.site-button { color: var(--jtd-text) !important; background: none !important; }
+  html[data-jtd-theme="dark"] .side-bar .aux-nav a.site-button:hover,
+  html[data-jtd-theme="dark"] .side-bar .aux-nav a.site-button:focus-visible { color: var(--jtd-link-hvr) !important; text-decoration: underline !important; }
   html[data-jtd-theme="dark"] .main-content p,
   html[data-jtd-theme="dark"] .main-content li { color: var(--jtd-text) !important; }
   html[data-jtd-theme="dark"] .main-content a,
