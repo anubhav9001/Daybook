@@ -1,0 +1,28 @@
+<script>
+  // Apply saved or system theme BEFORE first paint to avoid a flash.
+  (function () {
+    try {
+      var saved = localStorage.getItem('daybook-theme'); // 'light' | 'dark' | null
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var theme = saved || (prefersDark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-jtd-theme', theme);
+    } catch (e) { /* ignore */ }
+  })();
+</script>
+<style>
+  /* Fallback: honor the pre-paint data-jtd-theme marker before Just the Docs JS loads */
+  html[data-jtd-theme="dark"] body { background-color: #27262b; color: #e6e1e8; }
+
+  /* Theme toggle button in the top-right aux area */
+  #theme-toggle {
+    background: transparent;
+    border: 1px solid currentColor;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 8px;
+    color: inherit;
+  }
+  #theme-toggle:hover { opacity: 0.8; }
+</style>

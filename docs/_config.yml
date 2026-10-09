@@ -25,6 +25,9 @@ search:
   previews: 3
 
 heading_anchors: true
+# Default is overridden at runtime by assets/js/theme.js:
+# - respects prefers-color-scheme on first visit
+# - remembers the user's manual choice in localStorage
 color_scheme: light
 
 # Footer
