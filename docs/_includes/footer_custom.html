@@ -79,29 +79,54 @@
       title.insertBefore(svg, title.firstChild);
     }
 
-    /* Belt-and-braces: force opaque bg + high z-index on #search-results
-       every time its content changes, so JTD's innerHTML writes can't
-       strip our styling. */
-    function pinSearchResultsStyle() {
+    /* Nuclear fix for the search dropdown bleed-through:
+       1) Move #search-results to <body> root so NO parent stacking context can trap it.
+       2) Pin it as position:fixed under the search input via JS (so it tracks on scroll/resize).
+       3) Force opaque background + z-index via inline !important style.
+       4) Re-apply on every DOM mutation (JTD rewrites innerHTML on each keystroke)
+          and on theme change. */
+    function pinSearchResults() {
       var sr = document.getElementById('search-results');
       if (!sr) return;
-      function paint() {
-        var dark = document.documentElement.getAttribute('data-jtd-theme') === 'dark'
-                || (document.documentElement.getAttribute('data-jtd-theme') !== 'light'
-                    && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
-        sr.style.setProperty('background-color', dark ? '#1f1e26' : '#ffffff', 'important');
-        sr.style.setProperty('z-index', '9999', 'important');
-        sr.style.setProperty('isolation', 'isolate', 'important');
+      if (sr.parentNode !== document.body) document.body.appendChild(sr);
+
+      function reposition() {
+        var input = document.getElementById('search-input');
+        if (!input) return;
+        var rect = input.getBoundingClientRect();
+        sr.style.setProperty('position', 'fixed', 'important');
+        sr.style.setProperty('top',  (rect.bottom + 6) + 'px', 'important');
+        sr.style.setProperty('left', rect.left + 'px', 'important');
+        sr.style.setProperty('min-width', Math.max(rect.width, 340) + 'px', 'important');
+        sr.style.setProperty('max-width', '560px', 'important');
       }
+      function paint() {
+        var html = document.documentElement;
+        var dark = html.getAttribute('data-jtd-theme') === 'dark'
+                || (html.getAttribute('data-jtd-theme') !== 'light'
+                    && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        var bg = dark ? '#1f1e26' : '#ffffff';
+        var fg = dark ? '#f1edf5' : '#15151c';
+        sr.style.setProperty('background',       bg, 'important');
+        sr.style.setProperty('background-color', bg, 'important');
+        sr.style.setProperty('color',            fg, 'important');
+        sr.style.setProperty('z-index',          '2147483647', 'important'); /* top */
+        sr.style.setProperty('isolation',        'isolate', 'important');
+        sr.style.setProperty('backdrop-filter',  'none', 'important');
+        sr.style.setProperty('opacity',          '1', 'important');
+        reposition();
+      }
+
       paint();
       new MutationObserver(paint).observe(sr, { childList: true, subtree: true, attributes: true });
-      /* Re-paint when the theme switches too */
       new MutationObserver(paint).observe(document.documentElement, { attributes: true, attributeFilter: ['data-jtd-theme'] });
+      window.addEventListener('scroll',  reposition, { passive: true, capture: true });
+      window.addEventListener('resize',  reposition);
     }
 
     function restructure() {
       addLogo();
-      pinSearchResultsStyle();
+      pinSearchResults();
       /* Move main nav from sidebar into main-header, right after search */
       var siteNav = document.querySelector('.side-bar #site-nav');
       var mainHeader = document.getElementById('main-header');
