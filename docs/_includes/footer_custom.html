@@ -1,57 +1,70 @@
 <script>
-  // Insert a theme toggle button into the top-right aux-nav and wire it up.
   (function () {
-    function getTheme() {
+    // 3-way cycle: System -> Light -> Dark -> System ...
+    var STATES = ['system', 'light', 'dark'];
+    var LABELS = {
+      system: '⚙ System',
+      light:  '☀ Light',
+      dark:   '☽ Dark'
+    };
+
+    function getSaved() {
       try { return localStorage.getItem('daybook-theme'); } catch (e) { return null; }
     }
-    function systemPrefersDark() {
-      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    function current() {
+      var s = getSaved();
+      return (s === 'light' || s === 'dark') ? s : 'system';
     }
-    function currentTheme() {
-      return getTheme() || (systemPrefersDark() ? 'dark' : 'light');
-    }
-    function applyTheme(theme) {
-      document.documentElement.setAttribute('data-jtd-theme', theme);
-      // Note: jtd.setTheme is intentionally NOT called — the dark stylesheet
-      // isn't shipped with remote_theme. Our CSS overrides (in head_custom.html)
-      // handle the dark palette by targeting html[data-jtd-theme="dark"].
+    function apply(state) {
+      try {
+        if (state === 'system') localStorage.removeItem('daybook-theme');
+        else localStorage.setItem('daybook-theme', state);
+      } catch (e) {}
+      if (state === 'light' || state === 'dark') {
+        document.documentElement.setAttribute('data-jtd-theme', state);
+      } else {
+        document.documentElement.removeAttribute('data-jtd-theme');
+      }
       var btn = document.getElementById('theme-toggle');
       if (btn) {
-        btn.textContent = theme === 'dark' ? 'Light mode' : 'Dark mode';
-        btn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+        btn.textContent = LABELS[state];
+        btn.setAttribute('aria-label', 'Theme: ' + state + ' (click to change)');
       }
     }
 
-    // Apply once on load (Just the Docs JS is ready by now).
-    applyTheme(currentTheme());
-
-    // Add the toggle button to the aux-nav list in the top header.
-    var aux = document.querySelector('.aux-nav .aux-nav-list') || document.querySelector('.aux-nav ul');
-    if (aux) {
+    function insert() {
+      if (document.getElementById('theme-toggle')) return true;
+      var list = document.querySelector('.aux-nav .aux-nav-list')
+              || document.querySelector('.aux-nav ul');
+      if (!list) return false;
       var li = document.createElement('li');
       li.className = 'aux-nav-list-item';
       var btn = document.createElement('button');
       btn.id = 'theme-toggle';
       btn.type = 'button';
-      btn.setAttribute('aria-label', 'Toggle light and dark theme');
-      btn.textContent = currentTheme() === 'dark' ? 'Light mode' : 'Dark mode';
+      btn.className = 'site-button';
+      btn.textContent = LABELS[current()];
+      btn.setAttribute('aria-label', 'Theme: ' + current() + ' (click to change)');
       btn.addEventListener('click', function () {
-        var next = currentTheme() === 'dark' ? 'light' : 'dark';
-        try { localStorage.setItem('daybook-theme', next); } catch (e) {}
-        applyTheme(next);
+        var idx = STATES.indexOf(current());
+        apply(STATES[(idx + 1) % STATES.length]);
       });
       li.appendChild(btn);
-      aux.appendChild(li);
+      list.appendChild(li);
+      return true;
     }
 
-    // Follow system changes only when the user hasn't picked one.
-    if (window.matchMedia) {
-      var mq = window.matchMedia('(prefers-color-scheme: dark)');
-      var listener = function (e) {
-        if (!getTheme()) applyTheme(e.matches ? 'dark' : 'light');
-      };
-      if (mq.addEventListener) mq.addEventListener('change', listener);
-      else if (mq.addListener) mq.addListener(listener);
+    function boot() {
+      if (!insert()) {
+        requestAnimationFrame(function () {
+          if (!insert()) setTimeout(insert, 100);
+        });
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', boot);
+    } else {
+      boot();
     }
   })();
 </script>
