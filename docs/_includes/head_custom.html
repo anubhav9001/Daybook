@@ -265,56 +265,111 @@
   #theme-toggle:hover { opacity: 1; }
 
   /* ========================================================================
-     Search results dropdown — proper panel styling
+     Search results dropdown — fully opaque panel with clean row layout
      ======================================================================== */
   .search-results {
-    margin-top: 4px;
-    border-radius: 6px;
-    border: 1px solid rgba(127,127,127,0.25);
-    box-shadow: 0 6px 24px rgba(0,0,0,0.18);
-    max-height: 70vh;
-    overflow: auto;
-    background: #ffffff;
-    padding: 4px 0;
+    margin-top: 4px !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(127,127,127,0.3) !important;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.22) !important;
+    max-height: 70vh !important;
+    overflow: auto !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    padding: 4px !important;
+    z-index: 9999 !important;
   }
-  .search-results-list { padding: 0; margin: 0; list-style: none; }
-  .search-results-list-item { margin: 0; }
+  .search-results-list {
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+  }
+  .search-results-list-item { margin: 0 !important; padding: 0 !important; }
+
+  /* Each result row: icon left, content right, no overlap */
   .search-result {
-    display: block;
-    padding: 8px 12px;
-    text-decoration: none;
-    border-radius: 0;
-    border-left: 3px solid transparent;
-    color: inherit;
+    display: grid !important;
+    grid-template-columns: 24px 1fr !important;
+    column-gap: 10px !important;
+    align-items: start !important;
+    padding: 10px 12px !important;
+    margin: 2px 0 !important;
+    text-decoration: none !important;
+    border-radius: 6px !important;
+    color: inherit !important;
+    background: transparent !important;
+    background-image: none !important;
+    border: 0 !important;
   }
   .search-result:hover,
   .search-result.active {
-    background: rgba(75,123,236,0.08);
-    border-left-color: var(--jtd-primary);
+    background: rgba(75,123,236,0.08) !important;
   }
-  .search-result-title {
-    display: block;
+  .search-result-doc {
+    display: contents;             /* let icon and title lay out on the grid */
+  }
+  .search-result-icon {
+    grid-column: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.55;
+    width: 24px;
+    height: 20px;
+  }
+  .search-result-icon svg { width: 16px; height: 16px; }
+  .search-result-doc-title {
+    grid-column: 2;
     font-weight: 600;
     font-size: 14px;
     line-height: 1.3;
   }
-  .search-result-doc-parent,
+  .search-result-doc-parent {
+    grid-column: 2;
+    font-size: 11px;
+    opacity: 0.65;
+    line-height: 1.2;
+    margin-top: 1px;
+  }
+  .search-result-section {
+    grid-column: 2;
+    margin-top: 4px;
+  }
+  .search-result-section-title {
+    display: block;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 1.3;
+  }
   .search-result-rel-url {
     display: block;
-    font-size: 11px;
-    opacity: 0.7;
-    margin-top: 2px;
+    font-size: 10.5px;
+    opacity: 0.6;
+    margin-top: 1px;
+    word-break: break-all;
   }
   .search-result-previews {
+    grid-column: 2;
     display: block;
-    margin-top: 4px;
+    margin: 6px 0 0 !important;
+    padding: 0 0 0 10px !important;
     font-size: 12px;
-    opacity: 0.85;
-    line-height: 1.4;
-    padding-left: 8px;
-    border-left: 2px solid rgba(127,127,127,0.2);
+    line-height: 1.5;
+    opacity: 0.9;
+    border-left: 2px solid rgba(127,127,127,0.25);
+    list-style: none;
   }
-  .search-no-result { padding: 12px; opacity: 0.7; font-style: italic; }
+  .search-result-preview { margin: 2px 0; }
+  .search-result-highlight {
+    color: var(--jtd-primary);
+    font-weight: 600;
+  }
+  .search-no-result {
+    padding: 14px !important;
+    opacity: 0.7;
+    font-style: italic;
+    text-align: center;
+  }
 
   /* ========================================================================
      Permalink icons on headings — placed AFTER the heading text
@@ -429,11 +484,17 @@
     html:not([data-jtd-theme="light"]) .search-input-wrap,
     html:not([data-jtd-theme="light"]) .search-label { background-color: transparent !important; }
     html:not([data-jtd-theme="light"]) .search-results {
-      background-color: var(--jtd-bg-head) !important;
+      background: #27262b !important;
+      background-color: #27262b !important;
       color: var(--jtd-text) !important;
       border-color: var(--jtd-border) !important;
-      box-shadow: 0 6px 24px rgba(0,0,0,0.5) !important;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.6) !important;
     }
+    html:not([data-jtd-theme="light"]) .search-result:hover,
+    html:not([data-jtd-theme="light"]) .search-result.active {
+      background: #353440 !important;
+    }
+    html:not([data-jtd-theme="light"]) .search-result-highlight { color: var(--jtd-link) !important; }
     html:not([data-jtd-theme="light"]) .search-result { color: var(--jtd-text) !important; }
     html:not([data-jtd-theme="light"]) .search-result:hover,
     html:not([data-jtd-theme="light"]) .search-result.active {
@@ -525,11 +586,17 @@
   html[data-jtd-theme="dark"] .search-input-wrap,
   html[data-jtd-theme="dark"] .search-label { background-color: transparent !important; }
   html[data-jtd-theme="dark"] .search-results {
-    background-color: var(--jtd-bg-head) !important;
+    background: #27262b !important;
+    background-color: #27262b !important;
     color: var(--jtd-text) !important;
     border-color: var(--jtd-border) !important;
-    box-shadow: 0 6px 24px rgba(0,0,0,0.5) !important;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.6) !important;
   }
+  html[data-jtd-theme="dark"] .search-result:hover,
+  html[data-jtd-theme="dark"] .search-result.active {
+    background: #353440 !important;
+  }
+  html[data-jtd-theme="dark"] .search-result-highlight { color: var(--jtd-link) !important; }
   html[data-jtd-theme="dark"] .search-result { color: var(--jtd-text) !important; }
   html[data-jtd-theme="dark"] .search-result:hover,
   html[data-jtd-theme="dark"] .search-result.active {
