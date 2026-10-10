@@ -51,23 +51,35 @@ Daybook does **not** request access to Google Drive, Google Photos, Microsoft On
 - Access and refresh tokens issued to the app are stored in the operating system's secure credential store (Windows Credential Manager).
 - You can revoke Daybook's access at any time from your Google Account ([myaccount.google.com/permissions](https://myaccount.google.com/permissions)) or Microsoft account ([myaccount.microsoft.com](https://myaccount.microsoft.com)) settings.
 
-## 5. Telemetry and analytics
+## 5. Google API Services — Limited Use compliance
+
+Daybook's use and transfer of information received from Google APIs to any other app will adhere to the [Google API Services User Data Policy](https://developers.google.com/terms/api-services-user-data-policy), **including the Limited Use requirements**.
+
+Specifically:
+
+- **Allowed use.** Daybook accesses your Gmail and Google Calendar data only to provide user-facing features you directly interact with: showing your inbox and schedule, letting you reply to and classify mail, suggesting meeting times, and preparing editable reply drafts.
+- **No transfer to third parties.** Daybook does not transfer Google user data to any third party, except as needed to provide or improve user-facing features that are prominent in Daybook's user interface, and only with the user's explicit consent on a per-provider basis (see "Where your data goes" above). Transfers to cloud AI providers happen only when the user explicitly requests a suggestion that uses that provider, after that provider has been enabled in Settings.
+- **No ads.** Daybook does not use or transfer Google user data for serving advertisements, including personalised, re-targeted, or interest-based advertising.
+- **No human reading.** Daybook does not allow humans to read Google user data unless (a) the user has given affirmative agreement for specific messages, (b) it is necessary for security purposes (e.g. investigating abuse), (c) it is required by law, or (d) the data has been aggregated and anonymised for internal operations. The maintainer never receives your Gmail or Calendar data.
+- **No training of generalised ML models.** Daybook does not use Google user data to develop, improve, or train generalised AI or machine-learning models. The optional on-device AI model (Qwen3) is pre-trained by its authors; Daybook does not fine-tune or train it on your mail or calendar.
+
+## 6. Telemetry and analytics
 
 Daybook ships with **no analytics, no telemetry, and no crash reporting** sent to the developer or any third party. The app does not phone home.
 
-## 6. How long data is kept
+## 7. How long data is kept
 
 - Local cache: until you sign out of the account in Daybook or uninstall the app, whichever is sooner. Signing out purges the cache.
 - Tokens: cleared on sign-out or when revoked at the provider.
 
-## 7. Children
+## 8. Children
 
 Daybook is not directed at children under 13. We do not knowingly collect data from children.
 
-## 8. Changes to this policy
+## 9. Changes to this policy
 
 If this policy changes, the new version will appear at this URL with an updated "Last updated" date. Material changes will also be announced in the release notes.
 
-## 9. Contact
+## 10. Contact
 
 Use the [contact form](contact.html) or open an issue at <https://github.com/anubhav9001/Daybook/issues>.
