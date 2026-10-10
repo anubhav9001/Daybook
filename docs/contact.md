@@ -14,7 +14,7 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
 - Security vulnerabilities: please use GitHub's [private vulnerability reporting](https://github.com/anubhav9001/Daybook/security/advisories/new) — see the [Security Policy](https://github.com/anubhav9001/Daybook/blob/main/SECURITY.md).
 
 <form id="contact-form"
-      action="https://formsubmit.co/el/REPLACE_WITH_FORMSUBMIT_HASH"
+      action="https://formsubmit.co/anubhav.mitra@gmail.com"
       method="POST"
       novalidate
       aria-describedby="contact-form-help">
@@ -138,8 +138,11 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
 
       function post() {
         var data = new FormData(form);
-        /* FormSubmit AJAX endpoint variant: append .json suffix for JSON response */
-        var url = form.action.replace(/\/el\/([^/?]+)/, '/ajax/el/$1');
+        /* FormSubmit AJAX endpoint variant: inject /ajax after the host */
+        var url = form.action.replace(
+          /^(https?:\/\/formsubmit\.co)\/(?!ajax\/)/,
+          '$1/ajax/'
+        );
         fetch(url, {
           method: 'POST',
           body: data,
