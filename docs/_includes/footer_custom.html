@@ -479,10 +479,12 @@
         document.body.classList.toggle('daybook-sidebar-open', open);
         applyInert(open);
         if (open) {
-          /* Focus the dialog CONTAINER (not a child) so screen readers announce
-             only "Daybook navigation, dialog" — not every link inside.
-             The user then swipes/tabs to explore the links themselves. */
-          sidebar.focus({ preventScroll: true });
+          /* Move focus to the FIRST meaningful link in the sidebar — the site
+             title ("Daybook"). The user hears "Daybook, link" and swipes from
+             there. */
+          var titleLink = sidebar.querySelector('.site-title')
+                       || sidebar.querySelector('a, button');
+          if (titleLink && titleLink.focus) titleLink.focus({ preventScroll: true });
         } else {
           btn.focus();
         }
@@ -597,13 +599,28 @@
         mainHeader.appendChild(btn);
       }
 
-      /* Meaningful name for heading permalinks */
+      /* Permalink icons: Just the Docs puts <a class="anchor-heading"> INSIDE
+         each heading, which can confuse some screen readers (they stop
+         announcing the heading role when the first child is a link).
+         Move the anchor OUT of the heading and place it as a sibling right
+         after the heading. The heading now contains only its text, so its
+         "heading level N" semantic is unambiguous. */
       document.querySelectorAll('.main-content .anchor-heading').forEach(function (a) {
         var h = a.closest('h1,h2,h3,h4,h5,h6');
-        var heading = h ? (h.textContent || '').trim() : '';
-        a.setAttribute('aria-label', 'Permanent link to ' + heading);
-        a.setAttribute('title', 'Permanent link to ' + heading);
+        if (!h) return;
+        var text = (h.textContent || '').trim();
+        a.setAttribute('aria-label', 'Permanent link to ' + text);
+        a.setAttribute('title', 'Permanent link to ' + text);
         a.removeAttribute('aria-labelledby');
+        /* Wrap the heading + permalink in a span so CSS can still position the
+           icon next to the heading text; the heading itself stays pure. */
+        if (!h.parentNode.classList.contains('heading-wrap')) {
+          var wrap = document.createElement('span');
+          wrap.className = 'heading-wrap';
+          h.parentNode.insertBefore(wrap, h);
+          wrap.appendChild(h);
+          wrap.appendChild(a);          /* anchor now AFTER the heading, as a sibling */
+        }
       });
 
       /* Mark external links everywhere in the content area */

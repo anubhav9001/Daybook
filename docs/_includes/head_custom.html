@@ -347,27 +347,9 @@
       outline-offset: 2px !important;
     }
 
-    /* Headings on mobile — use plain block layout to guarantee screen-reader
-       heading role is always announced. Permalink icon stays after text via
-       absolute positioning rather than flex ordering. */
-    .main-content h1,
-    .main-content h2,
-    .main-content h3,
-    .main-content h4,
-    .main-content h5,
-    .main-content h6 {
-      display: block !important;
-      position: relative;
-      padding-right: 32px;
-    }
-    .main-content .anchor-heading {
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      margin: 0 !important;
-      order: unset !important;
-    }
+    /* Headings on mobile — the permalink icon lives in a sibling .heading-wrap
+       span (not inside the heading), so block + flex-wrap layout is reliable. */
+    .main-content .heading-wrap { gap: 6px; }
 
     /* Main nav lives in the sidebar on mobile — make items look + feel sidebar-native */
     .side-bar #site-nav { display: block !important; margin: 8px 0; }
@@ -786,24 +768,27 @@
   }
 
   /* ========================================================================
-     Permalink icons on headings — placed AFTER the heading text
-     (JTD renders them before by default; flex order moves them to the end
-     so the focus ring never overlaps the heading).
+     Permalink icons on headings — rendered as a SIBLING of the heading inside
+     a .heading-wrap span, not as a child of the <h1-6>. This keeps the heading
+     element pure text so every screen reader reliably announces its level.
      ======================================================================== */
-  .main-content h1,
-  .main-content h2,
-  .main-content h3,
-  .main-content h4,
-  .main-content h5,
-  .main-content h6 {
+  .main-content .heading-wrap {
     display: flex;
     align-items: baseline;
     flex-wrap: wrap;
     gap: 8px;
+    margin: 1em 0 0.5em;
   }
-  .main-content .anchor-heading {
-    order: 2;
-    margin: 0;
+  .main-content .heading-wrap > h1,
+  .main-content .heading-wrap > h2,
+  .main-content .heading-wrap > h3,
+  .main-content .heading-wrap > h4,
+  .main-content .heading-wrap > h5,
+  .main-content .heading-wrap > h6 {
+    margin: 0;                   /* the wrap handles spacing */
+    display: inline;
+  }
+  .main-content .heading-wrap > .anchor-heading {
     opacity: 0;
     transition: opacity 0.15s ease;
     text-decoration: none;
@@ -812,18 +797,13 @@
     padding: 2px;
     border-radius: 4px;
     line-height: 1;
+    margin: 0;
   }
-  .main-content .anchor-heading svg { display: block; }
-  .main-content h1:hover .anchor-heading,
-  .main-content h2:hover .anchor-heading,
-  .main-content h3:hover .anchor-heading,
-  .main-content h4:hover .anchor-heading,
-  .main-content h5:hover .anchor-heading,
-  .main-content h6:hover .anchor-heading,
-  .main-content .anchor-heading:focus,
-  .main-content .anchor-heading:focus-visible { opacity: 0.7; }
-  /* Tight focus ring on the small icon */
-  .main-content .anchor-heading:focus-visible {
+  .main-content .heading-wrap > .anchor-heading svg { display: block; }
+  .main-content .heading-wrap:hover > .anchor-heading,
+  .main-content .heading-wrap > .anchor-heading:focus,
+  .main-content .heading-wrap > .anchor-heading:focus-visible { opacity: 0.7; }
+  .main-content .heading-wrap > .anchor-heading:focus-visible {
     opacity: 1 !important;
     outline: 2px solid var(--jtd-focus) !important;
     outline-offset: 2px !important;
