@@ -153,10 +153,14 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
       });
     }
 
-    /* Client-side keyword filter — runs in the browser before the request leaves,
-       so FormSubmit never sees spam that matches these patterns. */
-    var BLOCK_RE = new RegExp(
+    /* Client-side spam filter — the only enforcement we can trust 100%.
+       Three layers:
+       1. Hard keyword/phrase blocklist (English + Hinglish)
+       2. Hard single-word blocklist (words a legit Daybook user has no reason to send)
+       3. Heuristic quality score (links, repeated words, caps, ALL-CAPS, repeated chars) */
+    var BLOCK_PHRASE_RE = new RegExp(
       '\\b(' + [
+        /* English spam phrases */
         'seo','backlink','link\\s*building','casino','crypto(?:currency)?','bitcoin','ethereum','nft',
         'loan','viagra','escort','investment\\s*opportunity','guest\\s*post','cheap\\s*price',
         'buy\\s*followers','dating','webcam','xxx','porn','gambling','forex','binary\\s*options',
@@ -167,17 +171,57 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
         'offshore','wire\\s*transfer','dark\\s*web','counterfeit','fake\\s*id','visa\\s*service',
         'web\\s*design\\s*services?','unlimited\\s*leads','buy\\s*leads','increase\\s*sales',
         'boost\\s*ranking','SEO\\s*expert','SEO\\s*agency','digital\\s*marketing',
-        'influencer\\s*marketing','lead\\s*generation','growth\\s*hack'
+        'influencer\\s*marketing','lead\\s*generation','growth\\s*hack',
+        /* Hinglish / transliteration spam markers (common lead-gen & scam patterns) */
+        'tumko','tumhe','tarike','tarkike','banao','banaao','kamao','kamaao','kamana',
+        'kamayenge','paise','lakhpati','crorepati','ghar\\s*bethe','ghar\\s*baithe',
+        'commission\\s*based','ladkiyan','ladkiya'
       ].join('|') + ')\\b', 'i'
     );
-    function containsSpam(form) {
+    /* Any one of these words anywhere in subject/summary/message = reject.
+       These are strict: a Daybook maintainer accepts bug reports and feature
+       requests from users, not pitches or "money" talk. */
+    var BLOCK_WORD_RE = /\b(money|cash|salary|profit|income|price|invoice|crypto|wallet|hack|hacking|hacker|whatsapp|telegram|skype|dm\s*me|contact\s*me\s*at|dollars?|rupees?|\$|₹|€)\b/i;
+
+    function heuristicScore(txt) {
+      if (!txt) return 0;
+      var score = 0;
+      var links = (txt.match(/https?:\/\/\S+/gi) || []).length;
+      if (links >= 2) score += 2;      /* 2+ links usually = spam */
+      if (links >= 1) score += 1;
+      /* ALL-CAPS screaming */
+      var letters = txt.replace(/[^A-Za-z]/g, '');
+      if (letters.length > 20) {
+        var upper = letters.replace(/[^A-Z]/g, '').length;
+        if (upper / letters.length > 0.6) score += 2;
+      }
+      /* Repeated exclamations / dollar signs */
+      if ((txt.match(/[!$]{2,}/g) || []).length >= 1) score += 1;
+      /* Same long word repeated 3+ times (bot pattern) */
+      var words = txt.toLowerCase().match(/\b[a-z]{5,}\b/g) || [];
+      var counts = {};
+      for (var i = 0; i < words.length; i++) {
+        counts[words[i]] = (counts[words[i]] || 0) + 1;
+        if (counts[words[i]] >= 3) { score += 2; break; }
+      }
+      /* Very short message that still "sells" */
+      if (txt.length < 60 && /(http|www\.|offer|service|contact)/i.test(txt)) score += 2;
+      return score;
+    }
+
+    function spamReason(form) {
       var fields = ['name','subject','summary','message'];
+      var blob = '';
       for (var i = 0; i < fields.length; i++) {
         var el = form.elements[fields[i]];
         if (!el) continue;
         var v = (el.value || '').trim();
-        if (v && BLOCK_RE.test(v)) return fields[i];
+        if (!v) continue;
+        if (BLOCK_PHRASE_RE.test(v)) return { field: fields[i], why: 'blocked phrase' };
+        if (BLOCK_WORD_RE.test(v))   return { field: fields[i], why: 'blocked word' };
+        blob += ' ' + v;
       }
+      if (heuristicScore(blob) >= 3) return { field: 'message', why: 'heuristics' };
       return null;
     }
 
@@ -188,10 +232,10 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
         focusFirstInvalid();
         return;
       }
-      var hit = containsSpam(form);
+      var hit = spamReason(form);
       if (hit) {
         announce('Your message appears to contain content we don’t accept here. Please rephrase and try again.', true);
-        var el = form.elements[hit];
+        var el = form.elements[hit.field];
         if (el) { el.focus(); el.scrollIntoView({ block: 'center' }); }
         return;
       }
