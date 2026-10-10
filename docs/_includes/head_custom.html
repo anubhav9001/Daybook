@@ -293,22 +293,51 @@
     .side-bar .aux-nav .nav-icon { font-size: 1.25em; }
   }
 
-  /* Push the "Just the Docs" credit to the sidebar bottom */
-  .side-bar .site-footer {
-    display: block !important;        /* show on all breakpoints */
-    margin-top: auto;                 /* pushes to bottom */
-    padding: 16px 20px;
-    font-size: 12.5px;
-    opacity: 1;                       /* no dim — rely on actual color for WCAG */
-    color: #4a4751 !important;        /* 8:1 on #ffffff */
-    border-top: 1px solid rgba(127,127,127,0.25);
+  /* Hide the sidebar "Just the Docs" credit — moved to the page footer */
+  .side-bar .site-footer { display: none !important; }
+
+  /* ========================================================================
+     Page-wide footer with Google-verification-grade links
+     ======================================================================== */
+  #daybook-page-footer {
+    margin: 48px auto 0;
+    padding: 24px 24px 32px;
+    border-top: 1px solid #d4d7dc;
+    font-size: 14px;
+    color: #4a4751;                   /* 8:1 on white */
+    background: transparent;
   }
-  .side-bar .site-footer a {
-    color: #1a4fcf !important;        /* 7:1 on #ffffff */
+  #daybook-page-footer .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    margin: 0 0 12px;
+    padding: 0;
+    list-style: none;
+    align-items: center;
+  }
+  #daybook-page-footer .footer-links a {
+    color: #1a4fcf !important;        /* 7:1 on white */
+    text-decoration: none;
+  }
+  #daybook-page-footer .footer-links a:hover,
+  #daybook-page-footer .footer-links a:focus-visible {
+    text-decoration: underline;
+    color: #0d2d8a !important;
+  }
+  #daybook-page-footer .footer-sep {
+    opacity: 0.4;
+    user-select: none;
+  }
+  #daybook-page-footer .footer-meta {
+    font-size: 12.5px;
+    color: #4a4751;
+    opacity: 0.85;
+  }
+  #daybook-page-footer .footer-meta a {
+    color: #1a4fcf !important;
     text-decoration: underline;
   }
-  .side-bar .site-footer a:hover,
-  .side-bar .site-footer a:focus-visible { color: #0d2d8a !important; }
   /* Hide the duplicate footer credit that JTD adds in main-content area */
   footer .d-md-none { display: none !important; }
 
@@ -801,6 +830,19 @@
     html:not([data-jtd-theme="light"]) #menu-button { color: var(--jtd-heading) !important; }
     html:not([data-jtd-theme="light"]) .site-footer { color: var(--jtd-text-dim) !important; border-color: var(--jtd-border) !important; }
     html:not([data-jtd-theme="light"]) .site-footer a { color: var(--jtd-link) !important; }
+    html:not([data-jtd-theme="light"]) #daybook-page-footer {
+      color: var(--jtd-text-dim) !important;
+      border-top-color: var(--jtd-border) !important;
+    }
+    html:not([data-jtd-theme="light"]) #daybook-page-footer .footer-links a,
+    html:not([data-jtd-theme="light"]) #daybook-page-footer .footer-meta a {
+      color: var(--jtd-link) !important;
+    }
+    html:not([data-jtd-theme="light"]) #daybook-page-footer .footer-links a:hover,
+    html:not([data-jtd-theme="light"]) #daybook-page-footer .footer-links a:focus-visible {
+      color: var(--jtd-link-hvr) !important;
+    }
+    html:not([data-jtd-theme="light"]) #daybook-page-footer .footer-meta { color: var(--jtd-text-dim) !important; }
 
     html:not([data-jtd-theme="light"]) .main-header .site-nav .nav-list-link { color: var(--jtd-text) !important; }
     html:not([data-jtd-theme="light"]) .main-header .site-nav .nav-list-link:hover {
@@ -1024,6 +1066,19 @@
   html[data-jtd-theme="dark"] #menu-button { color: var(--jtd-heading) !important; }
   html[data-jtd-theme="dark"] .site-footer { color: var(--jtd-text-dim) !important; border-color: var(--jtd-border) !important; }
   html[data-jtd-theme="dark"] .site-footer a { color: var(--jtd-link) !important; }
+  html[data-jtd-theme="dark"] #daybook-page-footer {
+    color: var(--jtd-text-dim) !important;
+    border-top-color: var(--jtd-border) !important;
+  }
+  html[data-jtd-theme="dark"] #daybook-page-footer .footer-links a,
+  html[data-jtd-theme="dark"] #daybook-page-footer .footer-meta a {
+    color: var(--jtd-link) !important;
+  }
+  html[data-jtd-theme="dark"] #daybook-page-footer .footer-links a:hover,
+  html[data-jtd-theme="dark"] #daybook-page-footer .footer-links a:focus-visible {
+    color: var(--jtd-link-hvr) !important;
+  }
+  html[data-jtd-theme="dark"] #daybook-page-footer .footer-meta { color: var(--jtd-text-dim) !important; }
   html[data-jtd-theme="dark"] .main-header .site-nav .nav-list-link { color: var(--jtd-text) !important; }
   html[data-jtd-theme="dark"] .main-header .site-nav .nav-list-link:hover { background: var(--jtd-surface-2) !important; color: var(--jtd-heading) !important; }
   html[data-jtd-theme="dark"] .main-header .site-nav .nav-list-link.active { background: rgba(75,123,236,0.18) !important; color: var(--jtd-link) !important; }

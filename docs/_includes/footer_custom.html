@@ -315,6 +315,37 @@
       }, true);
     }
 
+    /* Inject the site-wide page footer with trust/legal links. */
+    function injectPageFooter() {
+      if (document.getElementById('daybook-page-footer')) return;
+      var host = document.querySelector('.main-content-wrap') || document.querySelector('.main') || document.body;
+      var yr = new Date().getFullYear();
+      var footer = document.createElement('footer');
+      footer.id = 'daybook-page-footer';
+      footer.setAttribute('role', 'contentinfo');
+      footer.setAttribute('aria-label', 'Site footer');
+      footer.innerHTML =
+        '<nav aria-label="Legal and support"><ul class="footer-links">' +
+          '<li><a href="/Daybook/privacy.html">Privacy Policy</a></li>' +
+          '<li aria-hidden="true" class="footer-sep">·</li>' +
+          '<li><a href="/Daybook/terms.html">Terms of Service</a></li>' +
+          '<li aria-hidden="true" class="footer-sep">·</li>' +
+          '<li><a href="/Daybook/scopes.html">Permissions</a></li>' +
+          '<li aria-hidden="true" class="footer-sep">·</li>' +
+          '<li><a href="/Daybook/accessibility.html">Accessibility</a></li>' +
+          '<li aria-hidden="true" class="footer-sep">·</li>' +
+          '<li><a href="https://github.com/anubhav9001/Daybook/blob/main/SECURITY.md" target="_blank" rel="noopener noreferrer">Security</a></li>' +
+          '<li aria-hidden="true" class="footer-sep">·</li>' +
+          '<li><a href="/Daybook/support.html">Support &amp; Contact</a></li>' +
+        '</ul></nav>' +
+        '<div class="footer-meta">' +
+          '© ' + yr + ' Daybook &middot; ' +
+          '<a href="https://github.com/anubhav9001/Daybook" target="_blank" rel="noopener noreferrer">Source on GitHub</a> &middot; ' +
+          'This site uses <a href="https://github.com/just-the-docs/just-the-docs" target="_blank" rel="noopener noreferrer">Just the Docs</a>, a documentation theme for Jekyll.' +
+        '</div>';
+      host.appendChild(footer);
+    }
+
     /* Make every content table scrollable on narrow viewports and give
        headers explicit scope for screen readers. */
     function improveTables() {
@@ -370,6 +401,7 @@
       bindGlobalCopyAnnounce();
       wireCodeBlocks();
       improveTables();
+      injectPageFooter();
       polishMeta();
       /* Re-wire if Prism re-emits code blocks after highlight */
       setTimeout(wireCodeBlocks, 500);
