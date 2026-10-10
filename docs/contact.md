@@ -137,31 +137,10 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
       announce('Sending…', false);
 
       function post() {
-        var data = new FormData(form);
-        /* FormSubmit AJAX endpoint variant: inject /ajax after the host */
-        var url = form.action.replace(
-          /^(https?:\/\/formsubmit\.co)\/(?!ajax\/)/,
-          '$1/ajax/'
-        );
-        fetch(url, {
-          method: 'POST',
-          body: data,
-          headers: { 'Accept': 'application/json' }
-        }).then(function (r) {
-          return r.json().catch(function () { return { success: r.ok }; });
-        }).then(function (j) {
-          if (j && (j.success === true || j.success === 'true')) {
-            form.reset();
-            announce('Thanks — your message was sent. We’ll reply by email on a best-effort basis.', false);
-          } else {
-            var m = (j && (j.message || j.error)) || 'Something went wrong. Please try again.';
-            announce(m, true);
-          }
-        }).catch(function () {
-          announce('Network error. Please check your connection and try again.', true);
-        }).finally(function () {
-          submit.disabled = false;
-        });
+        /* FormSubmit aliases (/el/xxxx) only support classic form POST.
+           We rely on the _next hidden field to bring the user back here with
+           ?sent=1, which triggers the success announcer on load. */
+        HTMLFormElement.prototype.submit.call(form);
       }
 
       if (hasRecaptcha && window.grecaptcha && typeof grecaptcha.ready === 'function') {
