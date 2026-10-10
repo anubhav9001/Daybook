@@ -1,5 +1,9 @@
 <!-- Daybook favicon (inline SVG — works in all modern browsers) -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%234b7bec'/><path d='M18 14h18a14 14 0 0 1 0 28H18V14zm8 8v12h10a6 6 0 0 0 0-12H26z' fill='%23ffffff'/><circle cx='46' cy='48' r='4' fill='%23ffffff'/></svg>">
+
+<!-- Prism.js for real syntax highlighting on code blocks -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js" defer></script>
 <script>
   (function () {
     try {
@@ -408,8 +412,21 @@
   }
 
   /* ========================================================================
-     LIGHT THEME — syntax highlighting (WCAG AA on JTD's light code bg ≈ #f5f6fa)
-     Dark overrides below replace these when dark is active.
+     Prism.js token colors — LIGHT theme (same palette as Rouge rules below)
+     ======================================================================== */
+  .token.comment, .token.prolog, .token.doctype, .token.cdata { color: #5d6a79 !important; font-style: italic; }
+  .token.punctuation { color: #24292e !important; }
+  .token.keyword, .token.selector, .token.important, .token.atrule, .token.operator { color: #c7122a !important; }
+  .token.boolean, .token.builtin, .token.function { color: #0953a3 !important; }
+  .token.string, .token.char, .token.attr-value, .token.regex, .token.inserted { color: #032f62 !important; }
+  .token.variable, .token.parameter { color: #a04000 !important; }
+  .token.number { color: #0953a3 !important; }
+  .token.class-name, .token.namespace { color: #5a2e9b !important; }
+  .token.property, .token.tag, .token.symbol, .token.attr-name { color: #1a6f33 !important; }
+  .token.deleted { color: #9c1b1e !important; }
+
+  /* ========================================================================
+     LIGHT THEME — Rouge syntax highlighting (fallback for whatever Prism misses)
      ======================================================================== */
   .highlight .c,
   .highlight .c1,
@@ -606,6 +623,36 @@
     html:not([data-jtd-theme="light"]) .highlight .il { color: #d6b4ff !important; }                      /* numbers 7:1 */
     html:not([data-jtd-theme="light"]) .highlight .err { color: #ff8787 !important; background: transparent !important; } /* errors 7:1 */
 
+    /* Prism tokens — dark */
+    html:not([data-jtd-theme="light"]) .token.comment,
+    html:not([data-jtd-theme="light"]) .token.prolog,
+    html:not([data-jtd-theme="light"]) .token.doctype,
+    html:not([data-jtd-theme="light"]) .token.cdata { color: #9aa0b3 !important; font-style: italic; }
+    html:not([data-jtd-theme="light"]) .token.punctuation { color: #f1edf5 !important; }
+    html:not([data-jtd-theme="light"]) .token.keyword,
+    html:not([data-jtd-theme="light"]) .token.selector,
+    html:not([data-jtd-theme="light"]) .token.important,
+    html:not([data-jtd-theme="light"]) .token.atrule,
+    html:not([data-jtd-theme="light"]) .token.operator { color: #ff92d0 !important; }
+    html:not([data-jtd-theme="light"]) .token.boolean,
+    html:not([data-jtd-theme="light"]) .token.builtin,
+    html:not([data-jtd-theme="light"]) .token.function { color: #9ff2ff !important; }
+    html:not([data-jtd-theme="light"]) .token.string,
+    html:not([data-jtd-theme="light"]) .token.char,
+    html:not([data-jtd-theme="light"]) .token.attr-value,
+    html:not([data-jtd-theme="light"]) .token.regex,
+    html:not([data-jtd-theme="light"]) .token.inserted { color: #f6f291 !important; }
+    html:not([data-jtd-theme="light"]) .token.variable,
+    html:not([data-jtd-theme="light"]) .token.parameter { color: #ffcb6b !important; }
+    html:not([data-jtd-theme="light"]) .token.number { color: #d6b4ff !important; }
+    html:not([data-jtd-theme="light"]) .token.class-name,
+    html:not([data-jtd-theme="light"]) .token.namespace { color: #7cf59f !important; }
+    html:not([data-jtd-theme="light"]) .token.property,
+    html:not([data-jtd-theme="light"]) .token.tag,
+    html:not([data-jtd-theme="light"]) .token.symbol,
+    html:not([data-jtd-theme="light"]) .token.attr-name { color: #a9c1ff !important; }
+    html:not([data-jtd-theme="light"]) .token.deleted { color: #ff8787 !important; }
+
     html:not([data-jtd-theme="light"]) .btn {
       color: var(--jtd-text) !important;
       background-color: var(--jtd-surface) !important;
@@ -755,6 +802,36 @@
   html[data-jtd-theme="dark"] .highlight .mo,
   html[data-jtd-theme="dark"] .highlight .il { color: #d6b4ff !important; }
   html[data-jtd-theme="dark"] .highlight .err { color: #ff8787 !important; background: transparent !important; }
+
+  /* Prism tokens — dark (explicit) */
+  html[data-jtd-theme="dark"] .token.comment,
+  html[data-jtd-theme="dark"] .token.prolog,
+  html[data-jtd-theme="dark"] .token.doctype,
+  html[data-jtd-theme="dark"] .token.cdata { color: #9aa0b3 !important; font-style: italic; }
+  html[data-jtd-theme="dark"] .token.punctuation { color: #f1edf5 !important; }
+  html[data-jtd-theme="dark"] .token.keyword,
+  html[data-jtd-theme="dark"] .token.selector,
+  html[data-jtd-theme="dark"] .token.important,
+  html[data-jtd-theme="dark"] .token.atrule,
+  html[data-jtd-theme="dark"] .token.operator { color: #ff92d0 !important; }
+  html[data-jtd-theme="dark"] .token.boolean,
+  html[data-jtd-theme="dark"] .token.builtin,
+  html[data-jtd-theme="dark"] .token.function { color: #9ff2ff !important; }
+  html[data-jtd-theme="dark"] .token.string,
+  html[data-jtd-theme="dark"] .token.char,
+  html[data-jtd-theme="dark"] .token.attr-value,
+  html[data-jtd-theme="dark"] .token.regex,
+  html[data-jtd-theme="dark"] .token.inserted { color: #f6f291 !important; }
+  html[data-jtd-theme="dark"] .token.variable,
+  html[data-jtd-theme="dark"] .token.parameter { color: #ffcb6b !important; }
+  html[data-jtd-theme="dark"] .token.number { color: #d6b4ff !important; }
+  html[data-jtd-theme="dark"] .token.class-name,
+  html[data-jtd-theme="dark"] .token.namespace { color: #7cf59f !important; }
+  html[data-jtd-theme="dark"] .token.property,
+  html[data-jtd-theme="dark"] .token.tag,
+  html[data-jtd-theme="dark"] .token.symbol,
+  html[data-jtd-theme="dark"] .token.attr-name { color: #a9c1ff !important; }
+  html[data-jtd-theme="dark"] .token.deleted { color: #ff8787 !important; }
   html[data-jtd-theme="dark"] .btn { color: var(--jtd-text) !important; background-color: var(--jtd-surface) !important; background-image: none !important; box-shadow: none !important; border: 1px solid var(--jtd-border) !important; }
   html[data-jtd-theme="dark"] .btn:hover { background-color: var(--jtd-border) !important; }
   html[data-jtd-theme="dark"] .btn-primary { background-color: var(--jtd-primary) !important; color: #ffffff !important; border-color: var(--jtd-primary) !important; }

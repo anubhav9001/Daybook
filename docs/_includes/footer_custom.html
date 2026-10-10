@@ -124,9 +124,34 @@
       window.addEventListener('resize',  reposition);
     }
 
+    /* Rouge wraps code blocks like
+         <div class="language-powershell highlighter-rouge">
+           <div class="highlight"><pre class="highlight"><code>…</code></pre></div>
+         </div>
+       Prism needs the language-xxx class on the <code> element itself.
+       Copy it there, then (once Prism finishes loading) highlight everything. */
+    function prepareAndRunPrism() {
+      document.querySelectorAll('[class*="language-"]').forEach(function (el) {
+        var lang = (el.className.match(/language-[\w-]+/) || [])[0];
+        if (!lang) return;
+        var code = el.querySelector('pre > code, code');
+        if (!code) return;
+        if (!code.className.match(/language-[\w-]+/)) code.classList.add(lang);
+      });
+      function run() {
+        if (window.Prism && typeof Prism.highlightAll === 'function') {
+          try { Prism.highlightAll(); } catch (e) {}
+        } else {
+          setTimeout(run, 100);
+        }
+      }
+      run();
+    }
+
     function restructure() {
       addLogo();
       pinSearchResults();
+      prepareAndRunPrism();
       /* Move main nav from sidebar into main-header, right after search */
       var siteNav = document.querySelector('.side-bar #site-nav');
       var mainHeader = document.getElementById('main-header');
