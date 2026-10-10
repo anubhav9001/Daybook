@@ -208,10 +208,97 @@
       run();
     }
 
+    /* ======================================================================
+       Code-block accessibility
+       - One tab stop per code block (not two)
+       - Enter/Space on the code pane copies to clipboard
+       - aria-live announcement after copy
+       ====================================================================== */
+    function ensureLiveRegion() {
+      var live = document.getElementById('daybook-live-region');
+      if (live) return live;
+      live = document.createElement('div');
+      live.id = 'daybook-live-region';
+      live.setAttribute('aria-live', 'polite');
+      live.setAttribute('aria-atomic', 'true');
+      live.className = 'sr-only';
+      document.body.appendChild(live);
+      return live;
+    }
+    function announce(msg) {
+      var live = ensureLiveRegion();
+      /* Clear then set so repeated identical messages re-announce */
+      live.textContent = '';
+      setTimeout(function () { live.textContent = msg; }, 10);
+    }
+    function copyCode(code, trigger) {
+      var text = code.innerText || code.textContent || '';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(
+          function () { announce('Code copied to clipboard'); },
+          function () { announce('Copy failed. Press Ctrl+C to copy manually.'); }
+        );
+      } else {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          announce('Code copied to clipboard');
+        } catch (e) {
+          announce('Copy failed. Press Ctrl+C to copy manually.');
+        }
+      }
+    }
+    function wireCodeBlocks() {
+      document.querySelectorAll('.highlighter-rouge, div.highlight').forEach(function (wrap) {
+        var pre  = wrap.querySelector('pre');
+        var code = wrap.querySelector('pre code, code');
+        if (!pre || !code) return;
+
+        /* 1. One tab stop: keep tabindex on <pre> only. */
+        wrap.removeAttribute('tabindex');
+        var innerHl = wrap.querySelector(':scope > div.highlight');
+        if (innerHl) innerHl.removeAttribute('tabindex');
+        code.removeAttribute('tabindex');
+        if (!pre.hasAttribute('tabindex')) pre.setAttribute('tabindex', '0');
+        if (!pre.getAttribute('role')) pre.setAttribute('role', 'region');
+        if (!pre.getAttribute('aria-label')) {
+          var lang = (wrap.className.match(/language-([\w-]+)/) || [])[1];
+          pre.setAttribute('aria-label', (lang ? lang + ' ' : '') + 'code block. Press Enter to copy.');
+        }
+
+        /* 2. Enter/Space on the code pane triggers copy */
+        if (!pre.dataset.copyBound) {
+          pre.addEventListener('keydown', function (e) {
+            if ((e.key === 'Enter' || e.key === ' ') && !e.ctrlKey && !e.metaKey) {
+              e.preventDefault();
+              copyCode(code, pre);
+            }
+          });
+          pre.dataset.copyBound = '1';
+        }
+
+        /* 3. Hook any existing JTD copy button so it announces too */
+        var btn = wrap.querySelector('.code-button, .copy-code-button, button.copy');
+        if (btn && !btn.dataset.a11yBound) {
+          btn.addEventListener('click', function () { announce('Code copied to clipboard'); });
+          btn.dataset.a11yBound = '1';
+        }
+      });
+    }
+
     function restructure() {
       addLogo();
       pinSearchResults();
       prepareAndRunPrism();
+      ensureLiveRegion();
+      wireCodeBlocks();
+      /* Re-wire if Prism re-emits code blocks after highlight */
+      setTimeout(wireCodeBlocks, 500);
+      setTimeout(wireCodeBlocks, 1500);
       /* Move main nav from sidebar into main-header, right after search */
       var siteNav = document.querySelector('.side-bar #site-nav');
       var mainHeader = document.getElementById('main-header');

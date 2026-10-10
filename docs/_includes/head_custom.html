@@ -31,8 +31,14 @@
     --jtd-link:      #a9c1ff;        /* brighter link ≈9:1 */
     --jtd-link-hvr:  #ccdcff;
     --jtd-primary:   #5a89ff;
-    --jtd-focus:     #ffcc33;
+    --jtd-focus:     #0a0a0f;   /* light-mode: deep near-black ring */
+    --jtd-focus-dark:#ffcc33;   /* dark-mode: amber ring */
   }
+  /* Dark theme swaps the focus ring to amber */
+  @media (prefers-color-scheme: dark) {
+    html:not([data-jtd-theme="light"]) { --jtd-focus: var(--jtd-focus-dark); }
+  }
+  html[data-jtd-theme="dark"] { --jtd-focus: var(--jtd-focus-dark); }
 
   /* ========================================================================
      Accessibility: visually-hidden utility (used for aria-only text)
@@ -413,11 +419,57 @@
   .main-content h6:hover .anchor-heading,
   .main-content .anchor-heading:focus,
   .main-content .anchor-heading:focus-visible { opacity: 0.7; }
-  /* Tight focus ring on the small icon, offset tiny so it never crosses text */
+  /* Tight focus ring on the small icon */
   .main-content .anchor-heading:focus-visible {
-    outline: 2px solid var(--jtd-focus);
-    outline-offset: 1px;
+    opacity: 1 !important;
+    outline: 2px solid var(--jtd-focus) !important;
+    outline-offset: 2px !important;
+    background: rgba(127,127,127,0.12);
+    border-radius: 3px;
   }
+
+  /* Copy-code button — ensure it's visible in both themes */
+  .code-button,
+  .copy-code-button,
+  button.copy {
+    opacity: 0.85 !important;
+    border: 1px solid currentColor !important;
+    background: rgba(127,127,127,0.1) !important;
+  }
+  .code-button:hover,
+  .copy-code-button:hover,
+  button.copy:hover { opacity: 1 !important; background: rgba(127,127,127,0.2) !important; }
+  .code-button:focus-visible,
+  .copy-code-button:focus-visible,
+  button.copy:focus-visible {
+    opacity: 1 !important;
+    outline: 2px solid var(--jtd-focus) !important;
+    outline-offset: 2px !important;
+    background: rgba(255,255,255,0.1) !important;
+  }
+  /* On the navy PowerShell background: light focus ring stays visible */
+  .language-powershell .code-button,
+  .language-powershell .copy-code-button {
+    color: #ffffff !important;
+    border-color: rgba(255,255,255,0.4) !important;
+  }
+  .language-powershell .code-button:focus-visible,
+  .language-powershell .copy-code-button:focus-visible {
+    outline-color: #ffcc33 !important;      /* amber on navy for contrast */
+    outline: 2px solid #ffcc33 !important;
+  }
+
+  /* Code blocks: only ONE tab stop. JTD may put tabindex on both the wrapper
+     div and the <pre>; JS below removes the redundant ones. The remaining
+     scrollable element gets a visible focus ring. */
+  pre[tabindex]:focus-visible,
+  div.highlight[tabindex]:focus-visible,
+  div.highlighter-rouge[tabindex]:focus-visible {
+    outline: 2px solid var(--jtd-focus) !important;
+    outline-offset: 2px !important;
+  }
+  pre[tabindex]:focus,
+  div.highlight[tabindex]:focus { outline: none; }  /* only focus-visible shows the ring */
 
   /* ========================================================================
      PowerShell blocks — authentic console look (navy bg, bright tokens)
