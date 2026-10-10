@@ -457,40 +457,83 @@
         sidebar.insertBefore(closeBtn, sidebar.firstChild);
       }
 
-      /* 5. Open/close logic — bidirectional AT lock on mobile:
-              - sidebar CLOSED: sidebar is inert+aria-hidden (AT can't reach it)
-              - sidebar OPEN:   main content & page footer are inert+aria-hidden
-              On DESKTOP (>=800px) everything stays accessible — no inert ever. */
+      /* 5. Open/close logic — bidirectional AT & keyboard lock on mobile.
+              Belt-and-braces: inert attribute + aria-hidden + tabindex -1 on
+              every focusable child + a focusin listener that bounces stray
+              focus back. This covers browsers where inert alone is unreliable. */
       function mainRegions() {
         return [
-          document.querySelector('.main-content-wrap') || document.getElementById('main-content'),
+          document.querySelector('.main'),           /* widest scope: includes header + content */
           document.getElementById('daybook-page-footer')
         ].filter(Boolean);
       }
+      var FOCUSABLE =
+        'a[href],area[href],button:not([disabled]),input:not([disabled]),' +
+        'select:not([disabled]),textarea:not([disabled]),iframe,object,embed,' +
+        '[contenteditable=""],[contenteditable="true"],[tabindex]:not([tabindex="-1"])';
+
       function lockFrom(elems, lock) {
         elems.forEach(function (el) {
           if (!el) return;
-          if (lock) { el.setAttribute('inert', ''); el.setAttribute('aria-hidden', 'true'); }
-          else      { el.removeAttribute('inert'); el.removeAttribute('aria-hidden'); }
+          if (lock) {
+            el.setAttribute('inert', '');
+            el.setAttribute('aria-hidden', 'true');
+            /* Save original tabindex and set -1 on every focusable descendant */
+            el.querySelectorAll(FOCUSABLE).forEach(function (f) {
+              if (!f.dataset.daybookRestoreTi) {
+                f.dataset.daybookRestoreTi = f.hasAttribute('tabindex') ? f.getAttribute('tabindex') : '__none__';
+              }
+              f.setAttribute('tabindex', '-1');
+            });
+          } else {
+            el.removeAttribute('inert');
+            el.removeAttribute('aria-hidden');
+            el.querySelectorAll(FOCUSABLE + ',[tabindex="-1"][data-daybook-restore-ti]').forEach(function (f) {
+              var orig = f.dataset.daybookRestoreTi;
+              if (orig === undefined) return;
+              if (orig === '__none__') f.removeAttribute('tabindex');
+              else                     f.setAttribute('tabindex', orig);
+              delete f.dataset.daybookRestoreTi;
+            });
+          }
         });
       }
 
       function applyLocks(open) {
         var mobile = window.innerWidth < 800;
         if (!mobile) {
-          /* Desktop: everything open and accessible */
           lockFrom([sidebar], false);
           lockFrom(mainRegions(), false);
           return;
         }
         if (open) {
-          lockFrom([sidebar], false);          /* sidebar interactive */
-          lockFrom(mainRegions(), true);       /* main+footer hidden */
+          lockFrom([sidebar], false);
+          lockFrom(mainRegions(), true);
+          /* Make sure the hamburger stays reachable even though .main contains it:
+             after locking main, un-tabindex the hamburger specifically. */
+          if (btn.dataset.daybookRestoreTi !== undefined) {
+            var orig = btn.dataset.daybookRestoreTi;
+            if (orig === '__none__') btn.removeAttribute('tabindex');
+            else                     btn.setAttribute('tabindex', orig);
+            delete btn.dataset.daybookRestoreTi;
+          }
+          btn.removeAttribute('aria-hidden');
         } else {
-          lockFrom([sidebar], true);           /* sidebar hidden */
-          lockFrom(mainRegions(), false);      /* main+footer interactive */
+          lockFrom([sidebar], true);
+          lockFrom(mainRegions(), false);
         }
       }
+
+      /* Belt-and-braces focus trap: if focus somehow escapes the sidebar while
+         it's open, bounce it back to the first sidebar link. */
+      document.addEventListener('focusin', function (e) {
+        if (!document.body.classList.contains('daybook-sidebar-open')) return;
+        if (window.innerWidth >= 800) return;
+        if (sidebar.contains(e.target) || btn.contains(e.target)) return;
+        e.preventDefault();
+        var first = sidebar.querySelector('.site-title, a, button');
+        if (first && first.focus) first.focus({ preventScroll: true });
+      });
 
       function setOpen(open) {
         btn.setAttribute('aria-expanded', open ? 'true' : 'false');
