@@ -264,8 +264,10 @@
     #menu-button svg { width: 20px; height: 20px; display: block; }
   }
   @media (min-width: 50rem) {
-    /* Hide the hamburger on desktop (sidebar is permanently visible) */
+    /* Hide the hamburger AND the sidebar close button on desktop
+       (the sidebar is permanently visible there, no toggle needed) */
     #menu-button { display: none !important; }
+    .sidebar-close { display: none !important; }
   }
 
   /* ========================================================================
@@ -315,6 +317,51 @@
     }
     body.daybook-sidebar-open { overflow: hidden; }   /* lock scroll under overlay */
     .side-bar { z-index: 60; }   /* above the backdrop */
+
+    /* Dedicated close (×) button inside the sidebar, visible on mobile only */
+    .sidebar-close {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 44px;
+      height: 44px;
+      padding: 10px;
+      border: 1px solid currentColor;
+      border-radius: 6px;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+    .sidebar-close:focus-visible {
+      outline: 2px solid var(--jtd-focus) !important;
+      outline-offset: 2px !important;
+    }
+
+    /* Headings on mobile — use plain block layout to guarantee screen-reader
+       heading role is always announced. Permalink icon stays after text via
+       absolute positioning rather than flex ordering. */
+    .main-content h1,
+    .main-content h2,
+    .main-content h3,
+    .main-content h4,
+    .main-content h5,
+    .main-content h6 {
+      display: block !important;
+      position: relative;
+      padding-right: 32px;
+    }
+    .main-content .anchor-heading {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      margin: 0 !important;
+      order: unset !important;
+    }
 
     /* Main nav lives in the sidebar on mobile — make items look + feel sidebar-native */
     .side-bar #site-nav { display: block !important; margin: 8px 0; }

@@ -318,26 +318,33 @@
     /* Inject the site-wide page footer with trust/legal links. */
     function injectPageFooter() {
       if (document.getElementById('daybook-page-footer')) return;
-      var host = document.querySelector('.main-content-wrap') || document.querySelector('.main') || document.body;
+      /* Place at BODY level so <footer contentinfo> is a top-level landmark,
+         not nested inside <main>. */
+      var host = document.body;
       var yr = new Date().getFullYear();
       var footer = document.createElement('footer');
       footer.id = 'daybook-page-footer';
       footer.setAttribute('role', 'contentinfo');
       footer.setAttribute('aria-label', 'Site footer');
+      /* Links live INSIDE the <footer contentinfo> landmark.
+         The <nav aria-label="…"> inside creates a secondary navigation landmark
+         so screen-reader users can jump straight to the legal links. */
       footer.innerHTML =
-        '<nav aria-label="Legal and support"><ul class="footer-links">' +
-          '<li><a href="/Daybook/privacy.html">Privacy Policy</a></li>' +
-          '<li aria-hidden="true" class="footer-sep">·</li>' +
-          '<li><a href="/Daybook/terms.html">Terms of Service</a></li>' +
-          '<li aria-hidden="true" class="footer-sep">·</li>' +
-          '<li><a href="/Daybook/scopes.html">Permissions</a></li>' +
-          '<li aria-hidden="true" class="footer-sep">·</li>' +
-          '<li><a href="/Daybook/accessibility.html">Accessibility</a></li>' +
-          '<li aria-hidden="true" class="footer-sep">·</li>' +
-          '<li><a href="https://github.com/anubhav9001/Daybook/blob/main/SECURITY.md" target="_blank" rel="noopener noreferrer">Security</a></li>' +
-          '<li aria-hidden="true" class="footer-sep">·</li>' +
-          '<li><a href="/Daybook/contact.html">Contact</a></li>' +
-        '</ul></nav>' +
+        '<nav aria-label="Legal and support" class="footer-nav">' +
+          '<ul class="footer-links">' +
+            '<li><a href="/Daybook/privacy.html">Privacy Policy</a></li>' +
+            '<li aria-hidden="true" class="footer-sep">·</li>' +
+            '<li><a href="/Daybook/terms.html">Terms of Service</a></li>' +
+            '<li aria-hidden="true" class="footer-sep">·</li>' +
+            '<li><a href="/Daybook/scopes.html">Permissions</a></li>' +
+            '<li aria-hidden="true" class="footer-sep">·</li>' +
+            '<li><a href="/Daybook/accessibility.html">Accessibility</a></li>' +
+            '<li aria-hidden="true" class="footer-sep">·</li>' +
+            '<li><a href="https://github.com/anubhav9001/Daybook/blob/main/SECURITY.md" target="_blank" rel="noopener noreferrer">Security</a></li>' +
+            '<li aria-hidden="true" class="footer-sep">·</li>' +
+            '<li><a href="/Daybook/contact.html">Contact</a></li>' +
+          '</ul>' +
+        '</nav>' +
         '<div class="footer-meta">' +
           '© ' + yr + ' Daybook &middot; ' +
           '<a href="https://github.com/anubhav9001/Daybook" target="_blank" rel="noopener noreferrer">Source on GitHub</a> &middot; ' +
@@ -393,57 +400,104 @@
       });
     }
 
-    /* Mobile sidebar overlay. JTD's hamburger lives INSIDE the sidebar, so it
-       disappears when we slide the sidebar off-screen. We relocate it into the
-       main-header (which is sticky + always on-screen on mobile) and manage
-       open/close state ourselves with a body class.                            */
+    /* Mobile sidebar overlay. We:
+       - Relocate hamburger from inside sidebar into sticky header
+       - CLONE the hamburger to strip JTD's own click handler (so one tap opens)
+       - Add inert + aria-hidden to the sidebar when closed so screen readers
+         can't focus items that are visually off-screen
+       - Inject a dedicated close (×) button at the top of the sidebar          */
     function wireMobileSidebar() {
       var btn = document.getElementById('menu-button');
       var sidebar = document.querySelector('.side-bar');
       var mainHeader = document.getElementById('main-header');
       if (!btn || !sidebar || !mainHeader) return;
 
-      /* 1. Move the hamburger into the main-header so it's always reachable */
-      if (btn.parentNode !== mainHeader) {
-        mainHeader.appendChild(btn);
-      }
-      if (!btn.hasAttribute('aria-controls')) btn.setAttribute('aria-controls', 'site-nav');
-      if (!btn.hasAttribute('aria-expanded')) btn.setAttribute('aria-expanded', 'false');
+      /* 1. Clone the button to drop JTD's own listener (prevents double-toggle) */
+      var fresh = btn.cloneNode(true);
+      btn.parentNode.replaceChild(fresh, btn);
+      btn = fresh;
 
-      /* 2. Explicit open/close handlers (don't rely on JTD's own toggle, which
-            can't find elements it expects now that we moved things). */
+      /* 2. Move it into the sticky header */
+      if (btn.parentNode !== mainHeader) mainHeader.appendChild(btn);
+      btn.setAttribute('aria-controls', 'daybook-sidebar');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-label', 'Open navigation menu');
+
+      /* 3. Give the sidebar a stable id for aria-controls, plus a landmark label */
+      sidebar.id = sidebar.id || 'daybook-sidebar';
+      sidebar.setAttribute('role', 'dialog');
+      sidebar.setAttribute('aria-modal', 'true');
+      sidebar.setAttribute('aria-label', 'Daybook navigation');
+
+      /* 4. Inject a dedicated close button at the TOP of the sidebar.
+            Visible only on mobile (CSS). */
+      var closeBtn = sidebar.querySelector('.sidebar-close');
+      if (!closeBtn) {
+        closeBtn = document.createElement('button');
+        closeBtn.type = 'button';
+        closeBtn.className = 'sidebar-close';
+        closeBtn.setAttribute('aria-label', 'Close navigation menu');
+        closeBtn.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
+        sidebar.insertBefore(closeBtn, sidebar.firstChild);
+      }
+
+      /* 5. Open/close logic */
+      function applyInert(open) {
+        if (open) {
+          sidebar.removeAttribute('inert');
+          sidebar.removeAttribute('aria-hidden');
+        } else {
+          /* Only hide from AT on mobile — on desktop the sidebar is always visible */
+          if (window.innerWidth < 800) {
+            sidebar.setAttribute('inert', '');
+            sidebar.setAttribute('aria-hidden', 'true');
+          } else {
+            sidebar.removeAttribute('inert');
+            sidebar.removeAttribute('aria-hidden');
+          }
+        }
+      }
       function setOpen(open) {
         btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        btn.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
         document.body.classList.toggle('daybook-sidebar-open', open);
+        applyInert(open);
         if (open) {
-          var first = sidebar.querySelector('a, button, [tabindex]:not([tabindex="-1"])');
-          if (first && first.focus) first.focus();
+          /* Focus the close button inside the sidebar — natural first stop */
+          setTimeout(function () { closeBtn.focus(); }, 60);
         } else {
           btn.focus();
         }
       }
+
+      /* Initial state: closed on mobile, open-equivalent on desktop */
+      applyInert(false);
+
       btn.addEventListener('click', function (e) {
-        e.preventDefault(); e.stopPropagation();
+        e.preventDefault(); e.stopImmediatePropagation();
         setOpen(btn.getAttribute('aria-expanded') !== 'true');
       });
+      closeBtn.addEventListener('click', function (e) {
+        e.preventDefault(); e.stopImmediatePropagation();
+        setOpen(false);
+      });
 
-      /* 3. Escape closes */
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && document.body.classList.contains('daybook-sidebar-open')) {
           setOpen(false);
         }
       });
-      /* 4. Tap outside the sidebar closes */
       document.addEventListener('click', function (e) {
         if (!document.body.classList.contains('daybook-sidebar-open')) return;
         if (sidebar.contains(e.target) || btn.contains(e.target)) return;
         setOpen(false);
       }, true);
-      /* 5. Close when viewport grows to desktop width */
       window.addEventListener('resize', function () {
         if (window.innerWidth >= 800 && document.body.classList.contains('daybook-sidebar-open')) {
           setOpen(false);
         }
+        /* Keep inert state correct across breakpoint crosses */
+        applyInert(document.body.classList.contains('daybook-sidebar-open'));
       });
     }
 
