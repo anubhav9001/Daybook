@@ -24,8 +24,9 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
   <input type="hidden" name="_captcha" value="false">
   <input type="hidden" name="_honey" value="">
   <input type="hidden" name="_template" value="table">
-  <!-- Spam keyword blocklist: FormSubmit rejects submissions containing these -->
-  <input type="hidden" name="_blacklist" value="seo,backlink,backlinks,link building,casino,crypto,bitcoin,ethereum,nft,loan,viagra,escort,investment opportunity,guest post,affordable price,cheap price,SEO service,ranking boost,buy followers,dating,webcam,xxx,porn,gambling,forex,binary options,work from home,make money fast,get rich,crypto investment">
+  <!-- Server-side spam keyword blocklist (FormSubmit may or may not honor this on AJAX
+       endpoint, so we also filter client-side in the submit handler below) -->
+  <input type="hidden" name="_blacklist" value="seo,backlink,backlinks,link building,casino,crypto,bitcoin,ethereum,nft,loan,viagra,escort,investment opportunity,guest post,affordable price,cheap price,SEO service,ranking boost,buy followers,dating,webcam,xxx,porn,gambling,forex,binary options,work from home,make money fast,get rich,crypto investment,earn money,easy money,sex,hookup,adult,penis,horny,milf,nude,naked,enlargement,weight loss,diet pills,miracle cure,ethical hacker,hack,hire a hacker,lottery,prize,winner,inheritance,prince,beneficiary,urgent business,confidential,offshore,wire transfer,darkweb,dark web,counterfeit,fake id,visa service,web design services,unlimited leads,buy leads,increase sales,boost ranking,SEO expert,SEO agency,digital marketing,influencer marketing,lead generation,growth hack">
   <p id="contact-form-help" class="form-help">All fields marked with <span aria-hidden="true">*</span> are required. We reply on a best-effort basis within a few business days.</p>
 
   <noscript>
@@ -152,11 +153,46 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
       });
     }
 
+    /* Client-side keyword filter — runs in the browser before the request leaves,
+       so FormSubmit never sees spam that matches these patterns. */
+    var BLOCK_RE = new RegExp(
+      '\\b(' + [
+        'seo','backlink','link\\s*building','casino','crypto(?:currency)?','bitcoin','ethereum','nft',
+        'loan','viagra','escort','investment\\s*opportunity','guest\\s*post','cheap\\s*price',
+        'buy\\s*followers','dating','webcam','xxx','porn','gambling','forex','binary\\s*options',
+        'work\\s*from\\s*home','make\\s*money','earn\\s*money','easy\\s*money','get\\s*rich',
+        'sex','hookup','adult','penis','horny','milf','nude','naked','enlargement',
+        'weight\\s*loss','diet\\s*pills','miracle\\s*cure','hire\\s*a\\s*hacker','hacker',
+        'lottery','prize\\s*winner','inheritance','beneficiary','urgent\\s*business',
+        'offshore','wire\\s*transfer','dark\\s*web','counterfeit','fake\\s*id','visa\\s*service',
+        'web\\s*design\\s*services?','unlimited\\s*leads','buy\\s*leads','increase\\s*sales',
+        'boost\\s*ranking','SEO\\s*expert','SEO\\s*agency','digital\\s*marketing',
+        'influencer\\s*marketing','lead\\s*generation','growth\\s*hack'
+      ].join('|') + ')\\b', 'i'
+    );
+    function containsSpam(form) {
+      var fields = ['name','subject','summary','message'];
+      for (var i = 0; i < fields.length; i++) {
+        var el = form.elements[fields[i]];
+        if (!el) continue;
+        var v = (el.value || '').trim();
+        if (v && BLOCK_RE.test(v)) return fields[i];
+      }
+      return null;
+    }
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       if (!form.checkValidity()) {
         announce('Please correct the highlighted fields and try again.', true);
         focusFirstInvalid();
+        return;
+      }
+      var hit = containsSpam(form);
+      if (hit) {
+        announce('Your message appears to contain content we don’t accept here. Please rephrase and try again.', true);
+        var el = form.elements[hit];
+        if (el) { el.focus(); el.scrollIntoView({ block: 'center' }); }
         return;
       }
       submit.disabled = true;
