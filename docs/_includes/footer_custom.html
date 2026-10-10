@@ -117,8 +117,43 @@
         reposition();
       }
 
+      /* Keep the keyboard-focused ("active") result scrolled into view. */
+      function scrollActiveIntoView() {
+        var active = sr.querySelector('.search-result.active');
+        if (!active) return;
+        if (typeof active.scrollIntoView === 'function') {
+          active.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'auto' });
+        } else {
+          var top = active.offsetTop;
+          var bottom = top + active.offsetHeight;
+          if (top < sr.scrollTop) sr.scrollTop = top;
+          else if (bottom > sr.scrollTop + sr.clientHeight) sr.scrollTop = bottom - sr.clientHeight;
+        }
+      }
+
+      /* ARIA wiring so screen readers announce the dropdown properly */
+      function wireAria() {
+        var input = document.getElementById('search-input');
+        if (input) {
+          input.setAttribute('role', 'combobox');
+          input.setAttribute('aria-autocomplete', 'list');
+          input.setAttribute('aria-controls', 'search-results');
+          input.setAttribute('aria-expanded', sr.children.length > 0 ? 'true' : 'false');
+        }
+        sr.setAttribute('role', 'listbox');
+        sr.querySelectorAll('.search-result').forEach(function (r, i) {
+          r.setAttribute('role', 'option');
+          r.id = r.id || ('search-result-' + i);
+          r.setAttribute('aria-selected', r.classList.contains('active') ? 'true' : 'false');
+        });
+        var active = sr.querySelector('.search-result.active');
+        if (input && active) input.setAttribute('aria-activedescendant', active.id);
+        else if (input) input.removeAttribute('aria-activedescendant');
+      }
+
       paint();
-      new MutationObserver(paint).observe(sr, { childList: true, subtree: true, attributes: true });
+      new MutationObserver(function () { paint(); wireAria(); scrollActiveIntoView(); })
+        .observe(sr, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
       new MutationObserver(paint).observe(document.documentElement, { attributes: true, attributeFilter: ['data-jtd-theme'] });
       window.addEventListener('scroll',  reposition, { passive: true, capture: true });
       window.addEventListener('resize',  reposition);

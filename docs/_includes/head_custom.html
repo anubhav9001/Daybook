@@ -306,8 +306,16 @@
     border: 0 !important;
     line-height: 1.4 !important;
   }
-  .search-result:hover,
-  .search-result.active { background: rgba(75,123,236,0.08) !important; }
+  .search-result:hover { background: rgba(75,123,236,0.08) !important; }
+  .search-result.active,
+  .search-result:focus,
+  .search-result:focus-visible {
+    background: rgba(75,123,236,0.14) !important;
+    outline: 2px solid var(--jtd-focus) !important;
+    outline-offset: -2px !important;
+    position: relative !important;
+    z-index: 1 !important;
+  }
 
   /* Reset JTD's inner wrappers to normal block flow */
   .search-result-doc,
@@ -553,9 +561,13 @@
       border-color: var(--jtd-border) !important;
       box-shadow: 0 10px 32px rgba(0,0,0,0.7) !important;
     }
-    html:not([data-jtd-theme="light"]) .search-result:hover,
-    html:not([data-jtd-theme="light"]) .search-result.active {
-      background: #353440 !important;
+    html:not([data-jtd-theme="light"]) .search-result:hover { background: #302f3a !important; }
+    html:not([data-jtd-theme="light"]) .search-result.active,
+    html:not([data-jtd-theme="light"]) .search-result:focus,
+    html:not([data-jtd-theme="light"]) .search-result:focus-visible {
+      background: #3b3a48 !important;
+      outline: 2px solid var(--jtd-focus) !important;
+      outline-offset: -2px !important;
     }
     html:not([data-jtd-theme="light"]) .search-result-highlight { color: var(--jtd-link) !important; }
     html:not([data-jtd-theme="light"]) .search-result { color: var(--jtd-text) !important; }
@@ -735,9 +747,13 @@
     border-color: var(--jtd-border) !important;
     box-shadow: 0 10px 32px rgba(0,0,0,0.7) !important;
   }
-  html[data-jtd-theme="dark"] .search-result:hover,
-  html[data-jtd-theme="dark"] .search-result.active {
-    background: #353440 !important;
+  html[data-jtd-theme="dark"] .search-result:hover { background: #302f3a !important; }
+  html[data-jtd-theme="dark"] .search-result.active,
+  html[data-jtd-theme="dark"] .search-result:focus,
+  html[data-jtd-theme="dark"] .search-result:focus-visible {
+    background: #3b3a48 !important;
+    outline: 2px solid var(--jtd-focus) !important;
+    outline-offset: -2px !important;
   }
   html[data-jtd-theme="dark"] .search-result-highlight { color: var(--jtd-link) !important; }
   html[data-jtd-theme="dark"] .search-result { color: var(--jtd-text) !important; }
