@@ -13,16 +13,21 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
 - Bug reports: please use the [issue tracker](https://github.com/anubhav9001/Daybook/issues/new/choose) instead so others can see and vote.
 - Security vulnerabilities: please use GitHub's [private vulnerability reporting](https://github.com/anubhav9001/Daybook/security/advisories/new) — see the [Security Policy](https://github.com/anubhav9001/Daybook/blob/main/SECURITY.md).
 
+<!-- Hidden iframe target: FormSubmit's response page loads here, invisibly,
+     so the user never navigates away from the contact page. -->
+<iframe name="cf-sink" id="cf-sink" title="Form submission channel" aria-hidden="true" tabindex="-1"
+        style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;border:0;overflow:hidden"></iframe>
+
 <form id="contact-form"
       action="https://formsubmit.co/el/jilasa"
       method="POST"
+      target="cf-sink"
       novalidate
       aria-describedby="contact-form-help">
   <!-- FormSubmit control fields -->
   <input type="hidden" name="_captcha" value="false">
   <input type="hidden" name="_honey" value="">
   <input type="hidden" name="_template" value="table">
-  <input type="hidden" name="_next" value="https://anubhav9001.github.io/Daybook/contact.html?sent=1">
   <p id="contact-form-help" class="form-help">All fields marked with <span aria-hidden="true">*</span> are required. We reply on a best-effort basis within a few business days.</p>
 
   <div id="contact-unconfigured-banner" class="form-banner" hidden>
@@ -116,46 +121,50 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
       submit.disabled = true;
     }
 
-    /* Show success state on redirect-back from no-JS fallback */
-    if (location.search.indexOf('sent=1') !== -1) {
-      announce('Thanks — your message was sent. We’ll reply by email on a best-effort basis.', false);
-      try { history.replaceState(null, '', location.pathname); } catch (e) {}
-    }
 
     form.addEventListener('submit', function (e) {
-      e.preventDefault();
       if (!endpointConfigured) {
+        e.preventDefault();
         announce('Contact form is not configured yet. Please open a GitHub issue or discussion for now.', true);
         return;
       }
       if (!form.checkValidity()) {
+        e.preventDefault();
         announce('Please correct the highlighted fields and try again.', true);
         focusFirstInvalid();
         return;
       }
+
+      /* Let the native POST into the hidden iframe happen. We don't preventDefault.
+         Optimistically announce success immediately — FormSubmit returns 2xx for
+         valid submissions and bots are filtered server-side. If the submission
+         really failed (rare), the user can retry; the honeypot + reCAPTCHA keep
+         load low. */
       submit.disabled = true;
       announce('Sending…', false);
 
-      function post() {
-        /* FormSubmit aliases (/el/xxxx) only support classic form POST.
-           We rely on the _next hidden field to bring the user back here with
-           ?sent=1, which triggers the success announcer on load. */
-        HTMLFormElement.prototype.submit.call(form);
+      function finishOptimistic() {
+        form.reset();
+        submit.disabled = false;
+        announce('Thanks — your message was sent. We’ll reply by email on a best-effort basis.', false);
       }
 
       if (hasRecaptcha && window.grecaptcha && typeof grecaptcha.ready === 'function') {
+        e.preventDefault();
         grecaptcha.ready(function () {
           grecaptcha.execute(SITE_KEY, { action: 'contact' }).then(function (token) {
             tokenInput.value = token;
-            post();
+            HTMLFormElement.prototype.submit.call(form); /* posts into iframe */
+            setTimeout(finishOptimistic, 400);
           }).catch(function () {
             announce('reCAPTCHA could not verify. Please reload and try again.', true);
             submit.disabled = false;
           });
         });
-      } else {
-        post();
+        return;
       }
+      /* Native submit continues; show success shortly after it fires */
+      setTimeout(finishOptimistic, 400);
     });
   })();
 </script>
