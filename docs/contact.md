@@ -14,10 +14,15 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
 - Security vulnerabilities: please use GitHub's [private vulnerability reporting](https://github.com/anubhav9001/Daybook/security/advisories/new) — see the [Security Policy](https://github.com/anubhav9001/Daybook/blob/main/SECURITY.md).
 
 <form id="contact-form"
-      action="https://formspree.io/f/REPLACE_WITH_FORMSPREE_FORM_ID"
+      action="https://formsubmit.co/el/REPLACE_WITH_FORMSUBMIT_HASH"
       method="POST"
       novalidate
       aria-describedby="contact-form-help">
+  <!-- FormSubmit control fields -->
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="_honey" value="">
+  <input type="hidden" name="_template" value="table">
+  <input type="hidden" name="_next" value="https://anubhav9001.github.io/Daybook/contact.html?sent=1">
   <p id="contact-form-help" class="form-help">All fields marked with <span aria-hidden="true">*</span> are required. We reply on a best-effort basis within a few business days.</p>
 
   <div id="contact-unconfigured-banner" class="form-banner" hidden>
@@ -56,7 +61,8 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
     <small id="cf-message-hint" class="form-hint">Please include enough detail for us to help (minimum 20 characters).</small>
   </div>
 
-  <!-- Spam honeypot: real users leave this blank; bots fill it. Hidden visually and from AT. -->
+  <!-- Spam honeypot: real users leave this blank; bots fill it. Hidden visually and from AT.
+       FormSubmit watches _honey; Formspree watches _gotcha. Both covered. -->
   <div class="honeypot" aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden">
     <label for="cf-website">Leave this field empty</label>
     <input type="text" id="cf-website" name="_gotcha" tabindex="-1" autocomplete="off">
@@ -110,6 +116,12 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
       submit.disabled = true;
     }
 
+    /* Show success state on redirect-back from no-JS fallback */
+    if (location.search.indexOf('sent=1') !== -1) {
+      announce('Thanks — your message was sent. We’ll reply by email on a best-effort basis.', false);
+      try { history.replaceState(null, '', location.pathname); } catch (e) {}
+    }
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       if (!endpointConfigured) {
@@ -126,19 +138,21 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
 
       function post() {
         var data = new FormData(form);
-        fetch(form.action, {
+        /* FormSubmit AJAX endpoint variant: append .json suffix for JSON response */
+        var url = form.action.replace(/\/el\/([^/?]+)/, '/ajax/el/$1');
+        fetch(url, {
           method: 'POST',
           body: data,
           headers: { 'Accept': 'application/json' }
         }).then(function (r) {
-          if (r.ok) {
+          return r.json().catch(function () { return { success: r.ok }; });
+        }).then(function (j) {
+          if (j && (j.success === true || j.success === 'true')) {
             form.reset();
             announce('Thanks — your message was sent. We’ll reply by email on a best-effort basis.', false);
           } else {
-            r.json().then(function (j) {
-              var m = (j && j.errors && j.errors[0] && j.errors[0].message) || 'Something went wrong. Please try again.';
-              announce(m, true);
-            }).catch(function () { announce('Something went wrong. Please try again.', true); });
+            var m = (j && (j.message || j.error)) || 'Something went wrong. Please try again.';
+            announce(m, true);
           }
         }).catch(function () {
           announce('Network error. Please check your connection and try again.', true);
