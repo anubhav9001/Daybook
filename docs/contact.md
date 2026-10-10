@@ -24,6 +24,8 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
   <input type="hidden" name="_captcha" value="false">
   <input type="hidden" name="_honey" value="">
   <input type="hidden" name="_template" value="table">
+  <!-- Spam keyword blocklist: FormSubmit rejects submissions containing these -->
+  <input type="hidden" name="_blacklist" value="seo,backlink,backlinks,link building,casino,crypto,bitcoin,ethereum,nft,loan,viagra,escort,investment opportunity,guest post,affordable price,cheap price,SEO service,ranking boost,buy followers,dating,webcam,xxx,porn,gambling,forex,binary options,work from home,make money fast,get rich,crypto investment">
   <p id="contact-form-help" class="form-help">All fields marked with <span aria-hidden="true">*</span> are required. We reply on a best-effort basis within a few business days.</p>
 
   <noscript>
@@ -79,7 +81,7 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
     <span id="cf-status" class="form-status" aria-live="polite" aria-atomic="true"></span>
   </div>
 
-  <p class="form-legal">
+  <p class="form-legal" id="cf-recaptcha-notice" hidden>
     This form is protected by <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google reCAPTCHA</a> &middot;
     <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer">Terms</a>.
   </p>
@@ -101,6 +103,8 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
       s.src = 'https://www.google.com/recaptcha/api.js?render=' + encodeURIComponent(SITE_KEY);
       s.async = true; s.defer = true;
       document.head.appendChild(s);
+      var notice = document.getElementById('cf-recaptcha-notice');
+      if (notice) notice.hidden = false;
     }
 
     function announce(msg, isError) {
