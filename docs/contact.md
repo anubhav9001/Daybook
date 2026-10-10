@@ -79,8 +79,10 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
 
   <div class="form-actions">
     <button type="submit" id="cf-submit" class="btn btn-primary fs-4">Send message</button>
-    <span id="cf-status" class="form-status" aria-live="polite" aria-atomic="true"></span>
+    <span id="cf-status" class="form-status" role="status" aria-live="polite" aria-atomic="true"></span>
   </div>
+  <!-- Dedicated assertive region for errors so screen readers interrupt immediately -->
+  <div id="cf-status-error" class="sr-only" role="alert" aria-live="assertive" aria-atomic="true"></div>
 
   <p class="form-legal" id="cf-recaptcha-notice" hidden>
     This form is protected by <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google reCAPTCHA</a> &middot;
@@ -108,9 +110,23 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
       if (notice) notice.hidden = false;
     }
 
+    var statusError = document.getElementById('cf-status-error');
     function announce(msg, isError) {
-      status.textContent = msg;
+      /* Prefix errors with the word "Error:" so sighted and non-sighted users
+         both immediately recognise the message type. */
+      var text = isError ? 'Error: ' + msg : msg;
+      status.textContent = text;
       status.className = 'form-status ' + (isError ? 'is-error' : 'is-ok');
+      /* Route errors to the assertive live region so screen readers interrupt. */
+      if (statusError) {
+        if (isError) {
+          /* Clear then set so repeated identical errors still re-announce */
+          statusError.textContent = '';
+          setTimeout(function () { statusError.textContent = text; }, 20);
+        } else {
+          statusError.textContent = '';
+        }
+      }
     }
     function focusFirstInvalid() {
       var first = form.querySelector(':invalid');
