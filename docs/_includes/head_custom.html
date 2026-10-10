@@ -118,12 +118,19 @@
     /* IMPORTANT: don't use overflow:hidden here — search dropdown must escape */
     position: relative;
   }
-  /* MOBILE: allow wrapping so search + nav + toggle stack cleanly */
+  /* MOBILE: allow wrapping so search + nav + toggle stack cleanly.
+     JTD hides .main-header on mobile by default — we need it visible because
+     the hamburger lives inside it on mobile. */
   @media (max-width: 49.99rem) {
+    #main-header.main-header,
     .main-header {
+      display: flex !important;
       flex-wrap: wrap !important;
       gap: 8px !important;
       padding: 8px 12px !important;
+      visibility: visible !important;
+      height: auto !important;
+      width: 100% !important;
     }
     .main-header .search {
       flex: 1 1 100% !important;
