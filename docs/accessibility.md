@@ -87,6 +87,6 @@ Every action in Daybook can be reached from the keyboard. These are the shipped 
 If you hit a barrier anywhere in the app or on this site, please tell us.
 
 - **Preferred:** [Report an accessibility bug](https://github.com/anubhav9001/Daybook/issues/new?template=bug_report.yml&labels=bug,a11y&title=%5BA11y%5D%3A%20) — pick the bug template and add the "a11y" label.
-- **Email:** **[FILL IN A PUBLIC CONTACT EMAIL]**
+- **Contact form:** [Send us a message](contact.html)
 
 We treat accessibility bugs as critical and respond on a best-effort basis within a few business days.

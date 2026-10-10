@@ -56,4 +56,4 @@ These terms are governed by the laws of the author's jurisdiction. Any disputes 
 
 ## 8. Contact
 
-Email **[FILL IN A PUBLIC CONTACT EMAIL]** or open an issue at <https://github.com/anubhav9001/Daybook/issues>.
+Use the [contact form](contact.html) or open an issue at <https://github.com/anubhav9001/Daybook/issues>.

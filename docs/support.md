@@ -9,8 +9,8 @@ description: Report a bug, get help, join the discussion, or report security iss
 
 ## Contact
 
-- **Email:** **[FILL IN A PUBLIC CONTACT EMAIL]**
-- **Response time:** best-effort, typically within a few business days
+- **Contact form:** [Send us a message](contact.html) — accessible form protected by reCAPTCHA v3; replies come from `anubhav.mitra@gmail.com`.
+- **Response time:** best-effort, typically within a few business days.
 
 ## Documentation
 

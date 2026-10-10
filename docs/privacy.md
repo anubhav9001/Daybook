@@ -20,7 +20,7 @@ Daybook ("the app", "we") is a desktop application that helps you manage your Go
 
 Daybook is developed and maintained by **anubhav9001** on GitHub. For questions about this policy or any privacy concern, contact:
 
-- Email: **[FILL IN A PUBLIC CONTACT EMAIL]**
+- Contact form: <https://anubhav9001.github.io/Daybook/contact.html>
 - Issues: <https://github.com/anubhav9001/Daybook/issues>
 
 ## 2. What data Daybook accesses
@@ -70,4 +70,4 @@ If this policy changes, the new version will appear at this URL with an updated 
 
 ## 9. Contact
 
-Email **[FILL IN A PUBLIC CONTACT EMAIL]** or open an issue at <https://github.com/anubhav9001/Daybook/issues>.
+Use the [contact form](contact.html) or open an issue at <https://github.com/anubhav9001/Daybook/issues>.
