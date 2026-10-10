@@ -281,13 +281,38 @@
           pre.dataset.copyBound = '1';
         }
 
-        /* 3. Hook any existing JTD copy button so it announces too */
-        var btn = wrap.querySelector('.code-button, .copy-code-button, button.copy');
-        if (btn && !btn.dataset.a11yBound) {
-          btn.addEventListener('click', function () { announce('Code copied to clipboard'); });
-          btn.dataset.a11yBound = '1';
-        }
+        /* 3. Label any button inside this wrapper (whatever its class) */
+        wrap.querySelectorAll('button').forEach(function (btn) {
+          if (!btn.getAttribute('aria-label') && !btn.textContent.trim()) {
+            btn.setAttribute('aria-label', 'Copy code to clipboard');
+          }
+          btn.setAttribute('type', 'button');
+        });
       });
+    }
+
+    /* Document-level copy announcement — fires regardless of what triggered
+       the clipboard write (JTD's button, our Enter handler, Ctrl+C). */
+    function bindGlobalCopyAnnounce() {
+      if (window.__daybookCopyBound) return;
+      window.__daybookCopyBound = true;
+      /* a) Native copy event — fires on Ctrl+C and most execCommand('copy') */
+      document.addEventListener('copy', function (e) {
+        var sel = window.getSelection && window.getSelection().toString();
+        if (sel && sel.length > 0) announce('Copied to clipboard');
+      }, true);
+      /* b) Delegated click on any button inside a code wrapper */
+      document.addEventListener('click', function (e) {
+        var btn = e.target.closest && e.target.closest(
+          '.highlighter-rouge button, .highlight button, pre + button, pre ~ button, ' +
+          '.copy, .copy-code-button, .code-button, button.btn-copy, ' +
+          'button[aria-label*="copy" i], button[title*="copy" i]'
+        );
+        if (btn) {
+          /* Give JTD a tick to actually run its copy, then announce. */
+          setTimeout(function () { announce('Code copied to clipboard'); }, 50);
+        }
+      }, true);
     }
 
     function restructure() {
@@ -295,6 +320,7 @@
       pinSearchResults();
       prepareAndRunPrism();
       ensureLiveRegion();
+      bindGlobalCopyAnnounce();
       wireCodeBlocks();
       /* Re-wire if Prism re-emits code blocks after highlight */
       setTimeout(wireCodeBlocks, 500);

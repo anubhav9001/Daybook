@@ -428,35 +428,81 @@
     border-radius: 3px;
   }
 
-  /* Copy-code button — ensure it's visible in both themes */
-  .code-button,
+  /* Copy-code button — target every button in a code wrapper, every JTD class */
+  .highlighter-rouge button,
+  .highlight button,
+  div.code-example button,
+  pre + button,
+  .copy,
   .copy-code-button,
-  button.copy {
-    opacity: 0.85 !important;
-    border: 1px solid currentColor !important;
-    background: rgba(127,127,127,0.1) !important;
-  }
-  .code-button:hover,
-  .copy-code-button:hover,
-  button.copy:hover { opacity: 1 !important; background: rgba(127,127,127,0.2) !important; }
-  .code-button:focus-visible,
-  .copy-code-button:focus-visible,
-  button.copy:focus-visible {
+  .code-button,
+  button.btn-copy {
     opacity: 1 !important;
-    outline: 2px solid var(--jtd-focus) !important;
+    color: inherit !important;
+    border: 1px solid rgba(127,127,127,0.5) !important;
+    background: rgba(127,127,127,0.15) !important;
+    padding: 4px 6px !important;
+    border-radius: 4px !important;
+  }
+  .highlighter-rouge button:hover,
+  .highlight button:hover,
+  .copy:hover,
+  .copy-code-button:hover,
+  .code-button:hover,
+  button.btn-copy:hover { background: rgba(127,127,127,0.3) !important; }
+
+  /* Strong, theme-aware focus ring on any code-block button */
+  .highlighter-rouge button:focus,
+  .highlighter-rouge button:focus-visible,
+  .highlight button:focus,
+  .highlight button:focus-visible,
+  pre + button:focus,
+  pre + button:focus-visible,
+  .copy:focus,
+  .copy:focus-visible,
+  .copy-code-button:focus,
+  .copy-code-button:focus-visible,
+  .code-button:focus,
+  .code-button:focus-visible,
+  button.btn-copy:focus,
+  button.btn-copy:focus-visible {
+    outline: 3px solid var(--jtd-focus) !important;
     outline-offset: 2px !important;
-    background: rgba(255,255,255,0.1) !important;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.65) !important;
   }
-  /* On the navy PowerShell background: light focus ring stays visible */
-  .language-powershell .code-button,
-  .language-powershell .copy-code-button {
+
+  /* On the navy PowerShell background: white border + amber ring always */
+  .language-powershell button,
+  .language-powershell .highlight button,
+  .language-powershell .copy,
+  .language-powershell .copy-code-button,
+  .language-powershell .code-button {
     color: #ffffff !important;
-    border-color: rgba(255,255,255,0.4) !important;
+    border-color: rgba(255,255,255,0.55) !important;
+    background: rgba(255,255,255,0.08) !important;
   }
-  .language-powershell .code-button:focus-visible,
-  .language-powershell .copy-code-button:focus-visible {
-    outline-color: #ffcc33 !important;      /* amber on navy for contrast */
-    outline: 2px solid #ffcc33 !important;
+  .language-powershell button:hover,
+  .language-powershell .copy:hover,
+  .language-powershell .copy-code-button:hover,
+  .language-powershell .code-button:hover { background: rgba(255,255,255,0.18) !important; }
+  .language-powershell button:focus,
+  .language-powershell button:focus-visible,
+  .language-powershell .copy:focus,
+  .language-powershell .copy:focus-visible,
+  .language-powershell .copy-code-button:focus,
+  .language-powershell .copy-code-button:focus-visible,
+  .language-powershell .code-button:focus,
+  .language-powershell .code-button:focus-visible {
+    outline: 3px solid #ffcc33 !important;    /* amber on navy — always visible */
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 1px #000000 !important;
+  }
+  /* Ensure the icon inside the button is visible on navy */
+  .language-powershell button svg,
+  .language-powershell button svg * {
+    fill: #ffffff !important;
+    stroke: #ffffff !important;
+    color: #ffffff !important;
   }
 
   /* Code blocks: only ONE tab stop. JTD may put tabindex on both the wrapper
