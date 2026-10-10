@@ -457,32 +457,46 @@
         sidebar.insertBefore(closeBtn, sidebar.firstChild);
       }
 
-      /* 5. Open/close logic
-            On OPEN: apply `inert` to the rest of the page (main content + page
-            footer) so swipe/tab navigation is naturally trapped inside the
-            sidebar. On CLOSE: remove it. On desktop (>=800px) we never apply
-            inert because the sidebar is always visible alongside content. */
-      function pageRegionsToLock() {
+      /* 5. Open/close logic — bidirectional AT lock on mobile:
+              - sidebar CLOSED: sidebar is inert+aria-hidden (AT can't reach it)
+              - sidebar OPEN:   main content & page footer are inert+aria-hidden
+              On DESKTOP (>=800px) everything stays accessible — no inert ever. */
+      function mainRegions() {
         return [
           document.querySelector('.main-content-wrap') || document.getElementById('main-content'),
           document.getElementById('daybook-page-footer')
         ].filter(Boolean);
       }
-      function setPageInert(on) {
-        var regions = pageRegionsToLock();
-        regions.forEach(function (el) {
-          if (on) el.setAttribute('inert', '');
-          else    el.removeAttribute('inert');
+      function lockFrom(elems, lock) {
+        elems.forEach(function (el) {
+          if (!el) return;
+          if (lock) { el.setAttribute('inert', ''); el.setAttribute('aria-hidden', 'true'); }
+          else      { el.removeAttribute('inert'); el.removeAttribute('aria-hidden'); }
         });
+      }
+
+      function applyLocks(open) {
+        var mobile = window.innerWidth < 800;
+        if (!mobile) {
+          /* Desktop: everything open and accessible */
+          lockFrom([sidebar], false);
+          lockFrom(mainRegions(), false);
+          return;
+        }
+        if (open) {
+          lockFrom([sidebar], false);          /* sidebar interactive */
+          lockFrom(mainRegions(), true);       /* main+footer hidden */
+        } else {
+          lockFrom([sidebar], true);           /* sidebar hidden */
+          lockFrom(mainRegions(), false);      /* main+footer interactive */
+        }
       }
 
       function setOpen(open) {
         btn.setAttribute('aria-expanded', open ? 'true' : 'false');
         btn.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
         document.body.classList.toggle('daybook-sidebar-open', open);
-        /* Only lock the page on mobile; desktop keeps everything interactive */
-        if (window.innerWidth < 800) setPageInert(open);
-        else                          setPageInert(false);
+        applyLocks(open);
         if (open) {
           var titleLink = sidebar.querySelector('.site-title')
                        || sidebar.querySelector('a, button');
@@ -492,8 +506,9 @@
         }
       }
 
-      /* Initial state: nothing inert */
-      setPageInert(false);
+      /* Initial state: on mobile, sidebar starts hidden from AT; on desktop,
+         nothing is locked. */
+      applyLocks(false);
 
       btn.addEventListener('click', function (e) {
         e.preventDefault(); e.stopImmediatePropagation();
@@ -518,8 +533,8 @@
         if (window.innerWidth >= 800 && document.body.classList.contains('daybook-sidebar-open')) {
           setOpen(false);
         }
-        /* On desktop widths, make sure nothing stays inert */
-        if (window.innerWidth >= 800) setPageInert(false);
+        /* Re-apply locks for the current state at the new viewport width */
+        applyLocks(document.body.classList.contains('daybook-sidebar-open'));
       });
     }
 
