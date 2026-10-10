@@ -20,6 +20,12 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
       aria-describedby="contact-form-help">
   <p id="contact-form-help" class="form-help">All fields marked with <span aria-hidden="true">*</span> are required. We reply on a best-effort basis within a few business days.</p>
 
+  <div id="contact-unconfigured-banner" class="form-banner" hidden>
+    <strong>Contact form is not yet live.</strong> While it's being set up, please use
+    <a href="https://github.com/anubhav9001/Daybook/issues/new/choose">GitHub Issues</a> or
+    <a href="https://github.com/anubhav9001/Daybook/discussions">Discussions</a>.
+  </div>
+
   <div class="form-row">
     <label for="cf-name">Your name <span class="req" aria-hidden="true">*</span></label>
     <input type="text" id="cf-name" name="name" autocomplete="name" required aria-required="true" aria-describedby="cf-name-hint">
@@ -97,8 +103,19 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
       if (first) { first.focus(); first.scrollIntoView({ block: 'center' }); }
     }
 
+    var endpointConfigured = form.action.indexOf('REPLACE_WITH') === -1;
+    if (!endpointConfigured) {
+      var banner = document.getElementById('contact-unconfigured-banner');
+      if (banner) banner.hidden = false;
+      submit.disabled = true;
+    }
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
+      if (!endpointConfigured) {
+        announce('Contact form is not configured yet. Please open a GitHub issue or discussion for now.', true);
+        return;
+      }
       if (!form.checkValidity()) {
         announce('Please correct the highlighted fields and try again.', true);
         focusFirstInvalid();
@@ -181,6 +198,16 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
   #contact-form .form-status { font-weight: 600; min-height: 1.4em; }
   #contact-form .form-status.is-ok { color: #1a6f33; }
   #contact-form .form-status.is-error { color: #c7122a; }
+  #contact-form .form-banner {
+    padding: 12px 14px;
+    margin: 0 0 18px;
+    border: 1px solid #e0b100;
+    background: #fff8dc;
+    color: #5a4600;
+    border-radius: 6px;
+    font-size: 0.95em;
+  }
+  #contact-form .form-banner a { color: #0d2d8a; text-decoration: underline; }
 
   html[data-jtd-theme="dark"] #contact-form input[type="text"],
   html[data-jtd-theme="dark"] #contact-form input[type="email"],
@@ -195,6 +222,12 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
   html[data-jtd-theme="dark"] #contact-form .form-status.is-ok { color: #7cf59f !important; }
   html[data-jtd-theme="dark"] #contact-form .form-status.is-error { color: #ff8787 !important; }
   html[data-jtd-theme="dark"] #contact-form .req { color: #ff92d0 !important; }
+  html[data-jtd-theme="dark"] #contact-form .form-banner {
+    background: #332900 !important;
+    border-color: #a07a00 !important;
+    color: #ffe9a3 !important;
+  }
+  html[data-jtd-theme="dark"] #contact-form .form-banner a { color: #a9c1ff !important; }
 
   @media (prefers-color-scheme: dark) {
     html:not([data-jtd-theme="light"]) #contact-form input[type="text"],
@@ -210,5 +243,11 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
     html:not([data-jtd-theme="light"]) #contact-form .form-status.is-ok { color: #7cf59f !important; }
     html:not([data-jtd-theme="light"]) #contact-form .form-status.is-error { color: #ff8787 !important; }
     html:not([data-jtd-theme="light"]) #contact-form .req { color: #ff92d0 !important; }
+    html:not([data-jtd-theme="light"]) #contact-form .form-banner {
+      background: #332900 !important;
+      border-color: #a07a00 !important;
+      color: #ffe9a3 !important;
+    }
+    html:not([data-jtd-theme="light"]) #contact-form .form-banner a { color: #a9c1ff !important; }
   }
 </style>
