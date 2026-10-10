@@ -14,7 +14,7 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
 - Security vulnerabilities: please use GitHub's [private vulnerability reporting](https://github.com/anubhav9001/Daybook/security/advisories/new) — see the [Security Policy](https://github.com/anubhav9001/Daybook/blob/main/SECURITY.md).
 
 <form id="contact-form"
-      action="https://formsubmit.co/anubhav.mitra@gmail.com"
+      action="https://formsubmit.co/el/jilasa"
       method="POST"
       novalidate
       aria-describedby="contact-form-help">
