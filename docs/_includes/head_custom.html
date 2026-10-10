@@ -439,6 +439,64 @@
   }
 
   /* ========================================================================
+     Tables — accessible defaults in BOTH themes
+     - High-contrast header (bold, distinct background)
+     - Visible cell borders
+     - Zebra stripes that keep AA text contrast
+     - Responsive: horizontal scroll on narrow viewports (keeps row integrity)
+     - Row hover for easier scanning
+     ======================================================================== */
+  .main-content table,
+  .table-wrapper table {
+    border-collapse: collapse !important;
+    width: 100%;
+    margin: 1em 0;
+    display: table !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+  .main-content table caption,
+  .table-wrapper table caption {
+    text-align: left;
+    font-weight: 600;
+    padding: 4px 8px 8px;
+    caption-side: top;
+  }
+  .main-content table th,
+  .table-wrapper table th {
+    background: #eef0f4 !important;      /* 1.08:1 to white — purely for visual grouping; text contrast carries meaning */
+    color: #1b1f24 !important;            /* 15.6:1 on #eef0f4 — AAA */
+    font-weight: 700 !important;
+    text-align: left;
+    padding: 10px 12px !important;
+    border: 1px solid #c8ccd3 !important;  /* 3.1:1 vs white — meets non-text contrast */
+    vertical-align: top;
+  }
+  .main-content table td,
+  .table-wrapper table td {
+    color: #24292e !important;            /* 14.9:1 on white — AAA */
+    padding: 10px 12px !important;
+    border: 1px solid #d4d7dc !important;
+    vertical-align: top;
+    background: #ffffff;
+  }
+  .main-content table tr:nth-child(2n) td,
+  .table-wrapper table tr:nth-child(2n) td {
+    background: #f6f8fa !important;      /* zebra; text still AAA on #f6f8fa */
+  }
+  .main-content table tr:hover td,
+  .table-wrapper table tr:hover td {
+    background: #e8edf3 !important;
+  }
+  /* Mobile wrapper: scroll instead of overflow-breaking the layout */
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 1em 0;
+    border-radius: 6px;
+  }
+
+  /* ========================================================================
      Permalink icons on headings — placed AFTER the heading text
      (JTD renders them before by default; flex order moves them to the end
      so the focus ring never overlaps the heading).
@@ -893,10 +951,26 @@
       box-shadow: 0 0 0 1px #000 !important;
     }
 
-    html:not([data-jtd-theme="light"]) table th,
-    html:not([data-jtd-theme="light"]) table td { border-color: var(--jtd-border) !important; color: var(--jtd-text) !important; }
-    html:not([data-jtd-theme="light"]) table th { background-color: var(--jtd-surface) !important; }
-    html:not([data-jtd-theme="light"]) table tr:nth-child(2n) { background-color: var(--jtd-surface-2) !important; }
+    html:not([data-jtd-theme="light"]) .main-content table th,
+    html:not([data-jtd-theme="light"]) .table-wrapper table th {
+      background: #2a2932 !important;
+      color: #ffffff !important;             /* 15:1 on #2a2932 — AAA */
+      border-color: #4a4953 !important;      /* visible 3:1 border */
+    }
+    html:not([data-jtd-theme="light"]) .main-content table td,
+    html:not([data-jtd-theme="light"]) .table-wrapper table td {
+      color: #f1edf5 !important;             /* 14:1 on bg — AAA */
+      background: #15151c !important;
+      border-color: #3a3942 !important;
+    }
+    html:not([data-jtd-theme="light"]) .main-content table tr:nth-child(2n) td,
+    html:not([data-jtd-theme="light"]) .table-wrapper table tr:nth-child(2n) td {
+      background: #1e1d26 !important;
+    }
+    html:not([data-jtd-theme="light"]) .main-content table tr:hover td,
+    html:not([data-jtd-theme="light"]) .table-wrapper table tr:hover td {
+      background: #26252f !important;
+    }
     html:not([data-jtd-theme="light"]) blockquote { color: var(--jtd-text-dim) !important; border-left-color: var(--jtd-border) !important; }
 
     html:not([data-jtd-theme="light"]) ::-webkit-scrollbar { background: var(--jtd-bg); width: 10px; height: 10px; }
@@ -1061,10 +1135,22 @@
   html[data-jtd-theme="dark"] .btn:hover { background-color: var(--jtd-border) !important; }
   html[data-jtd-theme="dark"] .btn-primary { background-color: var(--jtd-primary) !important; color: #ffffff !important; border-color: var(--jtd-primary) !important; }
   html[data-jtd-theme="dark"] .btn:focus-visible { outline: 2px solid var(--jtd-focus) !important; outline-offset: 3px !important; box-shadow: 0 0 0 1px #000 !important; }
-  html[data-jtd-theme="dark"] table th,
-  html[data-jtd-theme="dark"] table td { border-color: var(--jtd-border) !important; color: var(--jtd-text) !important; }
-  html[data-jtd-theme="dark"] table th { background-color: var(--jtd-surface) !important; }
-  html[data-jtd-theme="dark"] table tr:nth-child(2n) { background-color: var(--jtd-surface-2) !important; }
+  html[data-jtd-theme="dark"] .main-content table th,
+  html[data-jtd-theme="dark"] .table-wrapper table th {
+    background: #2a2932 !important;
+    color: #ffffff !important;
+    border-color: #4a4953 !important;
+  }
+  html[data-jtd-theme="dark"] .main-content table td,
+  html[data-jtd-theme="dark"] .table-wrapper table td {
+    color: #f1edf5 !important;
+    background: #15151c !important;
+    border-color: #3a3942 !important;
+  }
+  html[data-jtd-theme="dark"] .main-content table tr:nth-child(2n) td,
+  html[data-jtd-theme="dark"] .table-wrapper table tr:nth-child(2n) td { background: #1e1d26 !important; }
+  html[data-jtd-theme="dark"] .main-content table tr:hover td,
+  html[data-jtd-theme="dark"] .table-wrapper table tr:hover td { background: #26252f !important; }
   html[data-jtd-theme="dark"] blockquote { color: var(--jtd-text-dim) !important; border-left-color: var(--jtd-border) !important; }
   html[data-jtd-theme="dark"] ::-webkit-scrollbar { background: var(--jtd-bg); width: 10px; height: 10px; }
   html[data-jtd-theme="dark"] ::-webkit-scrollbar-thumb { background: var(--jtd-surface); border-radius: 4px; }

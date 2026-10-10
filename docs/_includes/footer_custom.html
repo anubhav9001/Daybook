@@ -315,6 +315,32 @@
       }, true);
     }
 
+    /* Make every content table scrollable on narrow viewports and give
+       headers explicit scope for screen readers. */
+    function improveTables() {
+      document.querySelectorAll('.main-content table').forEach(function (table) {
+        /* 1. Wrap for horizontal scroll (keeps row integrity on small screens) */
+        if (table.parentNode && !table.parentNode.classList.contains('table-wrapper')) {
+          var wrap = document.createElement('div');
+          wrap.className = 'table-wrapper';
+          wrap.setAttribute('role', 'region');
+          wrap.setAttribute('tabindex', '0');
+          var caption = table.querySelector('caption');
+          var captionText = caption ? caption.textContent.trim() : 'Table';
+          wrap.setAttribute('aria-label', captionText);
+          table.parentNode.insertBefore(wrap, table);
+          wrap.appendChild(table);
+        }
+        /* 2. Explicit scope on <th> cells */
+        table.querySelectorAll('thead th, tr:first-child th').forEach(function (th) {
+          if (!th.hasAttribute('scope')) th.setAttribute('scope', 'col');
+        });
+        table.querySelectorAll('tbody th').forEach(function (th) {
+          if (!th.hasAttribute('scope')) th.setAttribute('scope', 'row');
+        });
+      });
+    }
+
     /* Lighthouse / a11y polish */
     function polishMeta() {
       var input = document.getElementById('search-input');
@@ -343,6 +369,7 @@
       ensureLiveRegion();
       bindGlobalCopyAnnounce();
       wireCodeBlocks();
+      improveTables();
       polishMeta();
       /* Re-wire if Prism re-emits code blocks after highlight */
       setTimeout(wireCodeBlocks, 500);
