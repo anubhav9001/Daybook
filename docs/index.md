@@ -21,14 +21,26 @@ An accessible desktop assistant for managing Google and Microsoft 365 mail and c
 ## Highlights
 
 - Unified inbox and calendar across Google and Microsoft 365
-- Built-in private AI option
-- Screen-reader friendly throughout
+- Built-in private AI option (runs locally)
+- Screen-reader friendly throughout — targets WCAG 2.2 AA
 - Windows installer, one click
+- No telemetry, no analytics, no backend — data stays on your device
 
-## Quick links
+## Get started
 
-- [Install](install.html)
-- [Usage](usage.html)
+- [Install](install.html) — download and set up Daybook on Windows
+- [Usage](usage.html) — sign in, read mail, manage your calendar
+- [Changelog](changelog.html) — what's new in each release
+
+## Trust & transparency
+
+- [Privacy Policy](privacy.html) — what data Daybook touches and where it stays
+- [Permissions](scopes.html) — every Google and Microsoft permission requested, with the reason
+- [Terms of Service](terms.html) — the conditions for using the app
+- [Accessibility Statement](accessibility.html) — our conformance target and how to report barriers
+- [Security Policy](https://github.com/anubhav9001/Daybook/blob/main/SECURITY.md) — how to report a vulnerability privately
+
+## Help
+
+- [Support & community](support.html) — bug reports, discussions, contact
 - [FAQ](faq.html)
-- [Changelog](changelog.html)
-- [Support & Community](support.html)

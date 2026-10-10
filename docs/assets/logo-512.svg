@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Daybook logo">
+  <rect width="512" height="512" rx="96" fill="#4b7bec"/>
+  <path d="M144 112h144a112 112 0 0 1 0 224H144V112zm64 64v96h80a48 48 0 0 0 0-96h-80z" fill="#ffffff"/>
+  <circle cx="368" cy="384" r="32" fill="#ffffff"/>
+</svg>
