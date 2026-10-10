@@ -133,22 +133,19 @@
       width: 100% !important;
     }
     .main-header .search {
-      flex: 1 1 100% !important;
+      flex: 1 1 auto !important;
       max-width: none !important;
       min-width: 0 !important;
       order: 2;
     }
-    .main-header .site-nav {
-      flex: 1 1 100% !important;
-      order: 3;
-      overflow-x: auto;              /* horizontal scroll instead of overflow:hidden */
-      -webkit-overflow-scrolling: touch;
-    }
-    .main-header .site-nav .nav-list { flex-wrap: nowrap; }
+    /* On mobile the main nav lives inside the sidebar (opened via hamburger),
+       so hide any copy that happens to be in the header. */
+    .main-header .site-nav { display: none !important; }
     #theme-toggle {
-      order: 1;
-      margin-left: auto;             /* right-aligned next to hamburger */
+      order: 3;
+      flex: 0 0 auto;
     }
+    #menu-button { order: 4; }
     /* Make the search input taller for touch */
     .main-header .search-input { min-height: 44px; }
   }
@@ -166,47 +163,47 @@
     min-width: 140px;
     max-width: 220px;
   }
-  .main-header .site-nav {
-    flex: 1 1 auto;
-    min-width: 0;
-    overflow: hidden;              /* no horizontal scrollbar */
+  @media (min-width: 50rem) {
+    .main-header .site-nav {
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;              /* no horizontal scrollbar */
+    }
+    .main-header .site-nav .nav-list {
+      display: flex;
+      flex-wrap: nowrap;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      gap: 0;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .main-header .site-nav .nav-list-item { margin: 0; }
   }
-  .main-header .site-nav .nav-list {
-    display: flex;
-    flex-wrap: nowrap;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    gap: 0;
-    white-space: nowrap;
-    overflow: hidden;
+  @media (min-width: 50rem) {
+    .main-header .site-nav .nav-list-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      white-space: nowrap;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      background-image: none !important;
+    }
+    .main-header .site-nav .nav-list-link:hover {
+      background: rgba(127,127,127,0.12);
+    }
+    .main-header .site-nav .nav-list-link.active {
+      background: rgba(75,123,236,0.15);
+      color: var(--jtd-primary);
+      font-weight: 600;
+    }
+    .main-header .site-nav .nav-list .nav-list { display: none; }
   }
-  .main-header .site-nav .nav-list-item { margin: 0; }
-  .main-header .site-nav .nav-list-link {
-    display: inline-flex;
-    align-items: center;
-    min-height: 36px;
-    padding: 8px 12px;
-    border-radius: 6px;
-    white-space: nowrap;
-    font-size: 14px;
-    font-weight: 500;
-    text-decoration: none;
-    background-image: none !important;
-  }
-  /* Mobile: raise to 44x44 WCAG tap-target recommendation */
-  @media (max-width: 50rem) {
-    .main-header .site-nav .nav-list-link { min-height: 44px; padding: 10px 14px; }
-  }
-  .main-header .site-nav .nav-list-link:hover {
-    background: rgba(127,127,127,0.12);
-  }
-  .main-header .site-nav .nav-list-link.active {
-    background: rgba(75,123,236,0.15);
-    color: var(--jtd-primary);
-    font-weight: 600;
-  }
-  .main-header .site-nav .nav-list .nav-list { display: none; }
 
   /* Sidebar: give header room, then push Just-the-Docs credit to bottom */
   .side-bar {
@@ -318,6 +315,30 @@
     }
     body.daybook-sidebar-open { overflow: hidden; }   /* lock scroll under overlay */
     .side-bar { z-index: 60; }   /* above the backdrop */
+
+    /* Main nav lives in the sidebar on mobile — make items look + feel sidebar-native */
+    .side-bar #site-nav { display: block !important; margin: 8px 0; }
+    .side-bar #site-nav .nav-list { list-style: none; padding: 0; margin: 0; }
+    .side-bar #site-nav .nav-list-item { margin: 0; }
+    .side-bar #site-nav .nav-list-link {
+      display: block;
+      padding: 12px 18px;
+      min-height: 44px;
+      font-size: 16px;
+      font-weight: 500;
+      text-decoration: none;
+      color: inherit;
+    }
+    .side-bar #site-nav .nav-list-link:hover,
+    .side-bar #site-nav .nav-list-link:focus-visible {
+      background: rgba(127,127,127,0.1);
+    }
+    .side-bar #site-nav .nav-list-link.active {
+      background: rgba(75,123,236,0.14);
+      color: var(--jtd-primary);
+      font-weight: 600;
+    }
+    .side-bar #site-nav .nav-list .nav-list { display: none; }
   }
 
   /* Sidebar width — DESKTOP only. Mobile keeps JTD's slide-in overlay. */

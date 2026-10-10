@@ -461,16 +461,38 @@
       /* Re-wire if Prism re-emits code blocks after highlight */
       setTimeout(wireCodeBlocks, 500);
       setTimeout(wireCodeBlocks, 1500);
-      /* Move main nav from sidebar into main-header, right after search */
-      var siteNav = document.querySelector('.side-bar #site-nav');
-      var mainHeader = document.getElementById('main-header');
-      var search = mainHeader ? mainHeader.querySelector('.search') : null;
-      if (siteNav && mainHeader && search) {
-        if (search.nextSibling) mainHeader.insertBefore(siteNav, search.nextSibling);
-        else mainHeader.appendChild(siteNav);
+      /* Main nav placement: desktop → in main-header; mobile → inside sidebar
+         (compact top bar — all nav behind the hamburger). */
+      function placeMainNav() {
+        var siteNav = document.getElementById('site-nav');
+        var mainHeader = document.getElementById('main-header');
+        var sideBar = document.querySelector('.side-bar');
+        if (!siteNav || !mainHeader || !sideBar) return;
+        var isMobile = window.innerWidth < 800;
+        if (isMobile) {
+          if (!sideBar.contains(siteNav)) {
+            var siteHeader = sideBar.querySelector('.site-header');
+            if (siteHeader && siteHeader.nextSibling) sideBar.insertBefore(siteNav, siteHeader.nextSibling);
+            else sideBar.appendChild(siteNav);
+          }
+        } else {
+          if (!mainHeader.contains(siteNav)) {
+            var search = mainHeader.querySelector('.search');
+            if (search && search.nextSibling) mainHeader.insertBefore(siteNav, search.nextSibling);
+            else mainHeader.appendChild(siteNav);
+          }
+        }
         siteNav.setAttribute('aria-label', 'Main');
-        siteNav.style.display = ''; /* undo the CSS display:none on the original location */
+        siteNav.style.display = '';
       }
+      placeMainNav();
+      var prevMobile = window.innerWidth < 800;
+      window.addEventListener('resize', function () {
+        var nowMobile = window.innerWidth < 800;
+        if (nowMobile !== prevMobile) { prevMobile = nowMobile; placeMainNav(); }
+      });
+
+      var mainHeader = document.getElementById('main-header');
 
       /* Move aux-nav into sidebar; name it "Important" (sr-only) */
       var auxNav = document.querySelector('.aux-nav');
