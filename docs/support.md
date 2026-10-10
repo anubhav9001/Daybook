@@ -9,7 +9,7 @@ description: Report a bug, get help, join the discussion, or report security iss
 
 ## Contact
 
-- **Contact form:** [Send us a message](contact.html) — accessible form protected by reCAPTCHA v3; replies come from `anubhav.mitra@gmail.com`.
+- **Contact form:** [Send us a message](contact.html)
 - **Response time:** best-effort, typically within a few business days.
 
 ## Documentation

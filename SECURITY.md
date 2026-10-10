@@ -6,7 +6,7 @@ If you believe you have found a security issue in Daybook — the desktop app, i
 
 **Preferred:** use GitHub's [private vulnerability reporting](https://github.com/anubhav9001/Daybook/security/advisories/new) on this repository. That channel is encrypted and keeps the details between you and the maintainer until a fix is ready.
 
-**Alternative:** use the [contact form](https://anubhav9001.github.io/Daybook/contact.html) with the subject `Daybook security` — replies come from `anubhav.mitra@gmail.com`.
+**Alternative:** use the [contact form](https://anubhav9001.github.io/Daybook/contact.html) with the subject `Daybook security`.
 
 Please do **not** open a public GitHub issue for a security vulnerability.
 

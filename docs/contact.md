@@ -18,7 +18,7 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
       method="POST"
       novalidate
       aria-describedby="contact-form-help">
-  <p id="contact-form-help" class="form-help">All fields marked with <span aria-hidden="true">*</span> are required. We reply from <strong>anubhav.mitra@gmail.com</strong>; please allow a few business days.</p>
+  <p id="contact-form-help" class="form-help">All fields marked with <span aria-hidden="true">*</span> are required. We reply on a best-effort basis within a few business days.</p>
 
   <div class="form-row">
     <label for="cf-name">Your name <span class="req" aria-hidden="true">*</span></label>
@@ -116,7 +116,7 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
         }).then(function (r) {
           if (r.ok) {
             form.reset();
-            announce('Thanks — your message was sent. We’ll reply from anubhav.mitra@gmail.com.', false);
+            announce('Thanks — your message was sent. We’ll reply by email on a best-effort basis.', false);
           } else {
             r.json().then(function (j) {
               var m = (j && j.errors && j.errors[0] && j.errors[0].message) || 'Something went wrong. Please try again.';
