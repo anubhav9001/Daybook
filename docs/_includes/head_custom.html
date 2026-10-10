@@ -314,12 +314,50 @@
   }
   @media (max-width: 49.99rem) {
     /* Un-push the main area so content isn't shifted when the sidebar is closed */
-    .main { margin-left: 0 !important; }
-    /* Give the slide-in sidebar a reasonable mobile width */
+    .main { margin-left: 0 !important; width: 100% !important; }
+
+    /* Sidebar becomes a fixed slide-in overlay, OFF-SCREEN by default. */
     .side-bar {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      height: 100vh !important;
+      height: 100dvh !important;
       width: 86% !important;
-      max-width: 320px;
+      max-width: 320px !important;
+      z-index: 60 !important;
+      transform: translateX(-100%) !important;        /* hidden */
+      transition: transform 0.25s ease !important;
       box-shadow: 2px 0 24px rgba(0,0,0,0.25);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    /* Open state — toggled by JS mirroring aria-expanded on #menu-button */
+    body.daybook-sidebar-open .side-bar {
+      transform: translateX(0) !important;
+    }
+
+    /* Make sure the top header is above the (closed) sidebar area so the
+       hamburger is always reachable. */
+    .main-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: #ffffff;
+      border-bottom: 1px solid #e4e7eb;
+    }
+  }
+  /* Dark-theme header background on mobile */
+  @media (max-width: 49.99rem) and (prefers-color-scheme: dark) {
+    html:not([data-jtd-theme="light"]) .main-header {
+      background: #15151c;
+      border-bottom-color: #3a3942;
+    }
+  }
+  @media (max-width: 49.99rem) {
+    html[data-jtd-theme="dark"] .main-header {
+      background: #15151c;
+      border-bottom-color: #3a3942;
     }
   }
 
