@@ -393,41 +393,58 @@
       });
     }
 
-    /* Mobile sidebar overlay: backdrop, Escape to close, focus management.
-       JTD toggles #menu-button[aria-expanded]; we mirror that onto <body>
-       so the backdrop CSS can show/hide and we can lock scroll. */
+    /* Mobile sidebar overlay. JTD's hamburger lives INSIDE the sidebar, so it
+       disappears when we slide the sidebar off-screen. We relocate it into the
+       main-header (which is sticky + always on-screen on mobile) and manage
+       open/close state ourselves with a body class.                            */
     function wireMobileSidebar() {
       var btn = document.getElementById('menu-button');
       var sidebar = document.querySelector('.side-bar');
-      if (!btn || !sidebar) return;
+      var mainHeader = document.getElementById('main-header');
+      if (!btn || !sidebar || !mainHeader) return;
 
-      function sync() {
-        var open = btn.getAttribute('aria-expanded') === 'true';
+      /* 1. Move the hamburger into the main-header so it's always reachable */
+      if (btn.parentNode !== mainHeader) {
+        mainHeader.appendChild(btn);
+      }
+      if (!btn.hasAttribute('aria-controls')) btn.setAttribute('aria-controls', 'site-nav');
+      if (!btn.hasAttribute('aria-expanded')) btn.setAttribute('aria-expanded', 'false');
+
+      /* 2. Explicit open/close handlers (don't rely on JTD's own toggle, which
+            can't find elements it expects now that we moved things). */
+      function setOpen(open) {
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
         document.body.classList.toggle('daybook-sidebar-open', open);
         if (open) {
-          /* Move focus into the sidebar for keyboard users */
-          var firstLink = sidebar.querySelector('a, button, [tabindex]:not([tabindex="-1"])');
-          if (firstLink && firstLink.focus) firstLink.focus();
-        }
-      }
-      /* Watch aria-expanded flips */
-      new MutationObserver(sync).observe(btn, { attributes: true, attributeFilter: ['aria-expanded'] });
-
-      /* Escape key closes the overlay and returns focus to the hamburger */
-      document.addEventListener('keydown', function (e) {
-        if (e.key !== 'Escape') return;
-        if (btn.getAttribute('aria-expanded') === 'true') {
-          btn.click();
+          var first = sidebar.querySelector('a, button, [tabindex]:not([tabindex="-1"])');
+          if (first && first.focus) first.focus();
+        } else {
           btn.focus();
         }
+      }
+      btn.addEventListener('click', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        setOpen(btn.getAttribute('aria-expanded') !== 'true');
       });
-      /* Tap on the dim backdrop closes the overlay */
+
+      /* 3. Escape closes */
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && document.body.classList.contains('daybook-sidebar-open')) {
+          setOpen(false);
+        }
+      });
+      /* 4. Tap outside the sidebar closes */
       document.addEventListener('click', function (e) {
         if (!document.body.classList.contains('daybook-sidebar-open')) return;
         if (sidebar.contains(e.target) || btn.contains(e.target)) return;
-        /* Click fell on the backdrop or main content → close */
-        btn.click();
+        setOpen(false);
       }, true);
+      /* 5. Close when viewport grows to desktop width */
+      window.addEventListener('resize', function () {
+        if (window.innerWidth >= 800 && document.body.classList.contains('daybook-sidebar-open')) {
+          setOpen(false);
+        }
+      });
     }
 
     function restructure() {

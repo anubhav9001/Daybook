@@ -232,8 +232,10 @@
     display: inline-block;
   }
 
-  /* Mobile hamburger button — ensure it's at least 44x44 and clearly visible */
+  /* Mobile hamburger button — ensure it's at least 44x44 and clearly visible.
+     On mobile JS relocates #menu-button into .main-header so it's always on-screen. */
   @media (max-width: 49.99rem) {
+    .main-header #menu-button,
     #menu-button {
       display: inline-flex !important;
       align-items: center;
@@ -241,17 +243,21 @@
       min-width: 44px;
       min-height: 44px;
       padding: 10px !important;
-      margin-left: auto;
+      order: 0;                 /* leftmost in the stacked header */
+      flex: 0 0 auto !important;
       border: 1px solid currentColor !important;
       border-radius: 6px;
       background: transparent;
+      color: inherit !important;
       cursor: pointer;
     }
+    .main-header #menu-button:focus-visible,
     #menu-button:focus-visible {
       outline: 2px solid var(--jtd-focus) !important;
       outline-offset: 2px !important;
     }
-    #menu-button .icon { width: 20px; height: 20px; }
+    #menu-button .icon,
+    #menu-button svg { width: 20px; height: 20px; display: block; }
   }
   @media (min-width: 50rem) {
     /* Hide the hamburger on desktop (sidebar is permanently visible) */
