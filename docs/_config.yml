@@ -41,3 +41,13 @@ footer_content: >
 plugins:
   - jekyll-remote-theme
   - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Default SEO/social metadata
+author: anubhav9001
+twitter:
+  card: summary
+social:
+  name: Daybook
+  links:
+    - https://github.com/anubhav9001/Daybook

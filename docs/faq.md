@@ -2,6 +2,7 @@
 layout: default
 title: FAQ
 nav_order: 4
+description: Answers to common questions about Daybook — licensing, platforms, data handling, bug reports.
 ---
 
 # Frequently Asked Questions

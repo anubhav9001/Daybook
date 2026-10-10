@@ -1,5 +1,16 @@
-<!-- Daybook favicon (inline SVG — works in all modern browsers) -->
+<!-- Daybook favicon + apple-touch icon -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%234b7bec'/><path d='M18 14h18a14 14 0 0 1 0 28H18V14zm8 8v12h10a6 6 0 0 0 0-12H26z' fill='%23ffffff'/><circle cx='46' cy='48' r='4' fill='%23ffffff'/></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='36' fill='%234b7bec'/><path d='M52 42h50a40 40 0 0 1 0 80H52V42zm22 22v36h28a18 18 0 0 0 0-36H74z' fill='%23ffffff'/><circle cx='128' cy='138' r='10' fill='%23ffffff'/></svg>">
+
+<!-- Social share image (OG + Twitter large card) -->
+<meta property="og:image" content="https://anubhav9001.github.io/Daybook/assets/daybook-social.svg">
+<meta property="og:image:alt" content="Daybook — accessible desktop assistant for mail and calendars">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://anubhav9001.github.io/Daybook/assets/daybook-social.svg">
+<meta name="twitter:image:alt" content="Daybook — accessible desktop assistant for mail and calendars">
+<meta name="theme-color" content="#4b7bec">
 
 <!-- Prism.js for real syntax highlighting on code blocks -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" defer></script>
@@ -39,6 +50,19 @@
     html:not([data-jtd-theme="light"]) { --jtd-focus: var(--jtd-focus-dark); }
   }
   html[data-jtd-theme="dark"] { --jtd-focus: var(--jtd-focus-dark); }
+
+  /* Light-mode link color override (previous value was dark-mode only).
+     --jtd-link gets a dark enough blue for AA contrast on white. */
+  html[data-jtd-theme="light"] {
+    --jtd-link:     #1a4fcf;    /* 7:1 on #ffffff */
+    --jtd-link-hvr: #0d2d8a;
+  }
+  @media (prefers-color-scheme: light) {
+    html:not([data-jtd-theme="dark"]) {
+      --jtd-link:     #1a4fcf;
+      --jtd-link-hvr: #0d2d8a;
+    }
+  }
 
   /* ========================================================================
      Accessibility: visually-hidden utility (used for aria-only text)
@@ -116,14 +140,20 @@
   }
   .main-header .site-nav .nav-list-item { margin: 0; }
   .main-header .site-nav .nav-list-link {
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    padding: 8px 12px;
+    border-radius: 6px;
     white-space: nowrap;
     font-size: 14px;
     font-weight: 500;
     text-decoration: none;
     background-image: none !important;
+  }
+  /* Mobile: raise to 44x44 WCAG tap-target recommendation */
+  @media (max-width: 50rem) {
+    .main-header .site-nav .nav-list-link { min-height: 44px; padding: 10px 14px; }
   }
   .main-header .site-nav .nav-list-link:hover {
     background: rgba(127,127,127,0.12);

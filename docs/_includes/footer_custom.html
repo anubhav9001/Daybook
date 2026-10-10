@@ -315,6 +315,27 @@
       }, true);
     }
 
+    /* Lighthouse / a11y polish */
+    function polishMeta() {
+      var input = document.getElementById('search-input');
+      if (input && input.getAttribute('type') !== 'search') {
+        input.setAttribute('type', 'search');
+      }
+      /* Add " | Daybook" brand suffix to document title and OG/Twitter titles when missing */
+      var brand = 'Daybook';
+      if (document.title && document.title.indexOf('|') === -1 && document.title.trim() !== brand) {
+        document.title = document.title + ' | ' + brand;
+      }
+      document.querySelectorAll(
+        'meta[property="og:title"], meta[name="twitter:title"]'
+      ).forEach(function (m) {
+        var c = m.getAttribute('content') || '';
+        if (c && c.indexOf('|') === -1 && c.trim() !== brand) {
+          m.setAttribute('content', c + ' | ' + brand);
+        }
+      });
+    }
+
     function restructure() {
       addLogo();
       pinSearchResults();
@@ -322,6 +343,7 @@
       ensureLiveRegion();
       bindGlobalCopyAnnounce();
       wireCodeBlocks();
+      polishMeta();
       /* Re-wire if Prism re-emits code blocks after highlight */
       setTimeout(wireCodeBlocks, 500);
       setTimeout(wireCodeBlocks, 1500);

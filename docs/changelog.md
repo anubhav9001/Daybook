@@ -2,6 +2,7 @@
 layout: default
 title: Changelog
 nav_order: 5
+description: Release history and what's new in each version of Daybook.
 ---
 
 # Changelog

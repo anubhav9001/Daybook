@@ -2,6 +2,7 @@
 layout: default
 title: Install
 nav_order: 2
+description: Install Daybook on Windows — step-by-step instructions, download link, and SHA-256 verification.
 ---
 
 # Installation

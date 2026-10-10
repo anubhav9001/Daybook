@@ -2,6 +2,7 @@
 layout: default
 title: Support
 nav_order: 6
+description: Report a bug, get help, join the discussion, or report security issues for Daybook.
 ---
 
 # Support & Community

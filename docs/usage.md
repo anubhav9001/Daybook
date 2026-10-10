@@ -2,6 +2,7 @@
 layout: default
 title: Usage
 nav_order: 3
+description: How to sign in, manage mail and calendars, and use Daybook's built-in private AI.
 ---
 
 # Using Daybook
