@@ -393,8 +393,46 @@
       });
     }
 
+    /* Mobile sidebar overlay: backdrop, Escape to close, focus management.
+       JTD toggles #menu-button[aria-expanded]; we mirror that onto <body>
+       so the backdrop CSS can show/hide and we can lock scroll. */
+    function wireMobileSidebar() {
+      var btn = document.getElementById('menu-button');
+      var sidebar = document.querySelector('.side-bar');
+      if (!btn || !sidebar) return;
+
+      function sync() {
+        var open = btn.getAttribute('aria-expanded') === 'true';
+        document.body.classList.toggle('daybook-sidebar-open', open);
+        if (open) {
+          /* Move focus into the sidebar for keyboard users */
+          var firstLink = sidebar.querySelector('a, button, [tabindex]:not([tabindex="-1"])');
+          if (firstLink && firstLink.focus) firstLink.focus();
+        }
+      }
+      /* Watch aria-expanded flips */
+      new MutationObserver(sync).observe(btn, { attributes: true, attributeFilter: ['aria-expanded'] });
+
+      /* Escape key closes the overlay and returns focus to the hamburger */
+      document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        if (btn.getAttribute('aria-expanded') === 'true') {
+          btn.click();
+          btn.focus();
+        }
+      });
+      /* Tap on the dim backdrop closes the overlay */
+      document.addEventListener('click', function (e) {
+        if (!document.body.classList.contains('daybook-sidebar-open')) return;
+        if (sidebar.contains(e.target) || btn.contains(e.target)) return;
+        /* Click fell on the backdrop or main content → close */
+        btn.click();
+      }, true);
+    }
+
     function restructure() {
       addLogo();
+      wireMobileSidebar();
       pinSearchResults();
       prepareAndRunPrism();
       ensureLiveRegion();

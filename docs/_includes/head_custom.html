@@ -110,13 +110,40 @@
      ======================================================================== */
   .main-header {
     display: flex;
-    flex-wrap: nowrap;             /* never wrap to 2nd line */
+    flex-wrap: nowrap;             /* desktop: single row */
     gap: 6px 10px;
     align-items: center;
     padding: 6px 14px;
     min-height: 48px;
     /* IMPORTANT: don't use overflow:hidden here — search dropdown must escape */
     position: relative;
+  }
+  /* MOBILE: allow wrapping so search + nav + toggle stack cleanly */
+  @media (max-width: 49.99rem) {
+    .main-header {
+      flex-wrap: wrap !important;
+      gap: 8px !important;
+      padding: 8px 12px !important;
+    }
+    .main-header .search {
+      flex: 1 1 100% !important;
+      max-width: none !important;
+      min-width: 0 !important;
+      order: 2;
+    }
+    .main-header .site-nav {
+      flex: 1 1 100% !important;
+      order: 3;
+      overflow-x: auto;              /* horizontal scroll instead of overflow:hidden */
+      -webkit-overflow-scrolling: touch;
+    }
+    .main-header .site-nav .nav-list { flex-wrap: nowrap; }
+    #theme-toggle {
+      order: 1;
+      margin-left: auto;             /* right-aligned next to hamburger */
+    }
+    /* Make the search input taller for touch */
+    .main-header .search-input { min-height: 44px; }
   }
   .main-header .search { position: relative; }
   .search-results {
@@ -205,12 +232,96 @@
     display: inline-block;
   }
 
-  /* Sidebar width tuned for the slightly larger nav font */
-  .side-bar { width: 250px; }
+  /* Mobile hamburger button — ensure it's at least 44x44 and clearly visible */
+  @media (max-width: 49.99rem) {
+    #menu-button {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
+      padding: 10px !important;
+      margin-left: auto;
+      border: 1px solid currentColor !important;
+      border-radius: 6px;
+      background: transparent;
+      cursor: pointer;
+    }
+    #menu-button:focus-visible {
+      outline: 2px solid var(--jtd-focus) !important;
+      outline-offset: 2px !important;
+    }
+    #menu-button .icon { width: 20px; height: 20px; }
+  }
+  @media (min-width: 50rem) {
+    /* Hide the hamburger on desktop (sidebar is permanently visible) */
+    #menu-button { display: none !important; }
+  }
+
+  /* ========================================================================
+     Mobile general polish
+     ======================================================================== */
+  @media (max-width: 49.99rem) {
+    html, body { overflow-x: hidden; }           /* no horizontal scroll of the page */
+    .main-content { padding: 16px !important; }
+    .main-content h1 { font-size: 1.9rem !important; line-height: 1.2; }
+    .main-content h2 { font-size: 1.4rem !important; }
+    .main-content h3 { font-size: 1.15rem !important; }
+    .main-content p,
+    .main-content li { font-size: 1rem; line-height: 1.55; }
+
+    /* Buttons full-width on narrow screens for easier tapping */
+    .main-content .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 16px !important;
+    }
+
+    /* Form inputs & textareas full-width + 44px minimum */
+    #contact-form input[type="text"],
+    #contact-form input[type="email"],
+    #contact-form textarea {
+      min-height: 44px;
+      font-size: 16px;                     /* 16px prevents iOS auto-zoom */
+    }
+    #contact-form textarea { min-height: 160px; }
+    #contact-form .btn { width: 100%; }
+    #contact-form .form-actions { flex-direction: column; align-items: stretch; }
+
+    /* Footer: let legal links wrap on mobile (don't force one line here) */
+    #daybook-page-footer .footer-links { flex-wrap: wrap !important; overflow-x: visible !important; }
+    #daybook-page-footer .footer-links li { white-space: nowrap; }
+    #daybook-page-footer { padding: 20px 16px 28px; }
+
+    /* Dim backdrop when sidebar overlay is open (Daybook JS adds the class) */
+    body.daybook-sidebar-open::after {
+      content: "";
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 50;
+      backdrop-filter: blur(1px);
+    }
+    body.daybook-sidebar-open { overflow: hidden; }   /* lock scroll under overlay */
+    .side-bar { z-index: 60; }   /* above the backdrop */
+  }
+
+  /* Sidebar width — DESKTOP only. Mobile keeps JTD's slide-in overlay. */
   @media (min-width: 50rem) {
     .side-bar { width: 250px; }
+    .main { margin-left: 250px; }
   }
-  .main { margin-left: 250px; }
+  @media (max-width: 49.99rem) {
+    /* Un-push the main area so content isn't shifted when the sidebar is closed */
+    .main { margin-left: 0 !important; }
+    /* Give the slide-in sidebar a reasonable mobile width */
+    .side-bar {
+      width: 86% !important;
+      max-width: 320px;
+      box-shadow: 2px 0 24px rgba(0,0,0,0.25);
+    }
+  }
 
   /* "Important" vertical list in sidebar — plain text LINK style with icons */
   .side-bar .aux-nav {
