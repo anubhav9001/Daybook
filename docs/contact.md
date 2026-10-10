@@ -96,7 +96,7 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
     var tokenInput = document.getElementById('cf-recaptcha-token');
     if (!form) return;
 
-    var SITE_KEY = 'REPLACE_WITH_RECAPTCHA_V3_SITE_KEY';
+    var SITE_KEY = '6LeZIegtAAAAANsxExrRxKfeq969NiPws3m0T6Qu';
     var hasRecaptcha = SITE_KEY && SITE_KEY.indexOf('REPLACE_WITH') !== 0;
 
     if (hasRecaptcha) {
