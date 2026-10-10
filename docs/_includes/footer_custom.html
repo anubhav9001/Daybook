@@ -173,9 +173,34 @@
         if (!code) return;
         if (!code.className.match(/language-[\w-]+/)) code.classList.add(lang);
       });
+
+      function extendPowershell() {
+        if (!window.Prism || !Prism.languages || !Prism.languages.powershell) return false;
+        if (Prism.languages.powershell.__daybookExtended) return true;
+        Prism.languages.insertBefore('powershell', 'operator', {
+          'parameter': {
+            pattern: /(?:^|\s)-[A-Z][A-Za-z0-9]*\b/,
+            alias: 'variable'
+          }
+        });
+        Prism.languages.powershell.__daybookExtended = true;
+        return true;
+      }
+
       function run() {
         if (window.Prism && typeof Prism.highlightAll === 'function') {
-          try { Prism.highlightAll(); } catch (e) {}
+          try {
+            /* Wait briefly for the powershell component (loaded by the autoloader)
+               to appear, then extend it before we highlight. */
+            var tries = 0;
+            (function waitPS() {
+              if (extendPowershell() || tries++ > 20) {
+                Prism.highlightAll();
+              } else {
+                setTimeout(waitPS, 100);
+              }
+            })();
+          } catch (e) {}
         } else {
           setTimeout(run, 100);
         }

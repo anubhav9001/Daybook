@@ -420,6 +420,61 @@
   }
 
   /* ========================================================================
+     PowerShell blocks — authentic console look (navy bg, bright tokens)
+     Applies in both themes, scoped only to .language-powershell.
+     All tokens hit AAA contrast on the #012456 background.
+     ======================================================================== */
+  div.language-powershell,
+  div.language-powershell > div.highlight,
+  div.language-powershell pre,
+  div.language-powershell pre.highlight,
+  pre.language-powershell,
+  code.language-powershell {
+    background-color: #012456 !important;
+    background: #012456 !important;
+    color: #ffffff !important;
+    border-radius: 6px !important;
+    border: 1px solid #012456 !important;
+  }
+  .language-powershell,
+  .language-powershell code,
+  .language-powershell .highlight code { color: #ffffff !important; }
+
+  /* Prism tokens inside .language-powershell */
+  .language-powershell .token.comment,
+  .language-powershell .token.prolog { color: #a3cc78 !important; font-style: italic; }   /* green ~9:1 */
+  .language-powershell .token.function,
+  .language-powershell .token.builtin,
+  .language-powershell .token.boolean { color: #ffd947 !important; font-weight: 600; }    /* cmdlet yellow ~12:1 */
+  .language-powershell .token.string,
+  .language-powershell .token.char,
+  .language-powershell .token.regex { color: #87cefa !important; }                        /* string light-cyan ~9:1 */
+  .language-powershell .token.variable { color: #ff92d0 !important; }                     /* $var pink ~7:1 */
+  .language-powershell .token.number { color: #ff92d0 !important; }                       /* number pink ~7:1 */
+  .language-powershell .token.operator,
+  .language-powershell .token.keyword { color: #e6d178 !important; }                       /* operator soft yellow ~10:1 */
+  .language-powershell .token.punctuation { color: #ffffff !important; }
+  .language-powershell .token.namespace,
+  .language-powershell .token.class-name { color: #87cefa !important; }
+
+  /* Rouge fallback (same palette) for when Prism doesn't tokenize */
+  .language-powershell .highlight .c,
+  .language-powershell .highlight .c1 { color: #a3cc78 !important; font-style: italic; }
+  .language-powershell .highlight .nb,
+  .language-powershell .highlight .nf { color: #ffd947 !important; font-weight: 600; }
+  .language-powershell .highlight .s,
+  .language-powershell .highlight .s1,
+  .language-powershell .highlight .s2 { color: #87cefa !important; }
+  .language-powershell .highlight .nv,
+  .language-powershell .highlight .mi,
+  .language-powershell .highlight .mf { color: #ff92d0 !important; }
+  .language-powershell .highlight .o,
+  .language-powershell .highlight .k { color: #e6d178 !important; }
+  .language-powershell .highlight .p,
+  .language-powershell .highlight .n,
+  .language-powershell .highlight .nx { color: #ffffff !important; }
+
+  /* ========================================================================
      Prism.js token colors — LIGHT theme (same palette as Rouge rules below)
      ======================================================================== */
   .token.comment, .token.prolog, .token.doctype, .token.cdata { color: #5d6a79 !important; font-style: italic; }
