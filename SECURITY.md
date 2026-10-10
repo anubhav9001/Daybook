@@ -40,4 +40,18 @@ Out of scope:
 - Denial-of-service against GitHub-hosted infrastructure
 - Automated scanner output without a working proof of concept
 
+## Keyboard shortcuts and security
+
+Daybook deliberately exposes only non-privileged shortcuts (see the [Accessibility Statement](https://anubhav9001.github.io/Daybook/accessibility.html) for the full list). The following guarantees apply to every shipped shortcut:
+
+| Guarantee | What it means |
+|---|---|
+| **No shortcut sends mail** | Daybook never sends email on your behalf from a key press. Replies always open as editable drafts you choose to send. |
+| **No shortcut bypasses OAuth consent** | Sign-in happens on Google's or Microsoft's own page; no key combination in Daybook can skip that consent screen or re-authorise an account silently. |
+| **No shortcut writes to disk outside the app's cache** | File dialogs are OS-native; Daybook does not grant itself file-system access through a hotkey. |
+| **No shortcut invokes the AI without consent** | The on-device AI only runs on content you select, and the cloud-AI providers only receive requests you explicitly send (consent captured per provider in Settings). |
+| **No global shortcuts** | Daybook does not register system-wide `globalShortcut`s. Shortcuts only fire while the Daybook window is focused, so they cannot be used to spy on or control other applications. |
+
+If you find a shortcut combination that violates any of the above, treat it as a security issue and report it through the private channels above.
+
 Thank you for helping keep Daybook users safe.
