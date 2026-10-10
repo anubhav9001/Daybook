@@ -309,13 +309,17 @@
   }
   #daybook-page-footer .footer-links {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px 20px;
+    flex-wrap: nowrap;              /* single row */
+    gap: 10px 14px;
     margin: 0 0 12px;
-    padding: 0;
+    padding: 0 0 4px;
     list-style: none;
     align-items: center;
+    overflow-x: auto;                /* horizontal scroll if the viewport is tight */
+    white-space: nowrap;
+    scrollbar-width: thin;
   }
+  #daybook-page-footer .footer-links li { white-space: nowrap; }
   #daybook-page-footer .footer-links a {
     color: #1a4fcf !important;        /* 7:1 on white */
     text-decoration: none;

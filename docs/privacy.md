@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Privacy Policy
-nav_order: 7
+nav_exclude: true
 description: How Daybook handles your mail, calendar and account data.
 ---
 

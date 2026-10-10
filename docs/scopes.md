@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Permissions
-nav_order: 9
+nav_exclude: true
 description: Every Google and Microsoft permission Daybook asks for, and why.
 ---
 

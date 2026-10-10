@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Terms of Service
-nav_order: 8
+nav_exclude: true
 description: Terms of service for Daybook — what you may and may not do with the app.
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Accessibility
-nav_order: 10
+nav_exclude: true
 description: Daybook's accessibility commitment, conformance level, and how to report an issue.
 ---
 
