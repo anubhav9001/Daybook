@@ -12,9 +12,18 @@
 <meta name="twitter:image:alt" content="Daybook — accessible desktop assistant for mail and calendars">
 <meta name="theme-color" content="#4b7bec">
 
-<!-- Prism.js for real syntax highlighting on code blocks -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js" defer></script>
+<!-- Prism.js from jsdelivr (no third-party cookies) with defer -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js" defer crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js" defer crossorigin="anonymous"></script>
+<script>
+  // Point Prism's autoloader at jsdelivr too (default is cdnjs)
+  window.Prism = window.Prism || {};
+  window.Prism.plugins = window.Prism.plugins || {};
+  window.Prism.plugins.autoloader = window.Prism.plugins.autoloader || {};
+  window.Prism.plugins.autoloader.languages_path =
+    'https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/';
+</script>
 <script>
   (function () {
     try {
@@ -279,10 +288,17 @@
     display: block !important;        /* show on all breakpoints */
     margin-top: auto;                 /* pushes to bottom */
     padding: 16px 20px;
-    font-size: 12px;
-    opacity: 0.65;
-    border-top: 1px solid rgba(127,127,127,0.2);
+    font-size: 12.5px;
+    opacity: 1;                       /* no dim — rely on actual color for WCAG */
+    color: #4a4751 !important;        /* 8:1 on #ffffff */
+    border-top: 1px solid rgba(127,127,127,0.25);
   }
+  .side-bar .site-footer a {
+    color: #1a4fcf !important;        /* 7:1 on #ffffff */
+    text-decoration: underline;
+  }
+  .side-bar .site-footer a:hover,
+  .side-bar .site-footer a:focus-visible { color: #0d2d8a !important; }
   /* Hide the duplicate footer credit that JTD adds in main-content area */
   footer .d-md-none { display: none !important; }
 
