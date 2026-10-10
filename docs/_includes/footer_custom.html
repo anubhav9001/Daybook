@@ -436,14 +436,14 @@
       btn.setAttribute('aria-expanded', 'false');
       btn.setAttribute('aria-label', 'Open navigation menu');
 
-      /* 3. Give the sidebar a stable id, dialog semantics, and a tabindex so
-            the container itself can receive focus (prevents screen readers
-            from auto-reading every link inside when it opens). */
+      /* 3. Keep the sidebar as a standard navigation region (header landmark).
+            NO dialog/aria-modal semantics. We'll trap AT swipe gestures by
+            putting `inert` on the rest of the page while the sidebar is open. */
       sidebar.id = sidebar.id || 'daybook-sidebar';
-      sidebar.setAttribute('role', 'dialog');
-      sidebar.setAttribute('aria-modal', 'true');
-      sidebar.setAttribute('aria-label', 'Daybook navigation');
-      sidebar.setAttribute('tabindex', '-1');
+      sidebar.removeAttribute('role');
+      sidebar.removeAttribute('aria-modal');
+      sidebar.removeAttribute('tabindex');
+      sidebar.setAttribute('aria-label', 'Daybook');
 
       /* 4. Inject a dedicated close button at the TOP of the sidebar.
             Visible only on mobile (CSS). */
@@ -457,31 +457,33 @@
         sidebar.insertBefore(closeBtn, sidebar.firstChild);
       }
 
-      /* 5. Open/close logic */
-      function applyInert(open) {
-        if (open) {
-          sidebar.removeAttribute('inert');
-          sidebar.removeAttribute('aria-hidden');
-        } else {
-          /* Only hide from AT on mobile — on desktop the sidebar is always visible */
-          if (window.innerWidth < 800) {
-            sidebar.setAttribute('inert', '');
-            sidebar.setAttribute('aria-hidden', 'true');
-          } else {
-            sidebar.removeAttribute('inert');
-            sidebar.removeAttribute('aria-hidden');
-          }
-        }
+      /* 5. Open/close logic
+            On OPEN: apply `inert` to the rest of the page (main content + page
+            footer) so swipe/tab navigation is naturally trapped inside the
+            sidebar. On CLOSE: remove it. On desktop (>=800px) we never apply
+            inert because the sidebar is always visible alongside content. */
+      function pageRegionsToLock() {
+        return [
+          document.querySelector('.main-content-wrap') || document.getElementById('main-content'),
+          document.getElementById('daybook-page-footer')
+        ].filter(Boolean);
       }
+      function setPageInert(on) {
+        var regions = pageRegionsToLock();
+        regions.forEach(function (el) {
+          if (on) el.setAttribute('inert', '');
+          else    el.removeAttribute('inert');
+        });
+      }
+
       function setOpen(open) {
         btn.setAttribute('aria-expanded', open ? 'true' : 'false');
         btn.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
         document.body.classList.toggle('daybook-sidebar-open', open);
-        applyInert(open);
+        /* Only lock the page on mobile; desktop keeps everything interactive */
+        if (window.innerWidth < 800) setPageInert(open);
+        else                          setPageInert(false);
         if (open) {
-          /* Move focus to the FIRST meaningful link in the sidebar — the site
-             title ("Daybook"). The user hears "Daybook, link" and swipes from
-             there. */
           var titleLink = sidebar.querySelector('.site-title')
                        || sidebar.querySelector('a, button');
           if (titleLink && titleLink.focus) titleLink.focus({ preventScroll: true });
@@ -490,8 +492,8 @@
         }
       }
 
-      /* Initial state: closed on mobile, open-equivalent on desktop */
-      applyInert(false);
+      /* Initial state: nothing inert */
+      setPageInert(false);
 
       btn.addEventListener('click', function (e) {
         e.preventDefault(); e.stopImmediatePropagation();
@@ -516,8 +518,8 @@
         if (window.innerWidth >= 800 && document.body.classList.contains('daybook-sidebar-open')) {
           setOpen(false);
         }
-        /* Keep inert state correct across breakpoint crosses */
-        applyInert(document.body.classList.contains('daybook-sidebar-open'));
+        /* On desktop widths, make sure nothing stays inert */
+        if (window.innerWidth >= 800) setPageInert(false);
       });
     }
 
