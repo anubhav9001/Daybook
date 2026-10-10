@@ -318,6 +318,12 @@
     body.daybook-sidebar-open { overflow: hidden; }   /* lock scroll under overlay */
     .side-bar { z-index: 60; }   /* above the backdrop */
 
+    /* Suppress the default focus ring on the dialog container itself —
+       the ring would surround the full-height sidebar which looks wrong.
+       Interior elements still get rings. */
+    .side-bar:focus,
+    .side-bar:focus-visible { outline: none !important; }
+
     /* Dedicated close (×) button inside the sidebar, visible on mobile only */
     .sidebar-close {
       position: absolute;

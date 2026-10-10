@@ -382,8 +382,21 @@
     /* Lighthouse / a11y polish */
     function polishMeta() {
       var input = document.getElementById('search-input');
-      if (input && input.getAttribute('type') !== 'search') {
-        input.setAttribute('type', 'search');
+      if (input) {
+        if (input.getAttribute('type') !== 'search') input.setAttribute('type', 'search');
+        /* Replace the sr-only <label> text with a direct aria-label on the input
+           so swipe navigation on TalkBack/VoiceOver doesn't land on a stray label. */
+        if (!input.hasAttribute('aria-label')) input.setAttribute('aria-label', 'Search Daybook');
+        var label = document.querySelector('label[for="search-input"]');
+        if (label) {
+          var sr = label.querySelector('.sr-only');
+          if (sr) sr.remove();
+          /* The <label> now only contains the decorative search icon — hide the
+             whole label from AT so the input is the only focusable + announced
+             element in the search region. */
+          label.setAttribute('aria-hidden', 'true');
+          label.removeAttribute('for');
+        }
       }
       /* Add " | Daybook" brand suffix to document title and OG/Twitter titles when missing */
       var brand = 'Daybook';
@@ -423,11 +436,14 @@
       btn.setAttribute('aria-expanded', 'false');
       btn.setAttribute('aria-label', 'Open navigation menu');
 
-      /* 3. Give the sidebar a stable id for aria-controls, plus a landmark label */
+      /* 3. Give the sidebar a stable id, dialog semantics, and a tabindex so
+            the container itself can receive focus (prevents screen readers
+            from auto-reading every link inside when it opens). */
       sidebar.id = sidebar.id || 'daybook-sidebar';
       sidebar.setAttribute('role', 'dialog');
       sidebar.setAttribute('aria-modal', 'true');
       sidebar.setAttribute('aria-label', 'Daybook navigation');
+      sidebar.setAttribute('tabindex', '-1');
 
       /* 4. Inject a dedicated close button at the TOP of the sidebar.
             Visible only on mobile (CSS). */
@@ -463,8 +479,10 @@
         document.body.classList.toggle('daybook-sidebar-open', open);
         applyInert(open);
         if (open) {
-          /* Focus the close button inside the sidebar — natural first stop */
-          setTimeout(function () { closeBtn.focus(); }, 60);
+          /* Focus the dialog CONTAINER (not a child) so screen readers announce
+             only "Daybook navigation, dialog" — not every link inside.
+             The user then swipes/tabs to explore the links themselves. */
+          sidebar.focus({ preventScroll: true });
         } else {
           btn.focus();
         }
