@@ -13,15 +13,11 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
 - Bug reports: please use the [issue tracker](https://github.com/anubhav9001/Daybook/issues/new/choose) instead so others can see and vote.
 - Security vulnerabilities: please use GitHub's [private vulnerability reporting](https://github.com/anubhav9001/Daybook/security/advisories/new) — see the [Security Policy](https://github.com/anubhav9001/Daybook/blob/main/SECURITY.md).
 
-<!-- Hidden iframe target: FormSubmit's response page loads here, invisibly,
-     so the user never navigates away from the contact page. -->
-<iframe name="cf-sink" id="cf-sink" title="Form submission channel" aria-hidden="true" tabindex="-1"
-        style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;border:0;overflow:hidden"></iframe>
-
+<!-- Form action is injected by JS at runtime so the destination email never
+     appears in the static HTML. Falls back to a visible notice if JS is off. -->
 <form id="contact-form"
-      action="https://formsubmit.co/el/jilasa"
+      action="javascript:void(0)"
       method="POST"
-      target="cf-sink"
       novalidate
       aria-describedby="contact-form-help">
   <!-- FormSubmit control fields -->
@@ -30,11 +26,13 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
   <input type="hidden" name="_template" value="table">
   <p id="contact-form-help" class="form-help">All fields marked with <span aria-hidden="true">*</span> are required. We reply on a best-effort basis within a few business days.</p>
 
-  <div id="contact-unconfigured-banner" class="form-banner" hidden>
-    <strong>Contact form is not yet live.</strong> While it's being set up, please use
-    <a href="https://github.com/anubhav9001/Daybook/issues/new/choose">GitHub Issues</a> or
-    <a href="https://github.com/anubhav9001/Daybook/discussions">Discussions</a>.
-  </div>
+  <noscript>
+    <div class="form-banner">
+      <strong>JavaScript is required to send this form.</strong> You can also
+      <a href="https://github.com/anubhav9001/Daybook/issues/new/choose">open an issue</a> or
+      start a <a href="https://github.com/anubhav9001/Daybook/discussions">discussion</a>.
+    </div>
+  </noscript>
 
   <div class="form-row">
     <label for="cf-name">Your name <span class="req" aria-hidden="true">*</span></label>
@@ -114,57 +112,65 @@ Have a question, feedback, or report that isn't a public bug? Use this form.
       if (first) { first.focus(); first.scrollIntoView({ block: 'center' }); }
     }
 
-    var endpointConfigured = form.action.indexOf('REPLACE_WITH') === -1;
-    if (!endpointConfigured) {
-      var banner = document.getElementById('contact-unconfigured-banner');
-      if (banner) banner.hidden = false;
-      submit.disabled = true;
+    /* Email is split into parts so it never appears as a plain string in the
+       HTML source. Reassembled only when the form is submitted. */
+    var EMAIL_PARTS = ['anubhav', '.', 'mitra', '@', 'gmail', '.', 'com'];
+    var AJAX_ENDPOINT = 'https://formsubmit.co/ajax/' + EMAIL_PARTS.join('');
+    var endpointConfigured = true;
+    form.action = AJAX_ENDPOINT; /* so native submit fallback also goes somewhere valid */
+
+
+    function sendViaAjax() {
+      var data = new FormData(form);
+      fetch(AJAX_ENDPOINT, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      }).then(function (r) {
+        return r.json().then(function (j) { return { ok: r.ok, body: j }; },
+                             function () { return { ok: r.ok, body: {} }; });
+      }).then(function (res) {
+        var ok = res.ok && res.body &&
+                 (res.body.success === true || res.body.success === 'true' ||
+                  (typeof res.body.message === 'string' && res.body.message.toLowerCase().indexOf('success') !== -1));
+        if (ok) {
+          form.reset();
+          announce('Thanks — your message was sent. We’ll reply by email on a best-effort basis.', false);
+        } else {
+          var m = (res.body && (res.body.message || res.body.error)) ||
+                  'The server could not process the submission. Please try again in a minute.';
+          announce(m, true);
+        }
+      }).catch(function () {
+        announce('Network error. Please check your connection and try again.', true);
+      }).finally(function () {
+        submit.disabled = false;
+      });
     }
 
-
     form.addEventListener('submit', function (e) {
-      if (!endpointConfigured) {
-        e.preventDefault();
-        announce('Contact form is not configured yet. Please open a GitHub issue or discussion for now.', true);
-        return;
-      }
+      e.preventDefault();
       if (!form.checkValidity()) {
-        e.preventDefault();
         announce('Please correct the highlighted fields and try again.', true);
         focusFirstInvalid();
         return;
       }
-
-      /* Let the native POST into the hidden iframe happen. We don't preventDefault.
-         Optimistically announce success immediately — FormSubmit returns 2xx for
-         valid submissions and bots are filtered server-side. If the submission
-         really failed (rare), the user can retry; the honeypot + reCAPTCHA keep
-         load low. */
       submit.disabled = true;
       announce('Sending…', false);
 
-      function finishOptimistic() {
-        form.reset();
-        submit.disabled = false;
-        announce('Thanks — your message was sent. We’ll reply by email on a best-effort basis.', false);
-      }
-
       if (hasRecaptcha && window.grecaptcha && typeof grecaptcha.ready === 'function') {
-        e.preventDefault();
         grecaptcha.ready(function () {
           grecaptcha.execute(SITE_KEY, { action: 'contact' }).then(function (token) {
             tokenInput.value = token;
-            HTMLFormElement.prototype.submit.call(form); /* posts into iframe */
-            setTimeout(finishOptimistic, 400);
+            sendViaAjax();
           }).catch(function () {
             announce('reCAPTCHA could not verify. Please reload and try again.', true);
             submit.disabled = false;
           });
         });
-        return;
+      } else {
+        sendViaAjax();
       }
-      /* Native submit continues; show success shortly after it fires */
-      setTimeout(finishOptimistic, 400);
     });
   })();
 </script>
