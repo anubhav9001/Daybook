@@ -9,7 +9,10 @@ description: Release history and what's new in each version of Daybook.
 
 See the full history on the [Releases page](https://github.com/anubhav9001/Daybook/releases).
 
-## 0.6.3 — latest
+## 0.6.4 — latest
+- Fixes Google sign-in refresh for connected Google accounts. If you had a Google account connected in an older version, you may need to Disconnect and Reconnect that account once after upgrading — the app will tell you if so. Microsoft accounts are not affected. Also includes the reliability improvements from 0.6.3.
+
+## 0.6.3
 - Minor bug fixes and reliability improvements. Fixes a case where Daybook could appear to not open after an update, and continues improvements to Google Gemini key handling from 0.6.1 and 0.6.2.
 
 ## 0.6.2
