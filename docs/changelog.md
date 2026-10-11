@@ -9,7 +9,10 @@ description: Release history and what's new in each version of Daybook.
 
 See the full history on the [Releases page](https://github.com/anubhav9001/Daybook/releases).
 
-## 0.6.2 — latest
+## 0.6.3 — latest
+- Minor bug fixes and reliability improvements. Fixes a case where Daybook could appear to not open after an update, and continues improvements to Google Gemini key handling from 0.6.1 and 0.6.2.
+
+## 0.6.2
 - Minor bug fixes and performance improvements. If you use Google Gemini and had trouble with your key in 0.6.1, this release should fix it.
 
 ## 0.6.1
