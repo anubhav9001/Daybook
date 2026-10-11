@@ -9,7 +9,12 @@ description: Release history and what's new in each version of Daybook.
 
 See the full history on the [Releases page](https://github.com/anubhav9001/Daybook/releases).
 
-## 0.6.0 — latest
+## 0.6.1 — latest
+- **Google Gemini: new-format keys accepted.** AI Studio keys that start with `AQ.` now work alongside the legacy `AIza` keys. 0.6.0 rejected the new format before even calling Google. Vertex AI tokens (`ya29.`) still get their own clear rejection.
+- **Truthful Gemini error messages.** Daybook now switches on the real HTTP status and Google's own status code (`PERMISSION_DENIED`, `NOT_FOUND`, `RESOURCE_EXHAUSTED`) instead of substring-matching the response text. Every error now quotes what Google actually said.
+- **Default Gemini model corrected to `gemini-3.1-flash-lite`.** The 0.6.0 default (`gemini-3.5-flash-lite`) is not on Google's current lineup. Users who already picked a specific model are unaffected.
+
+## 0.6.0
 - **New Info tab.** Mail is sorted into Needs a reply, Waiting on others, Info, and Other. Receipts, bills, and security alerts go to Info so Needs a reply stays about replies.
 - **Move to… per-sender override.** Choose Move to… on any message to permanently route every message from that sender to Reply, Info, or Other. Review and change your choices in Settings → Your per-sender choices.
 - **Cloud background drafts (opt-in).** If you use a cloud AI provider, Daybook can prepare replies with it in the background. Off by default; a daily cap keeps token use predictable.
