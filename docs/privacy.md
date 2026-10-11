@@ -8,7 +8,7 @@ description: How Daybook handles your mail, calendar and account data.
 # Privacy Policy
 {: .no_toc }
 
-Last updated: 2026-10-09
+Last updated: 2026-10-10
 {: .fs-3 .text-grey-dk-000 }
 
 Daybook ("the app", "we") is a desktop application that helps you manage your Google and Microsoft 365 mail and calendars. This policy explains what data Daybook touches, why, where it goes, and how long it stays.
@@ -25,17 +25,35 @@ Daybook is developed and maintained by **anubhav9001** on GitHub. For questions 
 
 ## 2. What data Daybook accesses
 
-Daybook accesses the following categories of data **only** when you sign in and grant permission:
+Daybook accesses the following data **only** after you sign in and grant the explicit OAuth permissions listed below. Each scope is listed in the same wording the Google / Microsoft consent screen shows you.
 
-| Data | Source | Why Daybook needs it |
+### Google scopes requested by Daybook
+
+| OAuth scope | What it grants | Why Daybook needs it |
 |---|---|---|
-| Email metadata (subject, sender, date) | Gmail / Microsoft Graph | Show your inbox |
-| Email bodies | Gmail / Microsoft Graph | Display the message you open |
-| Calendar events (title, time, attendees) | Google Calendar / Microsoft Graph | Show your schedule and let you edit it |
-| Contact names and email addresses | Gmail / Microsoft Graph | Autocomplete recipients when drafting a reply |
-| Your account display name and email | Google / Microsoft identity | Show which account is active |
+| `openid` | A pseudonymous identifier for your Google account | Lets Daybook tell your accounts apart when you connect more than one |
+| `.../auth/userinfo.email` | Your primary Google account email address | Shown in the Daybook header so you know which account is active |
+| `.../auth/gmail.readonly` | Read-only access to your Gmail messages and settings | Shows your inbox, lets you open a message to read it, powers the on-device "needs a reply" classification |
+| `.../auth/gmail.compose` | Create, edit, and delete **drafts**, and send email on your behalf **only when you initiate it** | Saves the reply Daybook drafts into your Gmail drafts folder. **Daybook never sends mail from a background task** — you review and send each draft explicitly |
+| `.../auth/calendar.events` | Read and write **events** on calendars you own | Shows today's calendar on the dashboard and lets you create or respond to meetings prompted by email conversations |
+| `.../auth/calendar.freebusy` | Read **free/busy availability** of calendars shared with you | Suggests meeting times that don't overlap invitees' busy blocks. Only busy/free time blocks are read — never event titles, descriptions, or attendees |
 
-Daybook does **not** request access to Google Drive, Google Photos, Microsoft OneDrive files, or any other product beyond mail and calendars.
+### Microsoft 365 scopes requested by Daybook
+
+| OAuth scope | What it grants | Why Daybook needs it |
+|---|---|---|
+| `openid`, `profile`, `email` | Basic sign-in identity | Shows which Microsoft account is active |
+| `offline_access` | Keeps you signed in between app launches | Refreshes access tokens in the background without re-prompting |
+| `User.Read` | Your basic profile (name, email) | Shown in the Daybook header |
+| `Mail.ReadWrite` | Read and modify your mail and draft folders | Shows your inbox, lets you open messages, saves drafts (no auto-send) |
+| `Calendars.ReadWrite` | Read and modify your calendar events | Shows today's calendar, lets you create or respond to meetings you confirm |
+
+### What Daybook does NOT request
+
+- **No access to Google Drive, Google Photos, Google Contacts, Google Workspace Admin APIs**
+- **No access to Microsoft OneDrive, SharePoint, Teams, or any directory-wide scope**
+- **No `gmail.send` scope** — Daybook uses `gmail.compose` which creates drafts; sending happens through the standard draft-send flow when you confirm
+- **No access to any product or data category beyond mail and calendars**
 
 ## 3. Where your data goes
 

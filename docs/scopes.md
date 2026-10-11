@@ -15,26 +15,26 @@ Each row shows a scope (permission) Daybook asks for during sign-in, what it unl
 
 ## Google (Gmail + Calendar)
 
-| Scope | Access it grants | Why Daybook needs it |
+| Scope | What it grants | Why Daybook needs it |
 |---|---|---|
-| `https://www.googleapis.com/auth/gmail.modify` | Read, compose, and modify (label, archive) email — but not delete | Show your inbox, open messages, send replies, mark read/unread, archive |
-| `https://www.googleapis.com/auth/gmail.send` | Send email on your behalf | Send the replies and new mail you compose in Daybook |
-| `https://www.googleapis.com/auth/calendar` | Read and write calendar events on all your calendars | Show your schedule and let you create, update, and respond to events |
-| `https://www.googleapis.com/auth/contacts.readonly` | Read your contacts | Autocomplete recipient names and email addresses when drafting mail or inviting attendees |
-| `openid`, `email`, `profile` | Your account identity | Know which account is signed in and show your name and email in the app header |
+| `openid` | A pseudonymous identifier for your account | Distinguish between multiple connected Google accounts |
+| `https://www.googleapis.com/auth/userinfo.email` | Your primary Google account email address | Show your email in the app header; label which account each message belongs to |
+| `https://www.googleapis.com/auth/gmail.readonly` | Read your mail and settings | Show your inbox, open individual messages, and run the on-device "needs a reply" classification |
+| `https://www.googleapis.com/auth/gmail.compose` | Create, edit, and manage **drafts** on your behalf | Save Daybook-prepared replies into your Gmail drafts folder. **Daybook never sends mail from a background task** — you review and send each draft explicitly from the reply window or your Gmail client |
+| `https://www.googleapis.com/auth/calendar.events` | Read and write **events** on your calendars | Show today's calendar and let you create, update, or respond to meetings you confirm |
+| `https://www.googleapis.com/auth/calendar.freebusy` | Read **free/busy availability** of calendars shared with you | Avoid scheduling conflicts by suggesting meeting times that don't overlap invitees' busy blocks. Only busy/free blocks are read — never event titles, attendees, or descriptions |
 
-Daybook does **not** request Google Drive, Google Photos, or any other scope beyond the ones listed above.
+Daybook does **not** request Google Drive, Google Photos, Google Contacts, `gmail.send`, `gmail.modify`, or any other broader scope.
 
 ## Microsoft 365 (Outlook + Calendar)
 
-| Scope | Access it grants | Why Daybook needs it |
+| Scope | What it grants | Why Daybook needs it |
 |---|---|---|
-| `Mail.ReadWrite` | Read and modify your mail | Show your inbox, open messages, mark read/unread, archive |
-| `Mail.Send` | Send mail on your behalf | Send the replies and new mail you compose |
-| `Calendars.ReadWrite` | Read and write calendar events | Show your schedule and let you create, update, and respond to events |
-| `Contacts.Read` | Read your contacts | Autocomplete recipient names and email addresses |
-| `User.Read` | Basic profile | Know which account is signed in and show your name and email |
-| `offline_access` | Keep you signed in without re-prompting | Refresh the access token in the background so you don't have to sign in on every launch |
+| `openid`, `profile`, `email` | Basic sign-in identity | Know which account is active and show your name and email in the header |
+| `offline_access` | Keep you signed in between launches | Refresh access tokens in the background so you don't have to re-sign-in on every open |
+| `User.Read` | Basic profile (name, email) | Show your account in the app header |
+| `Mail.ReadWrite` | Read your mail and manage drafts/folders | Show your inbox, open messages, save drafts (no auto-send) |
+| `Calendars.ReadWrite` | Read and modify your calendar events | Show your schedule and let you create or respond to meetings you confirm |
 
 Daybook does **not** request Teams, OneDrive, SharePoint, or any directory-wide scope.
 
@@ -49,4 +49,4 @@ After revoking, Daybook will prompt you to sign in again on next launch.
 
 ## Where this data goes
 
-See the [Privacy Policy](privacy.html) for a full description. In short: nothing leaves your computer unless you explicitly turn on a third-party AI provider.
+See the [Privacy Policy](privacy.html) for the full data-flow description. In short: nothing leaves your computer unless you explicitly turn on a third-party AI provider.
