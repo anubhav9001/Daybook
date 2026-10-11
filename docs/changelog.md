@@ -9,7 +9,11 @@ description: Release history and what's new in each version of Daybook.
 
 See the full history on the [Releases page](https://github.com/anubhav9001/Daybook/releases).
 
-## 0.6.1 — latest
+## 0.6.2 — latest
+- **Google Gemini: key goes in the URL, not the header.** Daybook now sends your Gemini key as `?key=…`, matching Google's own GenAI SDK and tools like Fido. Some AIza keys are accepted via the query string but rejected on the `x-goog-api-key` header — this fixes legacy AIza keys that stopped working for some users in 0.6.1. Both AIza and AQ. keys continue to work.
+- **Local key check loosened.** Daybook no longer tries to validate the key shape beyond rejecting Vertex OAuth tokens (`ya29.`). Google is the only source of truth for whether a key is valid.
+
+## 0.6.1
 - **Google Gemini: new-format keys accepted.** AI Studio keys that start with `AQ.` now work alongside the legacy `AIza` keys. 0.6.0 rejected the new format before even calling Google. Vertex AI tokens (`ya29.`) still get their own clear rejection.
 - **Truthful Gemini error messages.** Daybook now switches on the real HTTP status and Google's own status code (`PERMISSION_DENIED`, `NOT_FOUND`, `RESOURCE_EXHAUSTED`) instead of substring-matching the response text. Every error now quotes what Google actually said.
 - **Default Gemini model corrected to `gemini-3.1-flash-lite`.** The 0.6.0 default (`gemini-3.5-flash-lite`) is not on Google's current lineup. Users who already picked a specific model are unaffected.
