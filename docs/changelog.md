@@ -9,8 +9,18 @@ description: Release history and what's new in each version of Daybook.
 
 See the full history on the [Releases page](https://github.com/anubhav9001/Daybook/releases).
 
-## 0.5.2 — latest
-- Bug fixes and stability improvements.
+## 0.6.0 — latest
+- **New Info tab.** Mail is sorted into Needs a reply, Waiting on others, Info, and Other. Receipts, bills, and security alerts go to Info so Needs a reply stays about replies.
+- **Move to… per-sender override.** Choose Move to… on any message to permanently route every message from that sender to Reply, Info, or Other. Review and change your choices in Settings → Your per-sender choices.
+- **Cloud background drafts (opt-in).** If you use a cloud AI provider, Daybook can prepare replies with it in the background. Off by default; a daily cap keeps token use predictable.
+- **Meeting notes feed the reply.** When drafting a reply that mentions an upcoming meeting, the AI sees that meeting's agenda and location from your calendar.
+- **Keyboard-friendly Move to… and Snooze menus.** Both open with Enter or Arrow keys, cycle with Up/Down, jump with Home/End, and close with Escape. Each mail card's sender is now a heading so screen-reader users can jump between messages.
+- **Quit Daybook completely.** File → Quit Daybook completely (Ctrl+Q) fully exits, including the system-tray background process.
+- **Default Gemini model** is now `gemini-3.5-flash-lite` after Google retired older endpoints. Choose any model from Settings → AI provider → Show available models.
+- Stability and classification fixes for marketing, bulk, and transactional mail.
+
+## 0.5.2
+- Choose any model your cloud AI provider offers, from its own list, including lighter models that use fewer tokens and reply faster.
 
 ## 0.5.0
 - Unified inbox across Google and Microsoft 365.

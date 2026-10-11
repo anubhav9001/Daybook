@@ -21,7 +21,8 @@ An accessible desktop assistant for managing Google and Microsoft 365 mail and c
 ## Highlights
 
 - Unified inbox and calendar across Google and Microsoft 365
-- Built-in private AI option (runs locally)
+- Four-way inbox — Needs a reply, Waiting on others, Info, Other — with per-sender overrides
+- Built-in private AI option (runs locally); optional opt-in cloud AI with a daily token cap
 - Screen-reader friendly throughout — targets WCAG 2.2 AA
 - Windows installer, one click
 - No telemetry, no analytics, no backend — data stays on your device
