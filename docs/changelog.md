@@ -9,7 +9,10 @@ description: Release history and what's new in each version of Daybook.
 
 See the full history on the [Releases page](https://github.com/anubhav9001/Daybook/releases).
 
-## 0.6.4 — latest
+## 0.6.5 — latest
+- Restores the built-in private AI engine. 0.6.1 to 0.6.4 shipped without the on-device engine by accident, so users who picked "Built-in private AI" saw "This Daybook build does not include the built-in AI engine." Select Built-in private AI in Settings → AI provider again and it works.
+
+## 0.6.4
 - Fixes Google sign-in refresh for connected Google accounts. If you had a Google account connected in an older version, you may need to Disconnect and Reconnect that account once after upgrading — the app will tell you if so. Microsoft accounts are not affected. Also includes the reliability improvements from 0.6.3.
 
 ## 0.6.3
