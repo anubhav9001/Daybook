@@ -9,7 +9,14 @@ description: Release history and what's new in each version of Daybook.
 
 See the full history on the [Releases page](https://github.com/anubhav9001/Daybook/releases).
 
-## 0.6.5 — latest
+## 0.6.6 — latest
+- **Recovers gracefully from Windows credential-store issues.** If Daybook can't decrypt its saved files after a Windows profile change, it now shows one plain-language dialog listing what will be reset and asks before doing anything, instead of a stream of cryptic error toasts.
+- **Finds up to 100 recent messages per account** instead of 20. Mailing-list traffic no longer pushes personal mail out of the fetch window.
+- **Lets the AI classify mailing-list messages from colleagues.** Mail with a List-Id header from a human sender (e.g. a Google Group where a colleague is waiting) now goes to the AI for a content-based decision instead of being auto-filed to Info or Other. Automated newsletters, no-reply@ and security@ senders still skip the AI call.
+- **Content reflows at narrow widths and 400% zoom (WCAG 1.4.10).** The window now resizes down to 320 × 480, the inbox tabs wrap, and the dashboard collapses to a single column on narrow viewports.
+- **Larger baseline text everywhere (WCAG 1.4.4).** Body copy moves from 10 px to 13 px, metadata and timestamps from 9 px to 12 px. Inbox cards grow a little taller — zoom out with Ctrl + − for more density.
+
+## 0.6.5
 - Restores the built-in private AI engine. 0.6.1 to 0.6.4 shipped without the on-device engine by accident, so users who picked "Built-in private AI" saw "This Daybook build does not include the built-in AI engine." Select Built-in private AI in Settings → AI provider again and it works.
 
 ## 0.6.4
