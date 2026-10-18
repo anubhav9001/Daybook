@@ -9,6 +9,8 @@
 
 > **One Windows app** for your Gmail and Microsoft 365 mail and calendars. Screen-reader friendly throughout, with an optional on-device AI that drafts replies without your email ever leaving the PC.
 
+<a href="https://apps.microsoft.com/detail/9MVLMBFVZBVV?referrer=appbadge&mode=direct"><img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200" alt="Get it from Microsoft"></a>
+
 **[Download](https://github.com/anubhav9001/Daybook/releases/latest)** ·
 **[Website](https://anubhav9001.github.io/Daybook/)** ·
 **[Install guide](https://anubhav9001.github.io/Daybook/install.html)** ·
@@ -26,7 +28,7 @@ Daybook is an accessible desktop assistant for managing Google Gmail/Calendar an
 This repository is the **public home** for Daybook:
 
 - 📘 **Website** — <https://anubhav9001.github.io/Daybook/> (served from the `docs/` folder)
-- 📥 **Downloads** — [Releases page](https://github.com/anubhav9001/Daybook/releases)
+- 📥 **Downloads** — [Microsoft Store](https://apps.microsoft.com/detail/9MVLMBFVZBVV) or the [Releases page](https://github.com/anubhav9001/Daybook/releases)
 - 🐞 **Bug reports** — [Issues](https://github.com/anubhav9001/Daybook/issues)
 - 💬 **Questions** — [Discussions](https://github.com/anubhav9001/Daybook/discussions)
 - 📚 **Guides** — [Wiki](https://github.com/anubhav9001/Daybook/wiki)

@@ -12,6 +12,8 @@ permalink: /
 An accessible desktop assistant for managing Google and Microsoft 365 mail and calendars.
 {: .fs-6 .fw-300 }
 
+<a href="https://apps.microsoft.com/detail/9MVLMBFVZBVV?referrer=appbadge&mode=direct"><img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200" alt="Get it from Microsoft"></a>
+
 [Download Latest Built](https://github.com/anubhav9001/Daybook/releases/latest){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
 [Documentation](https://github.com/anubhav9001/Daybook/wiki){: .btn .fs-5 .mb-4 .mb-md-0 .mr-2 }
 [Report a Bug](https://github.com/anubhav9001/Daybook/issues/new/choose){: .btn .fs-5 .mb-4 .mb-md-0 }

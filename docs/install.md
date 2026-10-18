@@ -9,6 +9,14 @@ description: Install Daybook on Windows — step-by-step instructions, download 
 
 ## Windows
 
+### From the Microsoft Store
+
+<a href="https://apps.microsoft.com/detail/9MVLMBFVZBVV?referrer=appbadge&mode=direct"><img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200" alt="Get it from Microsoft"></a>
+
+Choose **Get** on the [Daybook Store page](https://apps.microsoft.com/detail/9MVLMBFVZBVV). The Store installs Daybook and keeps it up to date.
+
+### With the installer
+
 1. Go to the [latest release](https://github.com/anubhav9001/Daybook/releases/latest).
 2. Download `Daybook-Setup-<version>.exe`.
 3. Run the installer and follow the prompts.
