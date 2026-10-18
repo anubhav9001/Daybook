@@ -9,9 +9,9 @@
 
 > **One Windows app** for your Gmail and Microsoft 365 mail and calendars. Screen-reader friendly throughout, with an optional on-device AI that drafts replies without your email ever leaving the PC.
 
-<a href="https://apps.microsoft.com/detail/9MVLMBFVZBVV?referrer=appbadge&mode=direct"><img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200" alt="Get it from Microsoft"></a>
+<a href="https://apps.microsoft.com/detail/9MVLMBFVZBVV?referrer=appbadge&mode=direct"><img src="https://get.microsoft.com/images/en-us%20dark.svg" height="48" alt="Get it from Microsoft"></a>
+<a href="https://github.com/anubhav9001/Daybook/releases/latest"><img src="https://img.shields.io/github/v/release/anubhav9001/Daybook?style=for-the-badge&logo=github&label=Download&color=181717" height="48" alt="Download the latest release from GitHub"></a>
 
-**[Download](https://github.com/anubhav9001/Daybook/releases/latest)** ·
 **[Website](https://anubhav9001.github.io/Daybook/)** ·
 **[Install guide](https://anubhav9001.github.io/Daybook/install.html)** ·
 **[Keyboard shortcuts](https://anubhav9001.github.io/Daybook/accessibility.html#keyboard-shortcuts)** ·
