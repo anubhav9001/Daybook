@@ -539,8 +539,11 @@
     display: flex;
     flex-wrap: nowrap;              /* single row */
     gap: 10px 14px;
-    margin: 0 0 12px;
-    padding: 0 0 4px;
+    /* overflow-x below clips anything outside this box, including the focus
+       ring (drawn 4px outside each link). 6px of padding keeps the ring
+       whole; the matching negative margin keeps the text where it was. */
+    margin: -6px -6px 6px;
+    padding: 6px 6px 10px;
     list-style: none;
     align-items: center;
     overflow-x: auto;                /* horizontal scroll if the viewport is tight */
