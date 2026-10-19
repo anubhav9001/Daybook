@@ -377,6 +377,19 @@
   @media (min-width: 50rem) {
     .side-bar { width: 250px; }
     .main { margin-left: 250px; }
+    /* The sidebar scrolls with the page instead of staying fixed: it runs the
+       full height of the page so its background and border reach the footer. */
+    body { position: relative; }
+    .side-bar {
+      position: absolute !important;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      height: auto !important;
+      min-height: 100vh;
+    }
+    /* Footer now sits in the content column: indent it like the page text. */
+    #daybook-page-footer { padding-left: 32px; padding-right: 32px; }
   }
   @media (max-width: 49.99rem) {
     /* Un-push the main area so content isn't shifted when the sidebar is closed */
@@ -786,6 +799,12 @@
     display: inline;
   }
   .main-content .heading-wrap > .anchor-heading {
+    /* Just the Docs positions the permalink absolutely at height:100% of its
+       heading. Once it is moved out of the heading, that 100% is the whole
+       content column (a ~1,200 px tall focus outline), so lay it out inline. */
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
     opacity: 0;
     transition: opacity 0.15s ease;
     text-decoration: none;
@@ -796,7 +815,9 @@
     line-height: 1;
     margin: 0;
   }
-  .main-content .heading-wrap > .anchor-heading svg { display: block; }
+  /* The theme sizes this icon at 100% of the link; with the link now sized by
+     its content, give the icon a fixed size instead. */
+  .main-content .heading-wrap > .anchor-heading svg { display: block; width: 18px !important; height: 18px !important; }
   .main-content .heading-wrap:hover > .anchor-heading,
   .main-content .heading-wrap > .anchor-heading:focus,
   .main-content .heading-wrap > .anchor-heading:focus-visible { opacity: 0.7; }

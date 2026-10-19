@@ -35,11 +35,15 @@
       if (!isExt) return;
       a.setAttribute('target', '_blank');
       a.setAttribute('rel', 'noopener noreferrer');
-      var icon = document.createElement('span');
-      icon.className = 'ext-icon';
-      icon.setAttribute('aria-hidden', 'true');
-      icon.textContent = '↗';
-      a.appendChild(icon);
+      /* Image links (the Store and GitHub badges) get no visible arrow; it
+         would sit beside the badge as a stray underlined mark. */
+      if (!a.querySelector('img')) {
+        var icon = document.createElement('span');
+        icon.className = 'ext-icon';
+        icon.setAttribute('aria-hidden', 'true');
+        icon.textContent = '↗';
+        a.appendChild(icon);
+      }
       var sr = document.createElement('span');
       sr.className = 'sr-only';
       sr.textContent = ' (opens in new tab)';
@@ -318,9 +322,10 @@
     /* Inject the site-wide page footer with trust/legal links. */
     function injectPageFooter() {
       if (document.getElementById('daybook-page-footer')) return;
-      /* Place at BODY level so <footer contentinfo> is a top-level landmark,
-         not nested inside <main>. */
-      var host = document.body;
+      /* Place it in the content column (.main), after the <main> element, so it
+         lines up with the page text and isn't covered by the sidebar. It stays
+         outside <main>, so <footer contentinfo> is still a top-level landmark. */
+      var host = document.querySelector('.main') || document.body;
       var yr = new Date().getFullYear();
       var footer = document.createElement('footer');
       footer.id = 'daybook-page-footer';
