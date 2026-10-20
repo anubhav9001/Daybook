@@ -20,7 +20,7 @@ Each row shows a scope (permission) Daybook asks for during sign-in, what it unl
 | `openid` | A pseudonymous identifier for your account | Distinguish between multiple connected Google accounts |
 | `https://www.googleapis.com/auth/userinfo.email` | Your primary Google account email address | Show your email in the app header; label which account each message belongs to |
 | `https://www.googleapis.com/auth/gmail.readonly` | Read your mail and settings | Show your inbox, open individual messages, and run the on-device "needs a reply" classification |
-| `https://www.googleapis.com/auth/gmail.compose` | Create, edit, and manage **drafts** on your behalf | Save Daybook-prepared replies into your Gmail drafts folder. **Daybook never sends mail from a background task** — you review and send each draft explicitly from the reply window or your Gmail client |
+| `https://www.googleapis.com/auth/gmail.compose` | Create, edit, and manage **drafts** on your behalf | Save a reply you have reviewed into your Gmail **Drafts** folder. **Daybook never sends email** — you open the draft in Gmail and send it yourself |
 | `https://www.googleapis.com/auth/calendar.events` | Read and write **events** on your calendars | Show today's calendar and let you create, update, or respond to meetings you confirm |
 | `https://www.googleapis.com/auth/calendar.freebusy` | Read **free/busy availability** of calendars shared with you | Avoid scheduling conflicts by suggesting meeting times that don't overlap invitees' busy blocks. Only busy/free blocks are read — never event titles, attendees, or descriptions |
 
@@ -49,4 +49,4 @@ After revoking, Daybook will prompt you to sign in again on next launch.
 
 ## Where this data goes
 
-See the [Privacy Policy](privacy.html) for the full data-flow description. In short: nothing leaves your computer unless you explicitly turn on a third-party AI provider.
+See the [Privacy Policy](privacy.html) for the full data-flow description. In short: Daybook has no server. Your mail and calendar go nowhere except Google or Microsoft, unless you choose a cloud AI provider with your own key, in which case Daybook sends that provider what it needs for a reply suggestion, directly from your computer. Daybook never sends email; you do.

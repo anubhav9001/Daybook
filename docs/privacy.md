@@ -8,7 +8,7 @@ description: How Daybook handles your mail, calendar and account data.
 # Privacy Policy
 {: .no_toc }
 
-Last updated: 2026-10-10
+Last updated: 2026-10-19
 {: .fs-3 .text-grey-dk-000 }
 
 Daybook ("the app", "we") is a desktop application that helps you manage your Google and Microsoft 365 mail and calendars. This policy explains what data Daybook touches, why, where it goes, and how long it stays.
@@ -25,7 +25,7 @@ Daybook is developed and maintained by **anubhav9001** on GitHub. For questions 
 
 ## 2. What data Daybook accesses
 
-Daybook accesses the following data **only** after you sign in and grant the explicit OAuth permissions listed below. Each scope is listed in the same wording the Google / Microsoft consent screen shows you.
+Daybook accesses the following data **only** after you sign in and grant the explicit OAuth permissions listed below. Each scope is listed by its exact name, with a plain description of what it allows.
 
 ### Google scopes requested by Daybook
 
@@ -34,7 +34,7 @@ Daybook accesses the following data **only** after you sign in and grant the exp
 | `openid` | A pseudonymous identifier for your Google account | Lets Daybook tell your accounts apart when you connect more than one |
 | `.../auth/userinfo.email` | Your primary Google account email address | Shown in the Daybook header so you know which account is active |
 | `.../auth/gmail.readonly` | Read-only access to your Gmail messages and settings | Shows your inbox, lets you open a message to read it, powers the on-device "needs a reply" classification |
-| `.../auth/gmail.compose` | Create, edit, and delete **drafts**, and send email on your behalf **only when you initiate it** | Saves the reply Daybook drafts into your Gmail drafts folder. **Daybook never sends mail from a background task** — you review and send each draft explicitly |
+| `.../auth/gmail.compose` | Create, edit, and delete **drafts** (Google's description of this permission also covers sending) | Saves a reply you have reviewed into your Gmail **Drafts** folder. **Daybook never sends email** — it has no code that sends mail. You open the draft in Gmail, edit it if you like, and send it yourself |
 | `.../auth/calendar.events` | Read and write **events** on calendars you own | Shows today's calendar on the dashboard and lets you create or respond to meetings prompted by email conversations |
 | `.../auth/calendar.freebusy` | Read **free/busy availability** of calendars shared with you | Suggests meeting times that don't overlap invitees' busy blocks. Only busy/free time blocks are read — never event titles, descriptions, or attendees |
 
@@ -52,21 +52,26 @@ Daybook accesses the following data **only** after you sign in and grant the exp
 
 - **No access to Google Drive, Google Photos, Google Contacts, Google Workspace Admin APIs**
 - **No access to Microsoft OneDrive, SharePoint, Teams, or any directory-wide scope**
-- **No `gmail.send` scope** — Daybook uses `gmail.compose` which creates drafts; sending happens through the standard draft-send flow when you confirm
+- **No `gmail.send` scope** — Daybook uses `gmail.compose` only to create drafts. Daybook never sends mail, and no AI can send mail through Daybook; sending is always done by you, in Gmail or Outlook, after you review the draft
 - **No access to any product or data category beyond mail and calendars**
 
 ## 3. Where your data goes
 
-- **It stays on your device.** Daybook is a desktop app. All mail and calendar data retrieved from Google or Microsoft is held in the app's local cache on the computer you are using.
+- **It stays on your device.** Daybook is a desktop app. Mail and calendar data retrieved from Google or Microsoft is held in memory on the computer you are using while Daybook shows it; message content is not saved to disk. Daybook saves only small encrypted records on your computer (see section 7).
 - **Daybook has no server.** We do not operate any backend that receives, stores, or processes your mail, calendar, contacts, or account credentials.
 - **Nothing is sent to the developer.** The developer never sees your emails, calendar, or any token issued to the app.
-- **Built-in private AI runs locally.** When you enable the optional on-device AI, it processes message text on your computer only. No message content leaves your machine.
-- **Third-party AI providers are opt-in.** If you choose to connect a third-party AI (e.g. OpenAI, Anthropic, Google Gemini), Daybook sends the message text you select to that provider for that single request. You can turn this off at any time, and you can review the provider's own policy before connecting.
+- **Built-in private AI runs locally.** Daybook's built-in private AI (the default) processes message text on your computer only. No message content leaves your machine.
+- **Third-party AI providers are optional and your choice.** Daybook works fully with its built-in private AI, which needs no third party. If you choose a cloud AI provider (for example OpenAI, Anthropic, Google Gemini, Groq or OpenRouter) in Settings, you enter **your own API key** for that provider and must confirm that provider's data notice before Daybook uses it. Then:
+  - When you choose **Suggest reply**, Daybook sends that provider the conversation you are replying to, up to five of your recent sent messages (so the draft matches how you write), and your calendar events for the next seven days (titles, times, locations and notes), so the suggestion can take your schedule into account.
+  - If you also turn on **cloud background drafts** (off by default, limited to a daily number you set), Daybook does the same for new messages that may need a reply, so a draft is ready when you open them.
+  - The request goes **directly from your computer to the provider you chose**, using your key. It never passes through a Daybook server, and the developer never sees it. The provider's own privacy policy applies to what it receives.
+  - You can switch back to the built-in private AI, or remove your key, at any time in Settings.
+- **AI never sends email.** Every suggestion is shown to you for review. Daybook can only save it as a draft; you send it yourself, from Gmail or Outlook.
 
 ## 4. Credentials and tokens
 
 - Daybook uses the official OAuth 2.0 flow for both Google and Microsoft. You enter your credentials on Google's or Microsoft's own sign-in page; the app never sees your password.
-- Access and refresh tokens issued to the app are stored in the operating system's secure credential store (Windows Credential Manager).
+- Access and refresh tokens issued to the app are stored on your computer in Daybook's data folder, encrypted with Windows' per-user data protection (DPAPI), so only your Windows account can read them. They are never sent anywhere except to Google or Microsoft to keep you signed in.
 - You can revoke Daybook's access at any time from your Google Account ([myaccount.google.com/permissions](https://myaccount.google.com/permissions)) or Microsoft account ([myaccount.microsoft.com](https://myaccount.microsoft.com)) settings.
 
 ## 5. Google API Services — Limited Use compliance
@@ -76,7 +81,7 @@ Daybook's use and transfer of information received from Google APIs to any other
 Specifically:
 
 - **Allowed use.** Daybook accesses your Gmail and Google Calendar data only to provide user-facing features you directly interact with: showing your inbox and schedule, letting you reply to and classify mail, suggesting meeting times, and preparing editable reply drafts.
-- **No transfer to third parties.** Daybook does not transfer Google user data to any third party, except as needed to provide or improve user-facing features that are prominent in Daybook's user interface, and only with the user's explicit consent on a per-provider basis (see "Where your data goes" above). Transfers to cloud AI providers happen only when the user explicitly requests a suggestion that uses that provider, after that provider has been enabled in Settings.
+- **No transfer to third parties, except to the AI provider you choose.** Daybook does not transfer Google user data to any third party, except to provide the user-facing reply-suggestion feature, and only to a cloud AI provider that the user has chosen, configured with their own API key, and explicitly consented to in Settings (see "Where your data goes" above). The transfer goes directly from the user's computer to that provider; Daybook operates no server. It happens when the user asks for a suggestion, or for new messages if the user has turned on cloud background drafts. The built-in private AI involves no transfer at all.
 - **No ads.** Daybook does not use or transfer Google user data for serving advertisements, including personalised, re-targeted, or interest-based advertising.
 - **No human reading.** Daybook does not allow humans to read Google user data unless (a) the user has given affirmative agreement for specific messages, (b) it is necessary for security purposes (e.g. investigating abuse), (c) it is required by law, or (d) the data has been aggregated and anonymised for internal operations. The maintainer never receives your Gmail or Calendar data.
 - **No training of generalised ML models.** Daybook does not use Google user data to develop, improve, or train generalised AI or machine-learning models. The optional on-device AI model (Qwen3) is pre-trained by its authors; Daybook does not fine-tune or train it on your mail or calendar.
@@ -87,8 +92,9 @@ Daybook ships with **no analytics, no telemetry, and no crash reporting** sent t
 
 ## 7. How long data is kept
 
-- Local cache: until you sign out of the account in Daybook or uninstall the app, whichever is sooner. Signing out purges the cache.
-- Tokens: cleared on sign-out or when revoked at the provider.
+- **Mail and calendar content:** held in memory only while Daybook is open; not saved to disk.
+- **Small encrypted records on your computer:** inbox-sorting labels with a short reason for each message, your Done and Snooze choices, and meetings you created in Daybook (so it can tell you about replies). They stay in Daybook's data folder until you delete it; uninstalling the installer version leaves the folder in place (see the [install guide](install.html) for how to remove it).
+- **Sign-in tokens:** deleted when you choose **Disconnect** for that account in Daybook. For Google accounts, Disconnect also revokes Daybook's access at Google. You can also revoke access yourself at any time (section 4).
 
 ## 8. Children
 
