@@ -20,7 +20,7 @@ Daybook ("the app", "we") is a desktop application that helps you manage your Go
 
 Daybook is developed and maintained by **anubhav9001** on GitHub. For questions about this policy or any privacy concern, contact:
 
-- Contact form: <https://anubhav9001.github.io/Daybook/contact.html>
+- Contact form: <https://daybook.saksham.org/contact.html>
 - Issues: <https://github.com/anubhav9001/Daybook/issues>
 
 ## 2. What data Daybook accesses

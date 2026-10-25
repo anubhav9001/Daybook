@@ -1,22 +1,22 @@
 # Daybook — accessible desktop assistant for Gmail and Microsoft 365
 
 [![Latest release](https://img.shields.io/github/v/release/anubhav9001/Daybook)](https://github.com/anubhav9001/Daybook/releases/latest)
-[![Website](https://img.shields.io/badge/docs-anubhav9001.github.io%2FDaybook-blue)](https://anubhav9001.github.io/Daybook/)
+[![Website](https://img.shields.io/badge/docs-daybook.saksham.org-blue)](https://daybook.saksham.org/)
 [![Issues](https://img.shields.io/github/issues/anubhav9001/Daybook)](https://github.com/anubhav9001/Daybook/issues)
 [![Discussions](https://img.shields.io/github/discussions/anubhav9001/Daybook)](https://github.com/anubhav9001/Daybook/discussions)
-[![WCAG 2.2 AA](https://img.shields.io/badge/accessibility-WCAG%202.2%20AA-success)](https://anubhav9001.github.io/Daybook/accessibility.html)
-[![Privacy](https://img.shields.io/badge/privacy-no%20telemetry-success)](https://anubhav9001.github.io/Daybook/privacy.html)
+[![WCAG 2.2 AA](https://img.shields.io/badge/accessibility-WCAG%202.2%20AA-success)](https://daybook.saksham.org/accessibility.html)
+[![Privacy](https://img.shields.io/badge/privacy-no%20telemetry-success)](https://daybook.saksham.org/privacy.html)
 
 > **One Windows app** for your Gmail and Microsoft 365 mail and calendars. Screen-reader friendly throughout, with an optional on-device AI that drafts replies without your email ever leaving the PC.
 
 <a href="https://apps.microsoft.com/detail/9MVLMBFVZBVV?referrer=appbadge&mode=direct"><img src="https://get.microsoft.com/images/en-us%20dark.svg" width="161" height="44" alt="Get it from Microsoft"></a>
 <a href="https://github.com/anubhav9001/Daybook/releases/latest"><img src="docs/assets/github-download-badge.svg" width="161" height="44" alt="Download from GitHub"></a>
 
-**[Website](https://anubhav9001.github.io/Daybook/)** ·
-**[Install guide](https://anubhav9001.github.io/Daybook/install.html)** ·
-**[Keyboard shortcuts](https://anubhav9001.github.io/Daybook/accessibility.html#keyboard-shortcuts)** ·
-**[Permissions](https://anubhav9001.github.io/Daybook/scopes.html)** ·
-**[Privacy](https://anubhav9001.github.io/Daybook/privacy.html)** ·
+**[Website](https://daybook.saksham.org/)** ·
+**[Install guide](https://daybook.saksham.org/install.html)** ·
+**[Keyboard shortcuts](https://daybook.saksham.org/accessibility.html#keyboard-shortcuts)** ·
+**[Permissions](https://daybook.saksham.org/scopes.html)** ·
+**[Privacy](https://daybook.saksham.org/privacy.html)** ·
 **[Report a bug](https://github.com/anubhav9001/Daybook/issues/new/choose)**
 
 Daybook is an accessible desktop assistant for managing Google Gmail/Calendar and Microsoft 365 Outlook/Calendar together. It reads your inbox and schedule, highlights messages that may need a response, and can prepare an editable reply draft using the conversation and your recent sent messages as context.
@@ -27,7 +27,7 @@ Daybook is an accessible desktop assistant for managing Google Gmail/Calendar an
 
 This repository is the **public home** for Daybook:
 
-- 📘 **Website** — <https://anubhav9001.github.io/Daybook/> (served from the `docs/` folder)
+- 📘 **Website** — <https://daybook.saksham.org/> (served from the `docs/` folder)
 - 📥 **Downloads** — [Microsoft Store](https://apps.microsoft.com/detail/9MVLMBFVZBVV) or the [Releases page](https://github.com/anubhav9001/Daybook/releases)
 - 🐞 **Bug reports** — [Issues](https://github.com/anubhav9001/Daybook/issues)
 - 💬 **Questions** — [Discussions](https://github.com/anubhav9001/Daybook/discussions)
@@ -52,4 +52,4 @@ Daybook itself is proprietary — no license to copy or redistribute is granted.
 
 ## Contact
 
-Use the [contact form](https://anubhav9001.github.io/Daybook/contact.html) on the website.
+Use the [contact form](https://daybook.saksham.org/contact.html) on the website.

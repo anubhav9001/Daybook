@@ -1,8 +1,8 @@
 title: Daybook
 description: Accessible desktop assistant for Google and Microsoft 365 mail and calendars.
 remote_theme: just-the-docs/just-the-docs
-url: https://anubhav9001.github.io
-baseurl: /Daybook
+url: https://daybook.saksham.org
+baseurl: ""
 
 # Top-right header links (always visible)
 aux_links:
