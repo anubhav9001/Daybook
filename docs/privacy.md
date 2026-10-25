@@ -8,7 +8,7 @@ description: How Daybook handles your mail, calendar and account data.
 # Privacy Policy
 {: .no_toc }
 
-Last updated: 2026-10-19
+Last updated: 2026-10-25
 {: .fs-3 .text-grey-dk-000 }
 
 Daybook ("the app", "we") is a desktop application that helps you manage your Google and Microsoft 365 mail and calendars. This policy explains what data Daybook touches, why, where it goes, and how long it stays.
@@ -83,6 +83,7 @@ Specifically:
 - **Allowed use.** Daybook accesses your Gmail and Google Calendar data only to provide user-facing features you directly interact with: showing your inbox and schedule, letting you reply to and classify mail, suggesting meeting times, and preparing editable reply drafts.
 - **No transfer to third parties, except to the AI provider you choose.** Daybook does not transfer Google user data to any third party, except to provide the user-facing reply-suggestion feature, and only to a cloud AI provider that the user has chosen, configured with their own API key, and explicitly consented to in Settings (see "Where your data goes" above). The transfer goes directly from the user's computer to that provider; Daybook operates no server. It happens when the user asks for a suggestion, or for new messages if the user has turned on cloud background drafts. The built-in private AI involves no transfer at all.
 - **No ads.** Daybook does not use or transfer Google user data for serving advertisements, including personalised, re-targeted, or interest-based advertising.
+- **No selling.** Daybook never sells Google user data, and never transfers it to advertising platforms, data brokers, or information resellers.
 - **No human reading.** Daybook does not allow humans to read Google user data unless (a) the user has given affirmative agreement for specific messages, (b) it is necessary for security purposes (e.g. investigating abuse), (c) it is required by law, or (d) the data has been aggregated and anonymised for internal operations. The maintainer never receives your Gmail or Calendar data.
 - **No training of generalised ML models.** Daybook does not use Google user data to develop, improve, or train generalised AI or machine-learning models. The optional on-device AI model (Qwen3) is pre-trained by its authors; Daybook does not fine-tune or train it on your mail or calendar.
 
