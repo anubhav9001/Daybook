@@ -9,7 +9,21 @@ description: Release history and what's new in each version of Daybook.
 
 See the full history on the [Releases page](https://github.com/anubhav9001/Daybook/releases).
 
-## 0.6.6 — latest
+## 0.7.0 — latest
+Daybook comes to Outlook, works in any app, and handles calendar invitations from your inbox.
+
+- **Daybook in classic Outlook.** A Daybook tab and a docked panel in classic Outlook for every account, including Gmail and other IMAP or POP accounts: suggest a reply, summarize an email and add a Daybook label, or write and improve a draft. Keyboard: Alt, D, then R, S or P; F6 moves into the panel. The panel follows Outlook's dark theme and Windows high contrast, and works with screen readers. Add it from **Settings → Outlook add-in** (GitHub version) or with the separate [Daybook for classic Outlook installer](https://github.com/anubhav9001/Daybook/releases/latest/download/Daybook-for-classic-Outlook-Setup-1.0.0.exe) (Microsoft Store version).
+- **Daybook in new Outlook and Outlook on the web** for Microsoft 365 and Outlook.com accounts. Pair it once with a code from Daybook. See [Install → Daybook in Outlook](install.html#daybook-in-outlook).
+- **Daybook anywhere.** Turn it on in Settings, copy an email in any app, and press Ctrl+Shift+Alt+A for a reply, a summary or a rewrite. Works with Gmail in new Outlook too.
+- **Calendar invitations in your inbox.** Invitation emails get an Invitation label and are listed under Today's calendar. **Add to calendar** appears only when the event isn't already there, and **Accept in Google Calendar** handles invitations Google is holding. Finished meetings are marked.
+- **Choose the AI that sorts your inbox.** The built-in private AI stays the default; you can pick another provider, with its own model and notice.
+- **Disconnect removes the account's saved data** (sorting labels, Done and Snooze choices, and meeting records) from this PC.
+- Gmail support is **experimental** while Google reviews Daybook's access. [Get in touch](contact.html) if you'd like to test it.
+
+## 0.6.7
+- Connected accounts no longer get disconnected when two accounts refresh their sign-in at the same time; saved files are written safely so a crash or overlap can't damage them. Daybook also became available in the Microsoft Store.
+
+## 0.6.6
 - **Recovers gracefully from Windows credential-store issues.** If Daybook can't decrypt its saved files after a Windows profile change, it now shows one plain-language dialog listing what will be reset and asks before doing anything, instead of a stream of cryptic error toasts.
 - **Finds up to 100 recent messages per account** instead of 20. Mailing-list traffic no longer pushes personal mail out of the fetch window.
 - **Lets the AI classify mailing-list messages from colleagues.** Mail with a List-Id header from a human sender (e.g. a Google Group where a colleague is waiting) now goes to the AI for a content-based decision instead of being auto-filed to Info or Other. Automated newsletters, no-reply@ and security@ senders still skip the AI call.

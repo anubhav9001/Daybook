@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Daybook for Outlook — release manifest. Pages: https://daybook.saksham.org/addin/ -->
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+           xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.0"
+           xsi:type="MailApp">
+  <Id>33fccdfe-c713-467f-8089-b08de827cab5</Id>
+  <!-- The add-in has its own version (Office requires 1.0 or higher); first release ships with Daybook 0.7.0. -->
+  <Version>1.0.0.0</Version>
+  <ProviderName>Anubhav Mitra</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="Daybook"/>
+  <Description DefaultValue="Suggest replies, write and improve email, and summarize messages with Daybook running on your PC. You review and send every email yourself."/>
+  <IconUrl DefaultValue="https://daybook.saksham.org/addin/assets/icon-64.png"/>
+  <HighResolutionIconUrl DefaultValue="https://daybook.saksham.org/addin/assets/icon-128.png"/>
+  <SupportUrl DefaultValue="https://daybook.saksham.org/support.html"/>
+  <AppDomains>
+    <AppDomain>https://daybook.saksham.org</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Mailbox"/>
+  </Hosts>
+  <Requirements>
+    <Sets>
+      <Set Name="Mailbox" MinVersion="1.8"/>
+    </Sets>
+  </Requirements>
+  <FormSettings>
+    <Form xsi:type="ItemRead">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="https://daybook.saksham.org/addin/taskpane.html?view=reply"/>
+        <RequestedHeight>450</RequestedHeight>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
+  <!-- ReadWriteMailbox lets the add-in create Daybook's three Outlook categories and add them to an email. -->
+  <Permissions>ReadWriteMailbox</Permissions>
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Read"/>
+  </Rule>
+  <DisableEntityHighlighting>false</DisableEntityHighlighting>
+
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides/1.1" xsi:type="VersionOverridesV1_1">
+      <Requirements>
+        <bt:Sets DefaultMinVersion="1.8">
+          <bt:Set Name="Mailbox"/>
+        </bt:Sets>
+      </Requirements>
+      <Hosts>
+        <Host xsi:type="MailHost">
+          <DesktopFormFactor>
+            <!-- Reading an email: Suggest reply and Summarize (the panel can be pinned so it follows the selected email). -->
+            <ExtensionPoint xsi:type="MessageReadCommandSurface">
+              <OfficeTab id="TabDefault">
+                <Group id="daybookReadGroup">
+                  <Label resid="groupLabel"/>
+                  <Control xsi:type="Button" id="daybookSuggestReply">
+                    <Label resid="suggestLabel"/>
+                    <Supertip><Title resid="suggestLabel"/><Description resid="suggestTip"/></Supertip>
+                    <Icon><bt:Image size="16" resid="icon16"/><bt:Image size="32" resid="icon32"/><bt:Image size="80" resid="icon80"/></Icon>
+                    <Action xsi:type="ShowTaskpane">
+                      <SourceLocation resid="readPaneUrl"/>
+                      <SupportsPinning>true</SupportsPinning>
+                    </Action>
+                  </Control>
+                  <Control xsi:type="Button" id="daybookSummarize">
+                    <Label resid="summaryLabel"/>
+                    <Supertip><Title resid="summaryLabel"/><Description resid="summaryTip"/></Supertip>
+                    <Icon><bt:Image size="16" resid="icon16"/><bt:Image size="32" resid="icon32"/><bt:Image size="80" resid="icon80"/></Icon>
+                    <Action xsi:type="ShowTaskpane">
+                      <SourceLocation resid="summaryPaneUrl"/>
+                      <SupportsPinning>true</SupportsPinning>
+                    </Action>
+                  </Control>
+                </Group>
+              </OfficeTab>
+            </ExtensionPoint>
+            <!-- Writing a reply or a new email: write from notes or improve the draft. -->
+            <ExtensionPoint xsi:type="MessageComposeCommandSurface">
+              <OfficeTab id="TabDefault">
+                <Group id="daybookComposeGroup">
+                  <Label resid="groupLabel"/>
+                  <Control xsi:type="Button" id="daybookCompose">
+                    <Label resid="composeLabel"/>
+                    <Supertip><Title resid="composeLabel"/><Description resid="composeTip"/></Supertip>
+                    <Icon><bt:Image size="16" resid="icon16"/><bt:Image size="32" resid="icon32"/><bt:Image size="80" resid="icon80"/></Icon>
+                    <Action xsi:type="ShowTaskpane">
+                      <SourceLocation resid="composePaneUrl"/>
+                    </Action>
+                  </Control>
+                </Group>
+              </OfficeTab>
+            </ExtensionPoint>
+          </DesktopFormFactor>
+        </Host>
+      </Hosts>
+      <Resources>
+        <bt:Images>
+          <bt:Image id="icon16" DefaultValue="https://daybook.saksham.org/addin/assets/icon-16.png"/>
+          <bt:Image id="icon32" DefaultValue="https://daybook.saksham.org/addin/assets/icon-32.png"/>
+          <bt:Image id="icon80" DefaultValue="https://daybook.saksham.org/addin/assets/icon-80.png"/>
+        </bt:Images>
+        <bt:Urls>
+          <bt:Url id="readPaneUrl" DefaultValue="https://daybook.saksham.org/addin/taskpane.html?view=reply"/>
+          <bt:Url id="summaryPaneUrl" DefaultValue="https://daybook.saksham.org/addin/taskpane.html?view=summary"/>
+          <bt:Url id="composePaneUrl" DefaultValue="https://daybook.saksham.org/addin/taskpane.html?view=compose"/>
+        </bt:Urls>
+        <bt:ShortStrings>
+          <bt:String id="groupLabel" DefaultValue="Daybook"/>
+          <bt:String id="suggestLabel" DefaultValue="Suggest reply"/>
+          <bt:String id="summaryLabel" DefaultValue="Summarize"/>
+          <bt:String id="composeLabel" DefaultValue="Daybook"/>
+        </bt:ShortStrings>
+        <bt:LongStrings>
+          <bt:String id="suggestTip" DefaultValue="Daybook drafts a reply to this email for you to review. Shortcut: Ctrl+Shift+Alt+D while the panel is pinned."/>
+          <bt:String id="summaryTip" DefaultValue="Daybook summarizes this email and suggests a label: Needs a reply, For your info or Other. Shortcut: Ctrl+Shift+Alt+S while the panel is pinned."/>
+          <bt:String id="composeTip" DefaultValue="Write this email from short notes, or improve what you have typed."/>
+        </bt:LongStrings>
+      </Resources>
+    </VersionOverrides>
+  </VersionOverrides>
+</OfficeApp>

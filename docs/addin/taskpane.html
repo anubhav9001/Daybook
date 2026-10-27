@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://appsforoffice.microsoft.com; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <title>Daybook</title>
+  <link rel="stylesheet" href="taskpane.css">
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <script src="taskpane.js" defer></script>
+</head>
+<body>
+  <header class="pane-h"><img src="assets/icon-32.png" alt="" width="22" height="22"><b>Daybook</b><span id="conn" class="conn" role="status" aria-live="polite">Connecting…</span></header>
+  <main>
+    <p id="error" class="error hidden" role="alert"></p>
+
+    <!-- Shown once after pairing, until the user chooses Got it -->
+    <aside id="pin-tip" class="tip hidden" aria-labelledby="pin-tip-title">
+      <h2 id="pin-tip-title">Tip: keep Daybook one click away</h2>
+      <ul>
+        <li><b>On the ribbon:</b> choose <b>Apps</b> (on the Home tab, or under ⋯), right-click <b>Daybook</b>, and choose <b>Pin</b>. Suggest reply and Summarize then stay on the ribbon.</li>
+        <li><b>This panel:</b> choose the pin at the top of the panel to keep it open as you move between emails. Daybook’s shortcuts (Ctrl+Shift+Alt+D and S) work while it’s pinned.</li>
+      </ul>
+      <div class="btns"><button id="pin-tip-ok" type="button">Got it</button></div>
+    </aside>
+
+    <!-- Daybook isn't reachable, or this isn't Windows: what to do -->
+    <section id="help" class="help hidden" aria-labelledby="help-title">
+      <h1 id="help-title">Daybook needs to be running on this PC</h1>
+      <p id="help-platform" class="hidden">The Daybook add-in works with the Daybook app for Windows. Open this email in Outlook on a Windows PC where Daybook is installed.</p>
+      <ol class="steps" id="help-steps">
+        <li>Install <b>Daybook</b> for Windows (free): <a href="https://daybook.saksham.org/install.html" target="_blank" rel="noopener">Get Daybook</a>.</li>
+        <li>Open Daybook → <b>Settings</b> → <b>Outlook add-in</b>, turn on <b>Allow the Outlook add-in</b>, and choose <b>Save settings</b>.</li>
+        <li>If Outlook or your browser asks to allow access to <b>devices on your local network</b>, choose <b>Allow</b>. Daybook runs on this PC, and that is how the add-in reaches it. Nothing goes to other devices.</li>
+      </ol>
+      <div class="btns"><button id="help-retry" class="primary" type="button">Try again</button></div>
+    </section>
+
+    <!-- First use: pair with Daybook -->
+    <section id="view-pair" class="hidden" aria-labelledby="pair-title">
+      <h1 id="pair-title">Connect to Daybook</h1>
+      <ol class="steps">
+        <li>Open <b>Daybook</b> on this PC → <b>Settings</b> → <b>Outlook add-in</b>.</li>
+        <li>Turn on <b>Allow the Outlook add-in</b> and choose <b>Pair Outlook</b>.</li>
+        <li>Type the 6-digit code shown there.</li>
+      </ol>
+      <label class="f" for="pair-code">Pairing code</label>
+      <input id="pair-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*">
+      <div class="btns"><button id="pair-go" class="primary" type="button">Connect</button></div>
+    </section>
+
+    <!-- Same order as the classic Outlook panel: actions first, Daybook's result right under them (shown once
+         it's ready), then notes and options. -->
+
+    <!-- Reading an email: suggested reply -->
+    <section id="view-reply" class="hidden" aria-labelledby="reply-title">
+      <h1 id="reply-title" class="sr-only">Suggested reply</h1>
+      <div class="context" id="reply-context"></div>
+      <div class="btns two"><button id="reply-go" class="primary" type="button">Suggest reply</button><button id="reply-to-summary" type="button">Summarize</button></div>
+      <div id="reply-result" class="result hidden">
+        <label class="f" for="reply-text">Daybook’s suggestion (you can edit it)</label>
+        <textarea id="reply-text" rows="9"></textarea>
+        <div class="btns two"><button id="reply-insert" type="button" class="primary">Insert into reply</button><button id="reply-insert-all" type="button">Reply all</button></div>
+      </div>
+      <label class="f" for="reply-notes">Notes for Daybook (optional)</label>
+      <input id="reply-notes" maxlength="2000" placeholder="e.g. agree, but ask to move the call to Friday">
+    </section>
+
+    <!-- Reading an email: summary and label -->
+    <section id="view-summary" class="hidden" aria-labelledby="summary-title">
+      <h1 id="summary-title" class="sr-only">Summary</h1>
+      <div class="context" id="summary-context"></div>
+      <div class="btns two"><button id="summary-go" class="primary" type="button">Summarize</button><button id="summary-to-reply" type="button">Suggest reply</button></div>
+      <div id="summary-result" class="result hidden">
+        <h2 class="f">Summary</h2>
+        <ul id="summary-points" class="points" aria-live="polite"></ul>
+        <h2 class="f">Suggested label</h2>
+        <p class="label-row"><span id="summary-label" class="label hidden"></span> <span id="summary-reason" class="muted"></span></p>
+        <div class="btns"><button id="summary-apply" type="button" class="primary">Add this label to the email</button></div>
+      </div>
+    </section>
+
+    <!-- Writing: new email or reply -->
+    <section id="view-compose" class="hidden" aria-labelledby="compose-title">
+      <h1 id="compose-title" class="sr-only">Write with Daybook</h1>
+      <div class="context" id="compose-context"></div>
+      <div class="btns"><button id="compose-go" class="primary wide" type="button">Write from my notes</button></div>
+      <div class="chips" role="group" aria-label="Change what you’ve typed" aria-describedby="compose-select-hint">
+        <button type="button" data-action="improve">Improve</button><button type="button" data-action="shorter">Shorter</button><button type="button" data-action="formal">More formal</button><button type="button" data-action="friendlier">Friendlier</button><button type="button" data-action="grammar">Fix grammar</button>
+      </div>
+      <p class="muted small" id="compose-select-hint">In a reply, select the text you want to change first.</p>
+      <div id="compose-result" class="result hidden">
+        <label class="f" for="compose-text">Daybook’s text (you can edit it)</label>
+        <textarea id="compose-text" rows="8"></textarea>
+        <div class="btns two"><button id="compose-replace" type="button" class="primary">Replace my draft</button><button id="compose-insert" type="button">Insert at cursor</button></div>
+      </div>
+      <label class="f" for="compose-notes">Notes for Daybook</label>
+      <textarea id="compose-notes" rows="3" maxlength="2000" placeholder="e.g. pilot starts 2 Nov, install from the Microsoft Store, training call Monday 10am"></textarea>
+    </section>
+
+    <!-- Tone, length and language: for replies and writing -->
+    <div id="options-box" class="hidden">
+        <div class="selects">
+        <label class="sel"><span>Tone</span><select id="tone"><option value="auto">Match my tone</option><option value="friendly">Friendly</option><option value="formal">Formal</option><option value="direct">Direct</option></select></label>
+        <label class="sel"><span>Length</span><select id="length"><option value="auto">Automatic</option><option value="short">Short</option><option value="medium">Medium</option><option value="detailed">Detailed</option></select></label>
+        <label class="sel"><span>Language</span><select id="language"><option value="auto">Same as email</option><option value="en">English</option><option value="hi">Hindi</option><option value="bn">Bengali</option><option value="mr">Marathi</option><option value="ta">Tamil</option><option value="te">Telugu</option><option value="es">Spanish</option><option value="fr">French</option><option value="de">German</option><option value="pt">Portuguese</option><option value="ar">Arabic</option><option value="zh">Chinese (Simplified)</option><option value="ja">Japanese</option></select></label>
+        </div>
+    </div>
+
+    <details id="style-box" class="style hidden">
+      <summary>Writing style <span id="style-current">My recent sent mail</span></summary>
+      <fieldset>
+        <legend class="sr-only">Writing style</legend>
+        <label class="radio"><input type="radio" name="style" value="sent" checked><span>My recent sent mail in this account<small>Up to 5 sent emails, read by Daybook through this Microsoft 365 or Outlook.com account if it is connected in Daybook</small></span></label>
+        <label class="radio"><input type="radio" name="style" value="notes"><span>My style notes<small>The notes you wrote in Daybook’s Settings</small></span></label>
+        <label class="radio"><input type="radio" name="style" value="none"><span>No examples<small>Neutral, professional tone</small></span></label>
+      </fieldset>
+    </details>
+
+    <p id="status" class="status hidden" role="status" aria-live="polite"></p>
+    <p id="by" class="note" aria-live="polite"></p>
+    <p class="note small">Daybook only fills in text. You review and send every email yourself.</p>
+  </main>
+</body>
+</html>

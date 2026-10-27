@@ -8,7 +8,7 @@ description: How Daybook handles your mail, calendar and account data.
 # Privacy Policy
 {: .no_toc }
 
-Last updated: 2026-10-25
+Last updated: 2026-10-26
 {: .fs-3 .text-grey-dk-000 }
 
 Daybook ("the app", "we") is a desktop application that helps you manage your Google and Microsoft 365 mail and calendars. This policy explains what data Daybook touches, why, where it goes, and how long it stays.
@@ -66,6 +66,9 @@ Daybook accesses the following data **only** after you sign in and grant the exp
   - If you also turn on **cloud background drafts** (off by default, limited to a daily number you set), Daybook does the same for new messages that may need a reply, so a draft is ready when you open them.
   - The request goes **directly from your computer to the provider you chose**, using your key. It never passes through a Daybook server, and the developer never sees it. The provider's own privacy policy applies to what it receives.
   - You can switch back to the built-in private AI, or remove your key, at any time in Settings.
+- **Inbox sorting.** Daybook's built-in private AI sorts your inbox on your computer by default. If you choose a different provider for sorting in Settings (with its own model and notice), Daybook sends that provider the sender, subject and a short preview of each new message so it can sort them.
+- **Daybook add-ins for Outlook.** When you choose Suggest reply, Summarize or Daybook in Outlook, the add-in sends only the email you have open (or the draft you're writing) to **Daybook on your own computer** (127.0.0.1); it never goes over the network to us. Daybook then handles it exactly like Suggest reply above: on your computer with the built-in private AI, or with the cloud provider you chose. The new Outlook add-in's pages load from daybook.saksham.org, but no email content is sent there. The add-in changes your mailbox only when you choose **Add this label**, which adds a Daybook category to that email.
+- **Daybook anywhere** (off by default) reads your clipboard only when you press its shortcut. The text stays in its small window and goes only to the AI you chose; nothing is saved.
 - **AI never sends email.** Every suggestion is shown to you for review. Daybook can only save it as a draft; you send it yourself, from Gmail or Outlook.
 
 ## 4. Credentials and tokens
@@ -95,6 +98,7 @@ Daybook ships with **no analytics, no telemetry, and no crash reporting** sent t
 
 - **Mail and calendar content:** held in memory only while Daybook is open; not saved to disk.
 - **Small encrypted records on your computer:** inbox-sorting labels with a short reason for each message, your Done and Snooze choices, and meetings you created in Daybook (so it can tell you about replies). They stay in Daybook's data folder until you delete it; uninstalling the installer version leaves the folder in place (see the [install guide](install.html) for how to remove it).
+- **Disconnecting an account** deletes its sign-in tokens and its saved records (sorting labels, Done and Snooze choices, and meeting records) from your computer.
 - **Sign-in tokens:** deleted when you choose **Disconnect** for that account in Daybook. For Google accounts, Disconnect also revokes Daybook's access at Google. You can also revoke access yourself at any time (section 4).
 
 ## 8. Children

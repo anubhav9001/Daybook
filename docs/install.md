@@ -89,6 +89,25 @@ Your saved settings and sign-ins stay in `%APPDATA%\daybook-assistant` in case y
 
 > **Gmail support is experimental.** While Google reviews Daybook's access, Google may show a "Google hasn't verified this app" screen, and only a limited number of Gmail accounts can connect for now. If you'd like to test Daybook with Gmail, please [get in touch](contact.html). Microsoft 365 and Outlook.com accounts are fully supported.
 
+## Daybook in Outlook
+
+Daybook must be running on the same PC, with **Settings → Outlook add-in → Allow the Outlook add-in** turned on.
+
+### Classic Outlook (every account, including Gmail)
+
+- **GitHub installer version:** in Daybook, open **Settings → Outlook add-in** and choose **Add Daybook to classic Outlook**. Restart Outlook.
+- **Microsoft Store version:** download and run [Daybook for classic Outlook](https://github.com/anubhav9001/Daybook/releases/latest/download/Daybook-for-classic-Outlook-Setup-1.0.0.exe) (small, no administrator rights needed), then restart Outlook. Like the main installer, it isn't code-signed yet, so Windows may show "Windows protected your PC": choose **More info**, then **Run anyway**.
+
+Classic Outlook then has a **Daybook** tab: press **Alt, D**, then **R** to suggest a reply, **S** to summarize, or **P** for the Daybook panel. **F6** moves between Outlook and the panel. To remove it, choose **Remove from classic Outlook** in Daybook's Settings, or uninstall "Daybook for classic Outlook" from Windows Settings → Apps.
+
+### New Outlook and Outlook on the web (Microsoft 365 or Outlook.com accounts)
+
+1. In Outlook, open **Apps → Get add-ins** (or go to [aka.ms/olksideload](https://aka.ms/olksideload)), choose **My add-ins → Add a custom add-in → Add from URL**, and enter `https://daybook.saksham.org/addin/manifest.xml`. Daybook will also be listed in Microsoft's add-in store once it has been reviewed.
+2. Open an email, choose **Apps → Daybook**, and in Daybook choose **Settings → Outlook add-in → Pair Outlook**. Type the 6-digit code in the panel.
+3. To keep Daybook on the ribbon, choose **Apps**, right-click **Daybook**, and choose **Pin**.
+
+Microsoft doesn't run add-ins on Gmail accounts in new Outlook. For those, use **Daybook anywhere**: turn it on in Daybook's Settings, copy an email, and press **Ctrl+Shift+Alt+A**.
+
 ### If Google says "Google hasn't verified this app"
 
 Daybook's Google verification is still in progress, so Google may show this screen when you connect a Google account. To continue, choose **Advanced**, then **Go to Daybook**. Daybook only ever reads your mail and calendar, saves drafts, and adds events you confirm; see [Permissions](scopes.html) for what each permission is used for. The screen goes away once Google finishes its review.
