@@ -23,6 +23,8 @@ Daybook is an accessible desktop assistant for managing Google Gmail/Calendar an
 
 ---
 
+> **Gmail support is experimental.** While Google reviews Daybook's access, Google may show a "Google hasn't verified this app" screen, and only a limited number of Gmail accounts can connect for now. If you'd like to test Daybook with Gmail, please [get in touch](https://daybook.saksham.org/contact.html). Microsoft 365 and Outlook.com accounts are fully supported.
+
 ## About this repository
 
 This repository is the **public home** for Daybook:

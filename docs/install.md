@@ -85,6 +85,10 @@ Your saved settings and sign-ins stay in `%APPDATA%\daybook-assistant` in case y
 1. **Connect your accounts.** Choose **Connect an account**, then Google or Microsoft 365. Sign-in opens in your web browser; return to Daybook when it says you're signed in.
 2. **Optional: set up the built-in private AI.** Choose **Set up private AI** on the dashboard. Daybook downloads a free model sized for your computer (one time, 2.5–5 GB) and drafts replies without your email leaving the PC.
 
+### Gmail support (experimental)
+
+> **Gmail support is experimental.** While Google reviews Daybook's access, Google may show a "Google hasn't verified this app" screen, and only a limited number of Gmail accounts can connect for now. If you'd like to test Daybook with Gmail, please [get in touch](contact.html). Microsoft 365 and Outlook.com accounts are fully supported.
+
 ### If Google says "Google hasn't verified this app"
 
 Daybook's Google verification is still in progress, so Google may show this screen when you connect a Google account. To continue, choose **Advanced**, then **Go to Daybook**. Daybook only ever reads your mail and calendar, saves drafts, and adds events you confirm; see [Permissions](scopes.html) for what each permission is used for. The screen goes away once Google finishes its review.

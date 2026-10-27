@@ -29,6 +29,8 @@ An accessible desktop assistant for managing Google and Microsoft 365 mail and c
 - Windows installer, one click
 - No telemetry, no analytics, no backend — data stays on your device
 
+> **Gmail support is experimental.** While Google reviews Daybook's access, Google may show a "Google hasn't verified this app" screen, and only a limited number of Gmail accounts can connect for now. If you'd like to test Daybook with Gmail, please [get in touch](contact.html). Microsoft 365 and Outlook.com accounts are fully supported.
+
 ## Get started
 
 - [Install](install.html) — download and set up Daybook on Windows
